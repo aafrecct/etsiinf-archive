@@ -59,6 +59,10 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     }
   }
   
+  private Cuenta getCuentaById(String id) throws CuentaNoExisteExc {
+    return cuentas.get(binarySearch(cuentas, 0 , cuentas.size(), id));
+  }
+  
   @Override
   public IndexedList<Cuenta> getCuentasOrdenadas(Comparator<Cuenta> cmp) {
     quickSort(cuentas, 0, cuentas.size() - 1, cmp);
@@ -76,7 +80,7 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
 
   @Override
   public void borrarCuenta(String id) throws CuentaNoExisteExc, CuentaNoVaciaExc {
-    Cuenta cuenta = cuentas.get(binarySearch(cuentas, 0, cuentas.size(), id));
+    Cuenta cuenta = getCuentaById(id);
     if (cuenta.getSaldo() > 0){
       throw new CuentaNoVaciaExc();
     }
@@ -85,27 +89,29 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
 
   @Override
   public int ingresarDinero(String id, int cantidad) throws CuentaNoExisteExc {
-    // TODO Auto-generated method stub
-    return 0;
+    Cuenta cuenta = getCuentaById(id);
+    return cuenta.ingresar(cantidad);
   }
 
   @Override
   public int retirarDinero(String id, int cantidad) throws CuentaNoExisteExc, InsuficienteSaldoExc {
-    // TODO Auto-generated method stub
-    return 0;
+    Cuenta cuenta = getCuentaById(id);
+    return cuenta.retirar(cantidad);
   }
 
   @Override
   public int consultarSaldo(String id) throws CuentaNoExisteExc {
-    // TODO Auto-generated method stub
-    return 0;
+    Cuenta cuenta = getCuentaById(id);
+    return cuenta.getSaldo();
   }
 
   @Override
   public void hacerTransferencia(String idFrom, String idTo, int cantidad)
       throws CuentaNoExisteExc, InsuficienteSaldoExc {
-    // TODO Auto-generated method stub
-    
+    Cuenta origen = getCuentaById(idFrom);
+    Cuenta destino = getCuentaById(idTo);
+    origen.retirar(cantidad);
+    destino.ingresar(cantidad);
   }
 
   @Override
@@ -126,9 +132,6 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     return "banco";
   }
   
-  
-  public static void main(String[] args) {
-  }
 }
 
 
