@@ -42,6 +42,22 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     }   
   }
   
+  private static int binarySearch(IndexedList<Cuenta> list, int start, int end, String id) throws CuentaNoExisteExc {
+    int i = (int) ((start / end) / 2);
+    int comparison;
+    try {
+      comparison = list.get(i).getId().compareTo(id);
+    } catch (Exception E) {
+      throw new CuentaNoExisteExc();
+    }
+    if (comparison == 0) {
+      return i;
+    } else if (comparison < 0) {
+      return binarySearch(list, start, i - 1, id);
+    } else {
+      return binarySearch(list, i + 1, end, id);
+    }
+  }
   
   @Override
   public IndexedList<Cuenta> getCuentasOrdenadas(Comparator<Cuenta> cmp) {
@@ -53,15 +69,18 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   public String crearCuenta(String dni, int saldoIncial) {
     Cuenta nueva_cuenta = new Cuenta(dni, saldoIncial);
     int i = 0;
-    for ( ; i < cuentas.size() && cuentas.get(i).getDNI().compareTo(dni) < 0; i++) {}
+    for ( ; i < cuentas.size() && cuentas.get(i).getId().compareTo(dni) < 0; i++) {}
     cuentas.add(i, nueva_cuenta);
-    return null;
+    return nueva_cuenta.getId();
   }
 
   @Override
   public void borrarCuenta(String id) throws CuentaNoExisteExc, CuentaNoVaciaExc {
-    // TODO Auto-generated method stub
-    
+    Cuenta cuenta = cuentas.get(binarySearch(cuentas, 0, cuentas.size(), id));
+    if (cuenta.getSaldo() > 0){
+      throw new CuentaNoVaciaExc();
+    }
+    cuentas.remove(cuenta);
   }
 
   @Override
@@ -109,16 +128,6 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   
   
   public static void main(String[] args) {
-    IndexedList<Cuenta> l = new ArrayIndexedList<Cuenta>();
-    l.add(l.size(), new Cuenta("12402451E", 2400));
-    l.add(l.size(), new Cuenta("02402451E", 2300));  
-    l.add(l.size(), new Cuenta("22402451E", 2500));
-    l.add(l.size(), new Cuenta("42402451E", 2700));
-    l.add(l.size(), new Cuenta("32402451E", 2600));
-    quickSort(l, 0, 4, new ComparadorSaldo());
-    for (Cuenta c : l) {
-      System.out.println(c.getDNI() + " - " + c.getSaldo());
-    }
   }
 }
 
