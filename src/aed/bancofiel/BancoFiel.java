@@ -42,6 +42,12 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     }   
   }
   
+  private static boolean isSorted(IndexedList<Cuenta> list, Comparator<Cuenta> cmp) {
+    int i = 0;
+    for ( ; i < list.size() - 1 && cmp.compare(list.get(i), list.get(i + 1)) < 0; i++) {}
+      return i < list.size() - 1;
+    }
+  
   private static int binarySearch(IndexedList<Cuenta> list, int start, int end, String id) throws CuentaNoExisteExc {
     int i = (int) ((start / end) / 2);
     int comparison;
@@ -65,8 +71,14 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   
   @Override
   public IndexedList<Cuenta> getCuentasOrdenadas(Comparator<Cuenta> cmp) {
-    quickSort(cuentas, 0, cuentas.size() - 1, cmp);
-    return cuentas;
+    if (isSorted(cuentas, cmp)) {
+      return cuentas;
+    } else {
+      IndexedList<Cuenta> cuentas_new_sort = new ArrayIndexedList<Cuenta>((ArrayIndexedList<Cuenta>) cuentas);
+      quickSort(cuentas_new_sort, 0, cuentas_new_sort.size() - 1, cmp);
+      return cuentas_new_sort;
+    }
+    
   }
 
   @Override
