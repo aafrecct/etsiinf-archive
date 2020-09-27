@@ -48,20 +48,26 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
       return i < list.size() - 1;
     }
   
-  private static int binarySearch(IndexedList<Cuenta> list, int start, int end, String id) throws CuentaNoExisteExc {
+  //Metodo que busca de manera binaria un elemento en la lista
+  private static int binarySearch(IndexedList<Cuenta> list, int start, int end, String token) throws CuentaNoExisteExc {
     int i = (int) ((start / end) / 2);
     int comparison;
     try {
-      comparison = list.get(i).getId().compareTo(id);
+    	if(token.contains("/")) {
+    		comparison = list.get(i).getId().compareTo(token);
+    	}
+    	else {
+    		comparison = list.get(i).getDNI().compareTo(token);
+    	}
     } catch (Exception E) {
       throw new CuentaNoExisteExc();
     }
     if (comparison == 0) {
       return i;
     } else if (comparison < 0) {
-      return binarySearch(list, start, i - 1, id);
+      return binarySearch(list, start, i - 1, token);
     } else {
-      return binarySearch(list, i + 1, end, id);
+      return binarySearch(list, i + 1, end, token);
     }
   }
   
@@ -85,7 +91,7 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   public String crearCuenta(String dni, int saldoIncial) {
     Cuenta nueva_cuenta = new Cuenta(dni, saldoIncial);
     int i = 0;
-    for ( ; i < cuentas.size() && cuentas.get(i).getId().compareTo(dni) < 0; i++) {}
+    for ( ; i < cuentas.size() && cuentas.get(i).getId().compareTo(nueva_cuenta.getId()) < 0; i++) {}
     cuentas.add(i, nueva_cuenta);
     return nueva_cuenta.getId();
   }
@@ -128,14 +134,36 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
 
   @Override
   public IndexedList<String> getIdCuentas(String dni) {
-    // TODO Auto-generated method stub
-    return null;
+	  IndexedList<String> sol = new ArrayIndexedList<String>();
+	  //Nuestro método binary search nos busca un elemento aleatorio dentro de el "bloque" de cuentas con el mismo dni
+	  int med = binarySearch(cuentas, 0, cuentas.size(), dni);
+	  //Por ello hacemos una busqueda por debajo y por arriba para poder tener todas las cuentas con el mismo id
+	  int i = med+1;
+	  int j = med-1;
+	  
+	  while( i < cuentas.size() && cuentas.get(i).getDNI().equals(dni)) {
+		  //añade a solucion por la parte de detras los elementos que van despues de med
+		  sol.add(sol.size(), cuentas.get(i).getDNI());
+		  i++;
+	  }
+	  while( j > 0 && cuentas.get(j).getDNI().equals(dni)) {
+		  //añade por la perte de delante los elementos que van antes de med
+		  sol.add(0, cuentas.get(j).getDNI());
+		  j--;
+	  }
+	//Devuelve un array ordenado por id de las cuentas con el mismo dni  
+    return sol;
   }
 
   @Override
   public int getSaldoCuentas(String dni) {
-    // TODO Auto-generated method stub
-    return 0;
+	  IndexedList<String> list = new ArrayIndexedList<String>();
+	  list = getIdCuentas(dni);
+	  int sum = 0;
+	  for(int i = 0; i < list.size() ;i++) {
+		  sum = sum + cuentas.get(binarySearch(cuentas, 0, cuentas.size(), list.get(i))).getSaldo();
+	  }
+    return sum;
   }
 
   // ----------------------------------------------------------------------
