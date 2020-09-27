@@ -25,11 +25,14 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   private static int partition(IndexedList<Cuenta> list, int start, int end, Comparator<Cuenta> cmp) {
     Cuenta pivot = list.get(end);  
     int i = end;
-    for (int j = start; j < end; j ++) {
+    
+    for(int j = start; j < i;) {
       if (cmp.compare(list.get(j), pivot) > 0 ){
         list.add(i, list.removeElementAt(j));
         i--;
-      } 
+      } else {
+    	 j++;
+      }
     }
     return i; 
   }
@@ -50,29 +53,28 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   
   //Metodo que busca de manera binaria un elemento en la lista
   private static int binarySearch(IndexedList<Cuenta> list, int start, int end, String token) throws CuentaNoExisteExc {
-    int med = (int) ((start / end) / 2);
+    int med = (int) (start + (end - start) / 2);
     int comparison;
-    try {
     	if(token.contains("/")) {
     		comparison = list.get(med).getId().compareTo(token);
     	}
     	else {
     		comparison = list.get(med).getDNI().compareTo(token);
     	}
-    } catch (Exception E) {
-      throw new CuentaNoExisteExc();
-    }
+    
     if (comparison == 0) {
       return med;
+    } else if(end - start < 1){
+    	throw new CuentaNoExisteExc();
     } else if (comparison < 0) {
       return binarySearch(list, start, med - 1, token);
     } else {
       return binarySearch(list, med + 1, end, token);
-    }
+    } 
   }
   
   private Cuenta getCuentaById(String id) throws CuentaNoExisteExc {
-    return cuentas.get(binarySearch(cuentas, 0 , cuentas.size(), id));
+    return cuentas.get(binarySearch(cuentas, 0 , cuentas.size() , id));
   }
   
   @Override
@@ -91,9 +93,23 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   public String crearCuenta(String dni, int saldoIncial) {
     Cuenta nueva_cuenta = new Cuenta(dni, saldoIncial);
     int i = 0;
-    for ( ; i < cuentas.size() && cuentas.get(i).getId().compareTo(nueva_cuenta.getId()) < 0; i++) {}
-    cuentas.add(i, nueva_cuenta);
-    return nueva_cuenta.getId();
+    int a = 0;
+    boolean encontradoMayor = false;
+    while (i < cuentas.size() && !encontradoMayor) {
+    	if(cuentas.get(i).getId().compareTo(nueva_cuenta.getId()) < 0) {
+    		encontradoMayor = true;
+    		a = i;
+    	}else {
+    		i++;
+    	}
+    }
+    cuentas.add(a, nueva_cuenta);
+    System.out.println("Cuenta creada con el dni y saldo inicial : " + dni + " " + saldoIncial);
+    for(Cuenta c : cuentas) {
+    	System.out.println("id: " + c.getId());
+    }
+    	return nueva_cuenta.getId();
+    
   }
 
   @Override
@@ -118,7 +134,7 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   }
 
   @Override
-  public int consultarSaldo(String id) throws CuentaNoExisteExc {
+  public int consultarSaldo(String id) throws CuentaNoExisteExc { 
     Cuenta cuenta = getCuentaById(id);
     return cuenta.getSaldo();
   }
