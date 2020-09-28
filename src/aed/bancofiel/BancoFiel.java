@@ -45,21 +45,17 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     }   
   }
   
-  private static boolean isSorted(IndexedList<Cuenta> list, Comparator<Cuenta> cmp) {
-    int i = 0;
-    for ( ; i < list.size() - 1 && cmp.compare(list.get(i), list.get(i + 1)) > 0; i++) {}
-    return i < list.size() - 1;
-    }
-  
 //Metodo que busca de manera binaria un elemento en la lista
   private static int binarySearchId(IndexedList<Cuenta> list, int start, int end, String id) throws CuentaNoExisteExc {
-    if (list.size() > 0) {
+    if (list.size() <= 0) {
+      throw new CuentaNoExisteExc();  
+    } else {
       int med = start + (int)((end - start) / 2);
       int comparison = list.get(med).getId().compareTo(id);
       if (comparison == 0) {
         System.out.println("e");
         return med;
-      } else if(end - start < 1){
+      } else if((end - start) < 1){
         System.out.println("Boom");
         throw new CuentaNoExisteExc();
       } else if (comparison > 0) {
@@ -69,8 +65,6 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
         System.out.println("<");
         return binarySearchId(list, med + 1, end, id);
       } 
-    } else {
-      throw new CuentaNoExisteExc();
     }
   }
   
@@ -95,14 +89,9 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   
   @Override
   public IndexedList<Cuenta> getCuentasOrdenadas(Comparator<Cuenta> cmp) {
-//    if (isSorted(cuentas, cmp)) {
-//      return cuentas;
-//    } else {
     IndexedList<Cuenta> cuentas_new_sort = new ArrayIndexedList<Cuenta>((ArrayIndexedList<Cuenta>) cuentas);
     quickSort(cuentas_new_sort, 0, cuentas_new_sort.size() - 1, cmp);
     return cuentas_new_sort;
-//    }
-    
   }
 
   @Override
@@ -112,7 +101,6 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     for ( ; i < cuentas.size() && !(cuentas.get(i).getId().compareTo(nueva_cuenta.getId()) > 0); i++){}
     cuentas.add(i, nueva_cuenta);
     return nueva_cuenta.getId();
-    
   }
 
   @Override
