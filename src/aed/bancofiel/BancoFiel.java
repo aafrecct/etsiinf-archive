@@ -18,10 +18,11 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   public BancoFiel() {
     this.cuentas = new ArrayIndexedList<Cuenta>();
   }
-
-  // ----------------------------------------------------------------------
-  // Anadir metodos aqui ...
+  // ============================================================================================================
+  // ------------------METODOS PRIVADOS Y AUXILIARES -------------------------------------------
+  // serie de Metodos privados que usamos para poder resolver los problemas
   
+  //Metodo auxiliar del metodo quickSort
   private static int partition(IndexedList<Cuenta> list, int start, int end, Comparator<Cuenta> cmp) {
     Cuenta pivot = list.get(end);  
     int i = end;
@@ -37,6 +38,14 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     return i; 
   }
   
+  /**
+   * Metodo quicksort que reordena una lista de una manera recursiva 
+   * @param list lista que se le introduce
+   * @param start inicio (requerido para la recursivvidad)
+   * @param end final (requerido para la recursivvidad)
+   * @param cmp comparador por el cual se quiere ordenar
+   * @return una lista ordenada segun cmp
+   */ 
   private static void quickSort(IndexedList<Cuenta> list, int start, int end, Comparator<Cuenta> cmp){
     if (start < end) {
       int p = partition(list, start, end, cmp);
@@ -45,47 +54,109 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     }   
   }
   
-//Metodo que busca de manera binaria un elemento en la lista
+  /**
+   * Metodo que busca de manera binaria un elemento en la lista tiene como precondicion que la lista este ordenada
+   * @param list lista donde buscar
+   * @param start inicio (requerido para la recursivvidad)
+   * @param end final (requerido para la recursivvidad)
+   * @param id  ID del elemento que se quiere buscar
+   * @return la posicion en el array de ese elemento
+   * @throws CuentaNoExisteExc
+   */
   private static int binarySearchId(IndexedList<Cuenta> list, int start, int end, String id) throws CuentaNoExisteExc {
-    if (list.size() <= 0) {
+	
+	if (list.size() <= 0) {
       throw new CuentaNoExisteExc();  
     } else {
+    	//Cogemos el elemento del medio y en base a el vemos si está por encima o por debajo el que queremos	
       int med = start + (int)((end - start) / 2);
       int comparison = list.get(med).getId().compareTo(id);
       if (comparison == 0) {
-        System.out.println("e");
-        return med;
+    	  return med;
       } else if((end - start) < 1){
-        System.out.println("Boom");
-        throw new CuentaNoExisteExc();
+    	  throw new CuentaNoExisteExc();
       } else if (comparison > 0) {
-        System.out.println(">");
-        return binarySearchId(list, start, med - 1, id);
+    	  return binarySearchId(list, start, med - 1, id);
       } else {
-        System.out.println("<");
-        return binarySearchId(list, med + 1, end, id);
+    	  return binarySearchId(list, med + 1, end, id);
       } 
     }
   }
   
-  //Metodo que busca de manera binaria un elemento en la lista
+  
+  /**
+   * Metodo que busca de manera binaria un elemento en la lista tiene como precondicion que la lista este ordenada
+   * @param list lista donde buscar
+   * @param start inicio (requerido para la recursivvidad)
+   * @param end final (requerido para la recursivvidad)
+   * @param dni DNI del elemento que se quiere buscar
+   * @return la posicion en el array de ese elemento
+   * @throws CuentaNoExisteExc
+   */
   private static int binarySearchDNI(IndexedList<Cuenta> list, int start, int end, String dni) throws CuentaNoExisteExc {
-    int med = start + (int)((end - start) / 2);
-    int comparison = list.get(med).getDNI().compareTo(dni);
-    if (comparison == 0) {
-      return med;
-    } else if(end - start < 1){
-    	throw new CuentaNoExisteExc();
-    } else if (comparison > 0) {
-      return binarySearchDNI(list, start, med - 1, dni);
-    } else {
-      return binarySearchDNI(list, med + 1, end, dni);
-    } 
+	  if (list.size() <= 0) {
+	      throw new CuentaNoExisteExc();  
+	  } else {  
+		  //Cogemos el elemento del medio y en base a el vemos si está por encima o por debajo el que queremos
+		int med = start + (int)((end - start) / 2);
+	    int comparison = list.get(med).getDNI().compareTo(dni);
+	    if (comparison == 0) {
+	      return med;
+	    } else if(end - start < 1){
+	    	throw new CuentaNoExisteExc();
+	    } else if (comparison > 0) {
+	      return binarySearchDNI(list, start, med - 1, dni);
+	    } else {
+	      return binarySearchDNI(list, med + 1, end, dni);
+	    } 
+	  }
   }
   
+  /**
+   *  Metodo que busca por id un elemento
+   * @param id
+   * @return el elemento
+   * @throws CuentaNoExisteExc
+   */
   private Cuenta getCuentaById(String id) throws CuentaNoExisteExc {
     return cuentas.get(binarySearchId(cuentas, 0 , cuentas.size() - 1, id));
   }
+  
+  /**
+   *  Metodo que busca por DNI un elemento
+   * @param dni
+   * @return array con las cuentas asociadas al mismo dni
+   * @throws CuentaNoExisteExc
+   */
+  
+  private  IndexedList<Cuenta> getCuentasByDNI(String dni) throws CuentaNoExisteExc {
+    IndexedList<Cuenta> sol = new ArrayIndexedList<Cuenta>();
+    //Nuestro método binary search nos busca un elemento aleatorio dentro de el "bloque" de cuentas con el mismo dni
+    int med = 0;
+    med = binarySearchDNI(cuentas, 0, cuentas.size() - 1, dni);
+    sol.add(0, cuentas.get(med));
+    getAccDni(med + 1, 1, dni, sol);
+    getAccDni(med - 1, -1, dni, sol);  
+    //Devuelve un array ordenado por id de las cuentas con el mismo dni  
+    return sol;
+  }
+  
+  /**
+   *  Metodo que busca en una direccion cuentas que tengan un dni y las añade a la lista 
+   * @param i 
+   * @param dir la direccion
+   * @param dni el dni 
+   * @param list
+   */
+  private void getAccDni(int i, int dir, String dni, IndexedList<Cuenta> list) {
+	    while(i < cuentas.size() && i >= 0 && cuentas.get(i).getDNI().equals(dni)) {
+	      int pos = dir > 0 ? list.size() : 0;
+	      list.add(pos, cuentas.get(i));
+	      i += dir;
+	    }
+	  }
+  
+  // ------------------METODOS A IMPLEMENTAR-------------------------------------------
   
   @Override
   public IndexedList<Cuenta> getCuentasOrdenadas(Comparator<Cuenta> cmp) {
@@ -139,25 +210,6 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     destino.ingresar(cantidad);
   }
   
-  private void getAccDni(int i, int dir, String dni, IndexedList<Cuenta> list) {
-    while(i < cuentas.size() && i >= 0 && cuentas.get(i).getDNI().equals(dni)) {
-      int pos = dir > 0 ? list.size() : 0;
-      list.add(pos, cuentas.get(i));
-      i += dir;
-    }
-  }
-  
-  private  IndexedList<Cuenta> getCuentasByDNI(String dni) throws CuentaNoExisteExc {
-    IndexedList<Cuenta> sol = new ArrayIndexedList<Cuenta>();
-    //Nuestro método binary search nos busca un elemento aleatorio dentro de el "bloque" de cuentas con el mismo dni
-    int med = 0;
-    med = binarySearchDNI(cuentas, 0, cuentas.size() - 1, dni);
-    sol.add(0, cuentas.get(med));
-    getAccDni(med + 1, 1, dni, sol);
-    getAccDni(med - 1, -1, dni, sol);  
-    //Devuelve un array ordenado por id de las cuentas con el mismo dni  
-    return sol;
-  }
   
   @Override
   public IndexedList<String> getIdCuentas(String dni) {
@@ -183,7 +235,7 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     return sum;
   }
 
-  // ----------------------------------------------------------------------
+  // ===========================================================================================================
   // NOTAD. No se deberia cambiar este metodo.
   public String toString() {
     return "banco";
