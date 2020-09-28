@@ -31,7 +31,7 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
         list.add(i, list.removeElementAt(j));
         i--;
       } else {
-    	 j++;
+        j++;
       }
     }
     return i; 
@@ -57,8 +57,7 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
     int comparison;
     	if(token.contains("/")) {
     		comparison = list.get(med).getId().compareTo(token);
-    	}
-    	else {
+    	} else {
     		comparison = list.get(med).getDNI().compareTo(token);
     	}
     
@@ -93,17 +92,8 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   public String crearCuenta(String dni, int saldoIncial) {
     Cuenta nueva_cuenta = new Cuenta(dni, saldoIncial);
     int i = 0;
-    int a = 0;
-    boolean encontradoMayor = false;
-    while (i < cuentas.size() && !encontradoMayor) {
-    	if(cuentas.get(i).getId().compareTo(nueva_cuenta.getId()) < 0) {
-    		encontradoMayor = true;
-    		a = i;
-    	}else {
-    		i++;
-    	}
-    }
-    cuentas.add(a, nueva_cuenta);
+    for ( ; i < cuentas.size() && !(cuentas.get(i).getId().compareTo(nueva_cuenta.getId()) < 0); i++) {}
+    cuentas.add(i, nueva_cuenta);
     System.out.println("Cuenta creada con el dni y saldo inicial : " + dni + " " + saldoIncial);
     for(Cuenta c : cuentas) {
     	System.out.println("id: " + c.getId());
