@@ -54,16 +54,12 @@ public class MultiSetList<Element> implements MultiSet<Element> {
     
     @Override
     public void add(Element elem, int n) {
-      System.out.println(elem);
-      System.out.println(n);
       Position<Pair<Element, Integer>> pos = getPosition(elem);
-      System.out.println("pos: " + pos);
       if (n > 0) {
         if (pos != null) {
           pos.element().setRight(pos.element().getRight() + n);
         } else {
           elements.addLast(new Pair<Element, Integer>(elem, n));
-          System.out.println("pos: " + elements.last());
         }
         size += n;
       } else if (n == 0) {
@@ -71,8 +67,6 @@ public class MultiSetList<Element> implements MultiSet<Element> {
       } else {
         throw new IllegalArgumentException("El numero de elementos especificado esta fuera del rango de valores esperados.");
       }
-      System.out.println(elements);
-      System.out.println("---");
     }
 
 
