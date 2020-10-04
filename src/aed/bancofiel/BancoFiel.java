@@ -18,9 +18,8 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   public BancoFiel() {
     this.cuentas = new ArrayIndexedList<Cuenta>();
   }
-  // ============================================================================================================
+  // ===========================================================================================
   // ------------------METODOS PRIVADOS Y AUXILIARES -------------------------------------------
-  // serie de Metodos privados que usamos para poder resolver los problemas
   
   //Metodo auxiliar del metodo quickSort
   private static int partition(IndexedList<Cuenta> list, int start, int end, Comparator<Cuenta> cmp) {
@@ -97,7 +96,7 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
 	  if (list.size() <= 0) {
 	      throw new CuentaNoExisteExc();  
 	  } else {  
-		  //Cogemos el elemento del medio y en base a el vemos si está por encima o por debajo el que queremos
+		//Cogemos el elemento del medio y en base a el vemos si está por encima o por debajo el que queremos
 		int med = start + (int)((end - start) / 2);
 	    int comparison = list.get(med).getDNI().compareTo(dni);
 	    if (comparison == 0) {
@@ -160,7 +159,9 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   
   @Override
   public IndexedList<Cuenta> getCuentasOrdenadas(Comparator<Cuenta> cmp) {
+    // Para no desordenar 'cuentas' hacemos una copia.
     IndexedList<Cuenta> cuentas_new_sort = new ArrayIndexedList<Cuenta>((ArrayIndexedList<Cuenta>) cuentas);
+    // La complejidad temporal cuando cuentas ya esta ordenado es de O(n^2)
     quickSort(cuentas_new_sort, 0, cuentas_new_sort.size() - 1, cmp);
     return cuentas_new_sort;
   }
@@ -169,6 +170,7 @@ public class BancoFiel implements ClienteBanco, GestorBanco {
   public String crearCuenta(String dni, int saldoIncial) {
     Cuenta nueva_cuenta = new Cuenta(dni, saldoIncial);
     int i = 0;
+    // Guarda las cuenta ordenada por id.
     for ( ; i < cuentas.size() && !(cuentas.get(i).getId().compareTo(nueva_cuenta.getId()) > 0); i++){}
     cuentas.add(i, nueva_cuenta);
     return nueva_cuenta.getId();
