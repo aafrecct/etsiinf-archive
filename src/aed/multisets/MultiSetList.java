@@ -24,7 +24,6 @@ public class MultiSetList<Element> implements MultiSet<Element> {
      */
     public MultiSetList() {
       this.elements = new NodePositionList<Pair<Element,Integer>>();
-      System.out.println(elements);
     }
     
     public MultiSetList(MultiSetList<Element> ms) {
@@ -81,7 +80,6 @@ public class MultiSetList<Element> implements MultiSet<Element> {
     @Override
     public void remove(Element elem, int n) {
       Position<Pair<Element, Integer>> pos = getPosition(elem);
-      System.out.println(pos);
       if (n == 0) {
         // Literally do nothing.
       } else if (pos == null || n < 0 || n > pos.element().getRight()) {
