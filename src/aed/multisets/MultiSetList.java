@@ -26,13 +26,23 @@ public class MultiSetList<Element> implements MultiSet<Element> {
       this.elements = new NodePositionList<Pair<Element,Integer>>();
     }
     
+    /**
+     * Constructor that creates a MuliSetList copying the one passed
+     * @param ms the list to copy
+     */
     public MultiSetList(MultiSetList<Element> ms) {
       this.elements = new NodePositionList<Pair<Element,Integer>>();
       for (Pair<Element,Integer> e : ms.elements) {
         this.elements.addLast(new Pair<Element,Integer>(e));
       }
     }
-
+    
+    /**
+     * Meethod that compares two elements
+     * @param elem1
+     * @param elem2
+     * @return true if are equals
+     */
     private boolean equals(Element elem1, Element elem2) {
       if (elem1 == null) {
         return elem2 == null;
@@ -41,6 +51,11 @@ public class MultiSetList<Element> implements MultiSet<Element> {
       }
     }
     
+    /**
+     * Method that returns the objet Position given an element
+     * @param elem the element element
+     * @return the position object
+     */
     private Position<Pair<Element, Integer>> getPosition(Element elem){
       if (this.elements.size() == 0) {
         // If the size of the list is 0, return a null object.
@@ -70,7 +85,7 @@ public class MultiSetList<Element> implements MultiSet<Element> {
         }
         size += n;
       } else if (n == 0) {
-        // Literally do nothing.
+        // Do nothing.
       } else {
         throw new IllegalArgumentException("El numero de elementos especificado esta fuera del rango de valores esperados.");
       }
@@ -81,7 +96,7 @@ public class MultiSetList<Element> implements MultiSet<Element> {
     public void remove(Element elem, int n) {
       Position<Pair<Element, Integer>> pos = getPosition(elem);
       if (n == 0) {
-        // Literally do nothing.
+        //Do nothing.
       } else if (pos == null || n < 0 || n > pos.element().getRight()) {
         throw new IllegalArgumentException("El numero de elementos especificado esta fuera del rango de valores esperados.");
       } else {
@@ -129,7 +144,8 @@ public class MultiSetList<Element> implements MultiSet<Element> {
     public MultiSet<Element> intersection(MultiSet<Element> s) {
       MultiSet<Element> intsect = new MultiSetList<Element>();
       for (Pair<Element,Integer> e : elements) {
-        if (s.count(e.getLeft()) > 0){
+        //Checks if e is in s 
+    	if (s.count(e.getLeft()) > 0){
           int n_elem = Math.min(e.getRight(), s.count(e.getLeft()));
           intsect.add(e.getLeft(), n_elem);
         }
