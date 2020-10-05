@@ -24,6 +24,14 @@ public class MultiSetList<Element> implements MultiSet<Element> {
      */
     public MultiSetList() {
       this.elements = new NodePositionList<Pair<Element,Integer>>();
+      System.out.println(elements);
+    }
+    
+    public MultiSetList(MultiSetList<Element> ms) {
+      this.elements = new NodePositionList<Pair<Element,Integer>>();
+      for (Pair<Element,Integer> e : ms.elements) {
+        this.elements.addLast(new Pair<Element,Integer>(e));
+      }
     }
 
     private boolean equals(Element elem1, Element elem2) {
@@ -35,17 +43,17 @@ public class MultiSetList<Element> implements MultiSet<Element> {
     }
     
     private Position<Pair<Element, Integer>> getPosition(Element elem){
-      if (elements.size() == 0) {
+      if (this.elements.size() == 0) {
         // If the size of the list is 0, return a null object.
         return null;
       } else {
-        Position<Pair<Element,Integer>> pos = elements.first();
+        Position<Pair<Element,Integer>> pos = this.elements.first();
         boolean found = false;
-        while (!found && pos != elements.last()) {
+        while (!found && pos != this.elements.last()) {
           if (equals(pos.element().getLeft(), elem)) {
             found = true;
           } else {
-            pos = elements.next(pos);
+            pos = this.elements.next(pos);
           }
         }
         return equals(pos.element().getLeft(), elem) ? pos : null;
@@ -59,7 +67,7 @@ public class MultiSetList<Element> implements MultiSet<Element> {
         if (pos != null) {
           pos.element().setRight(pos.element().getRight() + n);
         } else {
-          elements.addLast(new Pair<Element, Integer>(elem, n));
+          this.elements.addLast(new Pair<Element, Integer>(elem, n));
         }
         size += n;
       } else if (n == 0) {
@@ -73,7 +81,10 @@ public class MultiSetList<Element> implements MultiSet<Element> {
     @Override
     public void remove(Element elem, int n) {
       Position<Pair<Element, Integer>> pos = getPosition(elem);
-      if (pos == null || n < 0 || n > pos.element().getRight()) {
+      System.out.println(pos);
+      if (n == 0) {
+        // Literally do nothing.
+      } else if (pos == null || n < 0 || n > pos.element().getRight()) {
         throw new IllegalArgumentException("El numero de elementos especificado esta fuera del rango de valores esperados.");
       } else {
         pos.element().setRight(pos.element().getRight() - n);
@@ -118,21 +129,34 @@ public class MultiSetList<Element> implements MultiSet<Element> {
 
     @Override
     public MultiSet<Element> intersection(MultiSet<Element> s) {
-      // TODO Auto-generated method stub
-      return null;
+      MultiSet<Element> intsect = new MultiSetList<Element>();
+      for (Pair<Element,Integer> e : elements) {
+        if (s.count(e.getLeft()) > 0){
+          int n_elem = Math.min(e.getRight(), s.count(e.getLeft()));
+          intsect.add(e.getLeft(), n_elem);
+        }
+      }
+      return intsect;
     }
 
 
     @Override
     public MultiSet<Element> sum(MultiSet<Element> s) {
-      // TODO Auto-generated method stub
-      return null;
+      MultiSet<Element> sum = new MultiSetList<Element>((MultiSetList<Element>) s);
+      for (Pair<Element,Integer> e : elements) {
+        sum.add(e.getLeft(), e.getRight());
+      }
+      return sum;
     }
 
 
     @Override
     public MultiSet<Element> minus(MultiSet<Element> s) {
-      // TODO Auto-generated method stub
-      return null;
+      MultiSet<Element> sub = new MultiSetList<Element>(this);
+      MultiSet<Element> intsect = intersection(s);
+      for (Element e : intsect.allElements()) {
+        sub.remove(e, 1);
+      }
+      return sub;
     }
 }
