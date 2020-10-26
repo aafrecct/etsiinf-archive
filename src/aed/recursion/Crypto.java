@@ -12,11 +12,8 @@ public class Crypto {
                                       Integer result, Position<Character> keyPos) {
     if (keyPos.element().equals(character)) {    // Character is found.
       return result;
-    } else if (keyPos.element().compareTo(character) < 0) {    // Character is left of target.
-      keyPos = key.next(keyPos);
-      return encryptChar(key, character, result + 1, keyPos);
-    } else {    // Character is right of target. 
-      return encryptChar(key, character, result - 1, keyPos);
+    } else {    // Character is left of target.
+      return encryptChar(key, character, result + 1, key.next(keyPos));
     }
   }
   

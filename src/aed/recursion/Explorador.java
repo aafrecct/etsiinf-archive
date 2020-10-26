@@ -9,48 +9,48 @@ import es.upm.aedlib.positionlist.*;
 
 public class Explorador {
 	
-	private static Pair<Object,PositionList<Lugar>> exploraR(Lugar lugar, PositionList<Lugar> camino){
-		//Caso base, esta el tesoro
-		if(lugar.tieneTesoro()){
-			return new Pair<Object, PositionList<Lugar>>(lugar.getTesoro(), camino);
+	private static Pair<Object,PositionList<Lugar>> explora (Lugar lugar, PositionList<Lugar> camino){
+		if (lugar.tieneTesoro()) {
+		  // Caso base, esta el tesoro.
+			return new Pair<Object, PositionList<Lugar>>(lugar.getTesoro(), camino);		
 			
 		} else {
-			//No esta el tesoro asi que tenemos que ir al siguiente que no este marcado con tiza
+			// No esta el tesoro asi que tenemos que ir al siguiente que no este marcado con tiza.
 			Lugar next = nextCamino(lugar);
 			lugar.marcaSueloConTiza();
-			if(next == null) { //No hay siguiente asi que tenemos que volver al anterior
-				
+			
+			if (next == null) { 
+			  // No hay siguiente asi que tenemos que volver al anterior.
 				camino.remove(camino.last());
-				return exploraR(camino.last().element(), camino);
+				return explora(camino.last().element(), camino);	
 				
 			} else {
-				//metemos este lugar en la pila y llamamos a la funcion en el siguiente
+				// Metemos este lugar en la pila y llamamos a la funcion en el siguiente.
 				camino.addLast(next);
-				return exploraR(next,camino);
+				return explora(next,camino);
 			}
 		}
 	}
 		
-	//Metodo que devuelve el siguiente lugar de la cueva que no esta marcado por tiza o null si no hay ninguno
-	private static Lugar nextCamino(Lugar lugar) {
-		Iterator<Lugar> it = lugar.caminos().iterator();
-		boolean found = false;
+	// Metodo que devuelve el siguiente lugar de la cueva que no esta marcado por tiza o null si no hay ninguno.
+	private static Lugar nextCamino (Lugar lugar) {
+	  Iterator<Lugar> caminos = lugar.caminos().iterator();
 		Lugar next = null;
 		
-		while(it.hasNext() && !found) {
-			next  = it.next();
-			if(!next.sueloMarcadoConTiza()) {
-				found = true;
-			}
+		while (caminos.hasNext() && next == null) {
+		  Lugar l = caminos.next();
+		  if (!l.sueloMarcadoConTiza()) {
+        next = l;
+		  }
 		}
+		
 		return next;
 	}
 		
   
-	public static Pair<Object,PositionList<Lugar>> explora(Lugar inicialLugar) {
+	public static Pair<Object,PositionList<Lugar>> explora (Lugar inicialLugar) {
 		PositionList<Lugar> camino = new NodePositionList<Lugar>();
 		camino.addLast(inicialLugar);
-	  
-	  return exploraR(inicialLugar, camino);
+	  return explora(inicialLugar, camino);
 	}
 }
