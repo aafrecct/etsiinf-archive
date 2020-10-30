@@ -3,7 +3,6 @@ package aed.recursion;
 import java.util.Iterator;
 
 import es.upm.aedlib.Pair;
-import es.upm.aedlib.Position;
 import es.upm.aedlib.positionlist.*;
 
 
