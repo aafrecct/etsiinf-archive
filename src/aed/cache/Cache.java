@@ -79,16 +79,15 @@ public class Cache<Key,Value> {
    * Loads the key from mainMemory into cacheContents,
    * if cache is full, it unloads least used element.
    */
-  private Value load(Key key) {
+  private boolean load(Key key) {
     Value value = mainMemory.read(key);
-    System.out.println(value);
     if (value != null) {
       if (cacheContents.size() >= maxCacheSize) {
         unload();
       }
       cacheContents.put(key, new CacheCell<Key,Value>(value, false, setMostRU(key)));
     }
-    return value;
+    return value != null;
   }
   
   
@@ -96,11 +95,11 @@ public class Cache<Key,Value> {
   public Value get(Key key) {
     Value value = null;
     if (!cacheContents.containsKey(key)) {
-      value = load(key);
+      load(key);
     } else {
       setMostRU(key, cacheContents.get(key));
     }
-    value = cacheContents.get(key).getValue();
+    value =  cacheContents.containsKey(key) ? cacheContents.get(key).getValue() : null;
     return value;
   }
 
@@ -108,7 +107,12 @@ public class Cache<Key,Value> {
   // Establece un valor nuevo para la clave en la memoria cache
   public void put(Key key, Value value) {
     if (!cacheContents.containsKey(key)){
-      load(key);
+      if (!load(key)) {
+        if (cacheContents.size() >= maxCacheSize) {
+          unload();
+        }
+        cacheContents.put(key, new CacheCell<Key,Value>(value, true, setMostRU(key)));
+      }
     }
     CacheCell<Key,Value> cell = cacheContents.get(key);
     cell.setDirty(true);
