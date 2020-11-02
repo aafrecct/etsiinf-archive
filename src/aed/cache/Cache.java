@@ -75,6 +75,15 @@ public class Cache<Key,Value> {
     keyListLRU.remove(leastUsed);
   }
   
+  
+  private void newCacheCell(Key key, CacheCell<Key,Value> cell) {
+    if (cacheContents.size() >= maxCacheSize) {
+      unload();
+    }
+    cacheContents.put(key, cell);
+  }
+  
+  
   /*
    * Loads the key from mainMemory into cacheContents,
    * if cache is full, it unloads least used element.
@@ -82,10 +91,7 @@ public class Cache<Key,Value> {
   private boolean load(Key key) {
     Value value = mainMemory.read(key);
     if (value != null) {
-      if (cacheContents.size() >= maxCacheSize) {
-        unload();
-      }
-      cacheContents.put(key, new CacheCell<Key,Value>(value, false, setMostRU(key)));
+      newCacheCell(key, new CacheCell<Key,Value>(value, false, setMostRU(key)));
     }
     return value != null;
   }
@@ -94,12 +100,13 @@ public class Cache<Key,Value> {
   // Devuelve el valor que corresponde a una clave "Key"
   public Value get(Key key) {
     Value value = null;
+    boolean valueExists = true;
     if (!cacheContents.containsKey(key)) {
-      load(key);
+      valueExists = load(key);
     } else {
       setMostRU(key, cacheContents.get(key));
     }
-    value =  cacheContents.containsKey(key) ? cacheContents.get(key).getValue() : null;
+    value = valueExists ? cacheContents.get(key).getValue() : null;
     return value;
   }
 
@@ -108,10 +115,7 @@ public class Cache<Key,Value> {
   public void put(Key key, Value value) {
     if (!cacheContents.containsKey(key)){
       if (!load(key)) {
-        if (cacheContents.size() >= maxCacheSize) {
-          unload();
-        }
-        cacheContents.put(key, new CacheCell<Key,Value>(value, true, setMostRU(key)));
+        newCacheCell(key, new CacheCell<Key,Value>(value, true, setMostRU(key)));
       }
     }
     CacheCell<Key,Value> cell = cacheContents.get(key);
