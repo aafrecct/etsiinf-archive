@@ -57,6 +57,60 @@ public class TreeSearch {
   }
 
   public static Tree<String> constructDeterministicTree(Set<PositionList<String>> paths) {
-    return null;
+	LinkedGeneralTree<String> sol = new LinkedGeneralTree<String>();
+	//de verdad que no se como pasar del set a algo mas iterable asi que lo paso a una lista
+	PositionList<PositionList<String>> ls = new NodePositionList<PositionList<String>>();
+	for(PositionList<String> e : paths) {
+		ls.addLast(e);
+	}
+	sol = constructDeterministicTreeRec(ls, sol);
+    return sol;
+  }
+  
+  private static LinkedGeneralTree<String> constructDeterministicTreeRec(PositionList<PositionList<String>> ls, LinkedGeneralTree<String> t){
+	  if(ls.isEmpty()) {
+		  return t;
+	  }
+	  PositionList<String> PList = ls.first().element();
+	  String PrimeraPalabra = PList.first().element();
+	  
+	  //si el arbol esta vacio introducimos el primer elemento de la lista (PList)
+	  if(t.isEmpty()) {
+		  t.addRoot(PrimeraPalabra);
+	  }
+	  //comprobamos si el primer elemento del PositionList es la root
+	  if(t.root().element() != PrimeraPalabra) {
+			  ls.remove(ls.first());
+			  return constructDeterministicTreeRec(ls, t);
+	  }
+		  
+	  //Procedemos sabiendo que hay una root ya y quitamos el primer elemento(que es la root que ya tenemos)
+	  PList.remove(PList.first());
+	  Position<String> cursor = t.root();
+	  //Miramos para cada elemento de la position list si es hijo, luego el cursor pasa a ser ese si o si
+	  for(String e : PList) {
+		  if(isSon(t, cursor, e) == null) {
+			  cursor = t.addChildLast(cursor, e);
+		  }else {
+			  cursor = isSon(t, cursor, e);
+		  }
+	  }
+	  //En este momento ya hemos recorrido toda la positionList y metido los elementos, es momento de llamar al siguiente
+	  
+	  ls.remove(ls.first());
+	  return constructDeterministicTreeRec(ls, t);
+	  }
+	  
+  
+  
+  //Metodo que devuelve una posicion si hay un hijo con ese string o null si no lo hay
+  private static Position<String> isSon(Tree<String> t, Position<String> a, String b) {
+	  Position<String> boy = null;
+	  for(Position<String> e : t.children(a)) {
+		  if(e.element() == b) {
+			  boy = e;
+		  }
+	  }
+	  return boy;
   }
 }
