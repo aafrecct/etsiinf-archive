@@ -89,10 +89,9 @@ public class TreeSearch {
 	  Position<String> cursor = t.root();
 	  //Miramos para cada elemento de la position list si es hijo, luego el cursor pasa a ser ese si o si
 	  for(String e : PList) {
-		  if(isSon(t, cursor, e) == null) {
+		  cursor = isSon(t, cursor, e);
+		  if(cursor == null) {
 			  cursor = t.addChildLast(cursor, e);
-		  }else {
-			  cursor = isSon(t, cursor, e);
 		  }
 	  }
 	  //En este momento ya hemos recorrido toda la positionList y metido los elementos, es momento de llamar al siguiente
