@@ -36,16 +36,21 @@ public class TreeSearch {
     return search(t, searchExprs, searchExprs.first(), t.root(), new HashTableMapSet<Position<String>>());
   }
   
+  private static <E> Set<E> copySet(Set<E> s) {
+    Set<E> ns = new HashTableMapSet<E>();
+    for (E item : s) {
+      ns.add(item);
+    }
+    return ns;
+  }
+  
   public static Tree<String> constructDeterministicTree(Set<PositionList<String>> paths) {
 		LinkedGeneralTree<String> t = new LinkedGeneralTree<String>();
 		
 		//hacemos una copia para no andar molestando
-		Set<PositionList<String>> ListOfPaths = new HashTableMapSet<PositionList<String>>();
-		for(PositionList<String> elem : paths) {
-			ListOfPaths.add(elem);
-		}
+		Set<PositionList<String>> listOfPaths = copySet(paths);
 		
-		for(PositionList<String> path : ListOfPaths) {
+		for(PositionList<String> path : listOfPaths) {
 			
 			  //primer caso con el arbol vacio para meter la root
 			  if(t.isEmpty()) {
