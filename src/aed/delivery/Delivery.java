@@ -13,16 +13,28 @@ import es.upm.aedlib.set.Set;
 import java.util.Iterator;
 
 public class Delivery<V> {
-
+  DirectedGraph<V, Integer> towns = new DirectedAdjacencyListGraph<V, Integer>();
+  
   // Construct a graph out of a series of vertices and an adjacency matrix.
   // There are 'len' vertices. A negative number means no connection. A non-negative
   // number represents distance between nodes.
   public Delivery(V[] places, Integer[][] gmat) {
+    Vertex<V> [] vertices = new Vertex [places.length];
+    for (int i = 0; i < places.length; i++) {
+      vertices[i] = towns.insertVertex(places[i]);
+    }
+    for (int i = 0; i < places.length; i++) {
+      for (int j = 0; i < places.length; j++) {
+        if (gmat[i][j] != null) {
+          towns.insertDirectedEdge(vertices[i], vertices[j], gmat[i][j]);
+        }
+      }
+    }
   }
   
   // Just return the graph that was constructed
   public DirectedGraph<V, Integer> getGraph() {
-    return null;
+    return towns;
   }
 
   // Return a Hamiltonian path for the stored graph, or null if there is noe.
