@@ -10,12 +10,12 @@ paradas del metro de Kiev, usando el algoritmo A*.
 Autores
 =======
 
-Antonio Carpintero Castilla (Coord)
-Borja Martinena Cepa
-Jaime Martín González
-Pablo Calero
-Julián Alonso
-Javier Rodriguez Peña
+| Antonio Carpintero Castilla (Coord)
+| Borja Martinena Cepa
+| Jaime Martín González
+| Pablo Calero
+| Julián Alonso
+| Javier Rodriguez Peña
 
 Instrucciones para desarrollo
 =============================
