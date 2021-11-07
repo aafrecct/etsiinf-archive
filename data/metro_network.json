@@ -2,6 +2,7 @@
   "Line 1": {
     "number": 1,
     "color": "red",
+    "length": 22640,
     "stations" : [
       {"name": "Akademmistechko", "ukranian_name": "Академмістечко"},
       {"name": "Zhytomyrska", "ukranian_name": "Житомирська"},
@@ -12,7 +13,7 @@
       {"name": "Politekhnichnyi Instytut", "ukranian_name": "Політехнічний інститут"},
       {"name": "Vokzalna", "ukranian_name": "Вокзальна"},
       {"name": "Universytet", "ukranian_name": "Університет"},
-      {"name": "Teatralna", "ukranian_name": "Театральна", "connects_with": "Zoloti Vorota"},
+      {"name": "Teatralna", "ukranian_name": "Театральна", "connects_with": "Zoloti vorota"},
       {"name": "Kreshchatyk", "ukranian_name": "Хрещатик", "connects_with": "Maidan Nezalezhnosti"},
       {"name": "Arsenalna", "ukranian_name": "Арсенальна"},
       {"name": "Dnipro", "ukranian_name": "Дніпро"},
@@ -26,6 +27,7 @@
   "Line 2": {
     "number": 2,
     "color": "blue",
+    "length": 20950,
     "stations": [
       {"name": "Heroyiv Dnipra", "ukranian_name": "Героїв Дніпра"},
       {"name": "Minska", "ukranian_name": "Мінська"},
@@ -50,23 +52,24 @@
   "Line 3": {
     "number": 2,
     "color": "green",
+    "length": 23860,
     "stations": [
-      {"name": "Syrets", "ukraninan_name": "Сирець"},
-      {"name": "Dorohozhychi", "ukraninan_name": "Дорогожичі"},
-      {"name": "Lukianivska", "ukraninan_name": "Лук'янівська"},
-      {"name": "Zoloti vorota", "ukraninan_name": "Золоті ворота", "connects_with": "Teatralna"},
-      {"name": "Palats Sportu", "ukraninan_name": "Палац спорту", "connects_with": "Ploshcha Lva Tolstogo"},
-      {"name": "Klovska", "ukraninan_name": "Кловська"},
-      {"name": "Percherska", "ukraninan_name": "Печерська"},
-      {"name": "Druzhby Narodiv", "ukraninan_name": "Дружби народів"},
-      {"name": "Vydubychi", "ukraninan_name": "Видубичі"},
-      {"name": "Slavutych", "ukraninan_name": "Славутич"},
-      {"name": "Osokorky", "ukraninan_name": "Осокорки"},
-      {"name": "Pozniaky", "ukraninan_name": "Позняки"},
-      {"name": "Kharkivska", "ukraninan_name": "Харківська"},
-      {"name": "Vyrlytsia", "ukraninan_name": "Вирлиця"},
-      {"name": "Boryspilska", "ukraninan_name": "Бориспільська"},
-      {"name": "Chervonyi khutir", "ukraninan_name": "Червоний хутір"}
+      {"name": "Syrets", "ukranian_name": "Сирець"},
+      {"name": "Dorohozhychi", "ukranian_name": "Дорогожичі"},
+      {"name": "Lukianivska", "ukranian_name": "Лук'янівська"},
+      {"name": "Zoloti vorota", "ukranian_name": "Золоті ворота", "connects_with": "Teatralna"},
+      {"name": "Palats Sportu", "ukranian_name": "Палац спорту", "connects_with": "Ploshcha Lva Tolstogo"},
+      {"name": "Klovska", "ukranian_name": "Кловська"},
+      {"name": "Percherska", "ukranian_name": "Печерська"},
+      {"name": "Druzhby Narodiv", "ukranian_name": "Дружби народів"},
+      {"name": "Vydubychi", "ukranian_name": "Видубичі"},
+      {"name": "Slavutych", "ukranian_name": "Славутич"},
+      {"name": "Osokorky", "ukranian_name": "Осокорки"},
+      {"name": "Pozniaky", "ukranian_name": "Позняки"},
+      {"name": "Kharkivska", "ukranian_name": "Харківська"},
+      {"name": "Vyrlytsia", "ukranian_name": "Вирлиця"},
+      {"name": "Boryspilska", "ukranian_name": "Бориспільська"},
+      {"name": "Chervonyi khutir", "ukranian_name": "Червоний хутір"}
     ]
   }
 }

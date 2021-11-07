@@ -2,17 +2,28 @@
 La implementación de la estructura del Metro de Kiev con Lineas, paradas,
 distancias y otra información.
 """
-import enum
+from json import load
 
 
-class Line(enum.Enum):
-    """ Cada una de las lineas de metro.
-
-    Cada linea tiene una lista de estaciones.
+class Line:
+    """ Representa una linea de metro
     """
-    LINE_1 = []
-    LINE_2 = []
-    LINE_3 = []
+
+    all = []
+
+    def __init__(self, number: int, length: int, color: str):
+        self.number = number
+        self.length = length
+        self.color = color
+        self.stations = []
+        self.all.append(self)
+
+    def __repr__(self):
+        return f"Line {self.number}: {repr(self.stations[0])} - {repr(self.stations[-1])}"
+
+    def __str__(self):
+        stations = " - ".join([repr(s) for s in self.stations])
+        return f"Line {self.number}, color {self.color} has stations: \n{stations}\n"
 
 
 class Station:
@@ -21,22 +32,52 @@ class Station:
     """
 
     all = {}
-    __lines = {1: Line.LINE_1, 2: Line.LINE_2, 3: Line.LINE_3}
 
-    def __init__(self, name: str, ukranian_name: str, line: int, number: int, neighbours: list):
+    def __init__(self, name: str, ukranian_name: str, line: int, number: int, connects_with=None,
+                 prev=None, next=None):
         self.id = line * 100 + number + 10
         self.name = name
-        self.ukranian_name = name
+        self.ukranian_name = ukranian_name
         self.line = line
         self.number = number
-        self.neighbours = neighbours
+        self.connects_with = connects_with
+        self.prev = prev
+        self.next = next
 
-        all[id] = self
-        self.__lines[line].append(self)
+        self.all[name] = self
 
     def get_distance_to(self, station):
         if type(station) is str:
             station = self.all[station]
 
+    def __repr__(self):
+        return f"({self.id}) {self.name}"
+
+    def __str__(self):
+        return f"Station {self.name} with id {self.id} is part of line {self.line}."
 
 
+with open("data/metro_network.json", "r", encoding='utf-8') as json_network:
+    network = load(json_network)
+
+with open("data/metro_distances.json", "r", encoding='utf-8') as json_distances:
+    distances = load(json_distances)
+
+connections = {}
+for l in network.values():
+    line = Line(l['number'], l['length'], l['color'])
+    last = None
+    for n, s in enumerate(l['stations']):
+        station = Station(s['name'], s['ukranian_name'], line.number, n)
+        line.stations.append(station)
+        if "connects_with" in s.keys():
+            connections[s['name']] = s["connects_with"]
+
+for s1, s2 in connections.items():
+    s1 = Station.all[s1]
+    s1.connects_with = Station.all[s2]
+
+for l, name in enumerate(distances.keys()):
+    for n, distance in enumerate(distances[name]):
+        Line.all[l].stations[n].next = (Line.all[l].stations[n + 1], distance)
+        Line.all[l].stations[n + 1].prev = (Line.all[l].stations[n], distance)
