@@ -28,7 +28,6 @@ class Line:
 
 class Station:
     """ Representa una estación de metro.
-
     """
 
     all = {}
@@ -46,15 +45,19 @@ class Station:
 
         self.all[name] = self
 
-    def get_distance_to(self, station):
-        if type(station) is str:
-            station = self.all[station]
-
     def __repr__(self):
         return f"({self.id}) {self.name}"
 
     def __str__(self):
         return f"Station {self.name} with id {self.id} is part of line {self.line}."
+
+    @classmethod
+    def id(cls, id):
+        line = Line.all[(id // 100) - 1]
+        return line.stations[id % 100 - 10]
+
+    def connections(self):
+        return [s for s in [(self.connects_with, 0), self.next, self.prev] if s and s[0]]
 
 
 with open("data/metro_network.json", "r", encoding='utf-8') as json_network:
