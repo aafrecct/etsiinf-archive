@@ -11,11 +11,12 @@ class Line:
 
     all = []
 
-    def __init__(self, number: int, length: int, color: str):
+    def __init__(self, number: int, length: int, color: str, transfers):
         self.number = number
         self.length = length
         self.color = color
         self.stations = []
+        self.trasfers = transfers
         self.all.append(self)
 
     def __repr__(self):
@@ -59,6 +60,14 @@ class Station:
     def connections(self):
         return [s for s in [(self.connects_with, 0), self.next, self.prev] if s and s[0]]
 
+    def stations_to(self, destination):
+        if destination.line == self.line:
+            return abs(destination.id - self.id)
+        else:
+            line = Line.all[self.line - 1]
+            return abs(line.trasfers[f'Line {destination.line}'][0] - self.id) +\
+                   abs(line.trasfers[f'Line {destination.line}'][1] - destination.id)
+
 
 with open("data/metro_network.json", "r", encoding='utf-8') as json_network:
     network = load(json_network)
@@ -68,7 +77,7 @@ with open("data/metro_distances.json", "r", encoding='utf-8') as json_distances:
 
 connections = {}
 for l in network.values():
-    line = Line(l['number'], l['length'], l['color'])
+    line = Line(l['number'], l['length'], l['color'], l['transfers'])
     last = None
     for n, s in enumerate(l['stations']):
         station = Station(s['name'], s['ukranian_name'], line.number, n)
@@ -78,7 +87,9 @@ for l in network.values():
 
 for s1, s2 in connections.items():
     s1 = Station.all[s1]
-    s1.connects_with = Station.all[s2]
+    s2 = Station.all[s2]
+    s1.connects_with = s2
+    s2.connects_with = s1
 
 for l, name in enumerate(distances.keys()):
     for n, distance in enumerate(distances[name]):

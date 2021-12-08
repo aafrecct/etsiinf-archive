@@ -3,6 +3,10 @@
     "number": 1,
     "color": "red",
     "length": 22640,
+    "transfers": {
+      "Line 2": [120, 217],
+      "Line 3": [119, 313]
+    },
     "stations" : [
       {"name": "Akademmistechko", "ukranian_name": "Академмістечко"},
       {"name": "Zhytomyrska", "ukranian_name": "Житомирська"},
@@ -28,6 +32,10 @@
     "number": 2,
     "color": "blue",
     "length": 20950,
+    "transfers": {
+      "Line 1": [217, 120],
+      "Line 3": [218, 314]
+    },
     "stations": [
       {"name": "Heroyiv Dnipra", "ukranian_name": "Героїв Дніпра"},
       {"name": "Minska", "ukranian_name": "Мінська"},
@@ -53,6 +61,10 @@
     "number": 3,
     "color": "green",
     "length": 23860,
+    "transfers": {
+      "Line 1": [313, 119],
+      "Line 2": [314, 218]
+    },
     "stations": [
       {"name": "Syrets", "ukranian_name": "Сирець"},
       {"name": "Dorohozhychi", "ukranian_name": "Дорогожичі"},
