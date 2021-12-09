@@ -33,15 +33,15 @@ window.configure(bg=colors['bg'])
 
 bgcanvas = Canvas(
     window,
-    bg=colors['bg'],
-    height=920,
-    width=920,
+    bg=colors['debugred'],
+    height=720,
+    width=1280,
     bd=0,
     highlightthickness=0,
     relief="ridge"
 )
 
-bgcanvas.place(x=0, y=0)
+bgcanvas.pack(side="left", fill="both", expand=True)
 
 bgcanvas.create_rectangle(
     10, 10,
@@ -128,6 +128,7 @@ bgcanvas.create_rectangle(
     outline="")
 
 
+
 # canvas = Canvas(
 #     window,
 #     bg=colors['bg'],
@@ -179,5 +180,8 @@ bgcanvas.create_rectangle(
 #     fill="#FAFAFA",
 #     font=("Sen Bold", 40 * -1)
 # )
+
+
+
 window.resizable(True, True)
 window.mainloop()
