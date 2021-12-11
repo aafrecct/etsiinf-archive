@@ -4,7 +4,6 @@ distancias y otra información.
 """
 from json import load
 
-
 class Line:
     """ Representa una linea de metro
     """
@@ -33,13 +32,14 @@ class Station:
 
     all = {}
 
-    def __init__(self, name: str, ukranian_name: str, line: int, number: int, connects_with=None,
-                 prev=None, next=None):
+    def __init__(self, name: str, ukranian_name: str, line: int, number: int,
+                 coords: tuple, connects_with=None, prev=None, next=None):
         self.id = line * 100 + number + 10
         self.name = name
         self.ukranian_name = ukranian_name
         self.line = line
         self.number = number
+        self.coords = coords
         self.connects_with = connects_with
         self.prev = prev
         self.next = next
@@ -53,12 +53,12 @@ class Station:
         return f"Station {self.name} with id {self.id} is part of line {self.line}."
 
     @classmethod
-    def id(cls, id):
+    def by_id(cls, id):
         line = Line.all[(id // 100) - 1]
         return line.stations[id % 100 - 10]
 
     def connections(self):
-        return [s for s in [(self.connects_with, 0), self.next, self.prev] if s and s[0]]
+        return [s for s in [(self.connects_with, 3000), self.next, self.prev] if s and s[0]]
 
     def stations_to(self, destination):
         if destination.line == self.line:
@@ -80,7 +80,7 @@ for l in network.values():
     line = Line(l['number'], l['length'], l['color'], l['transfers'])
     last = None
     for n, s in enumerate(l['stations']):
-        station = Station(s['name'], s['ukranian_name'], line.number, n)
+        station = Station(s['name'], s['ukranian_name'], line.number, n, s["coords"])
         line.stations.append(station)
         if "connects_with" in s.keys():
             connections[s['name']] = s["connects_with"]
