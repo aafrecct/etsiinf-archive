@@ -147,7 +147,7 @@ desdeinput = Menubutton(
     textvariable=desde,
     height=1,
     pady=6,
-    width=48
+    width=2 * map_scale + 4
 )
 
 hasta = StringVar()
@@ -162,7 +162,7 @@ hastainput = Menubutton(
     textvariable=hasta,
     height=1,
     pady=6,
-    width=48
+    width=2 * map_scale + 4
 )
 
 cur_menu = desde
@@ -262,7 +262,7 @@ transbordos_label = Label(
     justify='left',
     textvariable=transbordos_string
 )
-transbordos_label.place(x=grid['x'][1], y=grid['y'][8])
+transbordos_label.place(x=grid['x'][1], y=grid['y'][8] + gaps[0])
 
 time_string = StringVar()
 time_label = Label(
