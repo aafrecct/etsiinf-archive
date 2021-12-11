@@ -2,8 +2,9 @@ from pathlib import Path
 from json import load
 from tkinter import Tk, Canvas, Label, Menubutton, Menu, EventType, StringVar
 from functools import partial
-from metro import Station, Line
-from search import short_path
+from kiev_metro.metro import Station, Line
+from kiev_metro.search import short_path
+from kiev_metro.data import symbolicmap
 
 COLORMODE = "light"
 OUTPUT_PATH = Path(__file__).parent
@@ -274,9 +275,6 @@ time_label = Label(
 )
 time_label.place(x=grid['x'][1], y=grid['y'][7])
 
-with open('data/symbolicmap.json', 'r') as fd:
-    smap = load(fd)
-
 map_corner = grid['x'][8], grid['y'][3]
 linewidth = int(0.4 * map_scale)
 stationrad = int(0.5 * map_scale)
@@ -363,7 +361,7 @@ def find_path(event):
 
 
 i, prevline = -1, 1
-for line in smap['lines']:
+for line in symbolicmap['lines']:
     i = i + 1 if line[0] == prevline else 0
     prevline = line[0]
     points = [transform_point(p) for p in line[1:]]

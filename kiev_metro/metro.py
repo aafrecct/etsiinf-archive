@@ -2,7 +2,7 @@
 La implementación de la estructura del Metro de Kiev con Lineas, paradas,
 distancias y otra información.
 """
-from json import load
+from kiev_metro.data import metro_network, metro_distances
 
 class Line:
     """ Representa una linea de metro
@@ -69,14 +69,9 @@ class Station:
                    abs(line.trasfers[f'Line {destination.line}'][1] - destination.id)
 
 
-with open("data/metro_network.json", "r", encoding='utf-8') as json_network:
-    network = load(json_network)
-
-with open("data/metro_distances.json", "r", encoding='utf-8') as json_distances:
-    distances = load(json_distances)
 
 connections = {}
-for l in network.values():
+for l in metro_network.values():
     line = Line(l['number'], l['length'], l['color'], l['transfers'])
     last = None
     for n, s in enumerate(l['stations']):
@@ -91,7 +86,7 @@ for s1, s2 in connections.items():
     s1.connects_with = s2
     s2.connects_with = s1
 
-for l, name in enumerate(distances.keys()):
-    for n, distance in enumerate(distances[name]):
+for l, name in enumerate(metro_distances.keys()):
+    for n, distance in enumerate(metro_distances[name]):
         Line.all[l].stations[n].next = (Line.all[l].stations[n + 1], distance)
         Line.all[l].stations[n + 1].prev = (Line.all[l].stations[n], distance)

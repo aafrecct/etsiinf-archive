@@ -1,4 +1,4 @@
-from metro import Line, Station
+from kiev_metro.metro import Line, Station
 
 
 class Node:
