@@ -1,4 +1,6 @@
-from pandas import read_csv
+from xmlrpc.client import DateTime
+from pandas import read_csv, DataFrame
+from datetime import datetime as dt, timedelta
 from numpy.random import choice
 from sim_parameters import TRASITION_PROBS, HOLDING_TIMES
 from pprint import pprint
@@ -23,7 +25,8 @@ class SampleSimulation:
 
         self.holding_times = holding_times
         self.state = list(self.graph.keys())[0]
-        self.time_left = holding_times[self._current_state]
+        self.time_left = holding_times[self.state]
+        self.time_in_state = 0
 
     @staticmethod
     def __check_transitions(transitions):
@@ -58,12 +61,14 @@ class SampleSimulation:
         current_node = self.graph[self.state]
         self.state = choice(current_node[0], None, False, current_node[1])
         self.time_left = self.holding_times[self.state]
+        self.time_in_state = 0
 
     def __next_hour(self):
         if self.time_left <= 1:
             self.__transition()
         else:
             self.time_left -= 1
+            self.time_in_state += 1
 
     def next_state(self):
         """Calculate and transition into the next state and return it."""
@@ -87,32 +92,82 @@ class SampleSimulation:
 
 def get_group_sample_size(samples_size, country_data, country):
     return {
-        p_group: round(samples_size[country] * (country_data[country][p_group]) / 100)
-        for p_group in country_data[country]
-        if "g_" in p_group
+        p_group: round(samples_size[country] * p_group_value / 100)
+        for p_group, p_group_value in country_data.loc[country][2:].items()
     }
 
 
 def run(countries_csv_name, countries, sample_ratio, start_date, end_date):
+    start_date = dt.strptime(start_date, "%Y-%m-%d")
+    end_date = dt.strptime(end_date, "%Y-%m-%d")
+    days = abs((end_date - start_date).days)
+    
+    print(days)
+
     # Read the countries CSV file
-    country_data = read_csv(countries_csv_name, index_col=1)
+    country_data = read_csv(countries_csv_name, index_col=0)
     samples_size = {
-        country: int(country_data[country]["population"]) // sample_ratio
+        country: int(country_data.loc[country]["population"]) // sample_ratio
         for country in countries
     }
-    # samples = {
-    #     country: get_group_sample_size(samples_size, country_data, country)
-    #     for country in countries
-    # }
-
-
+    pprint(samples_size)
+    samples = {
+        country: get_group_sample_size(samples_size, country_data, country)
+        for country in countries
+    }
     pprint(samples)
+
+    simulated_timeseries = DataFrame(
+        columns=[
+            "person_id",
+            "age_group_name",
+            "country",
+            "date",
+            "state",
+            "staying_days",
+            "prev_state"
+        ]
+    )
+
+    # Run the simulation
+    person_id = 0
+    for country in countries:
+        for group in samples[country]:
+            for _ in range(samples[country][group]):
+                sim = SampleSimulation(TRASITION_PROBS[group], HOLDING_TIMES[group])
+                for d in range(days):
+                    state = sim.current_state()
+                    step = sim.next_state()
+                    pprint([
+                        person_id, 
+                        group,
+                        country,
+                        start_date + timedelta(days=d),
+                        step,
+                        sim.time_in_state,
+                        state
+                    ])
+                    simulated_timeseries.loc[len(simulated_timeseries.index)] = [
+                        person_id, 
+                        group,
+                        country,
+                        start_date + timedelta(days=d),
+                        step,
+                        sim.time_in_state,
+                        state
+                    ]
+                person_id += 1
+    print(simulated_timeseries)
+
+
+
+
 
 
 if __name__ == "__main__":
     run(
         "a3-countries.csv",
-        ["Afghanistan", "Sweden", "Japan"],
+        ["Sweden"],
         1e6,
         "2021-04-01",
         "2022-04-30",
