@@ -63,6 +63,7 @@ def create_plot(summary_csv, countries):
     # Multiple countries in subfigures
     countries_num = len(countries)
     fig, ax = plt.subplots(countries_num, figsize =(16,9*countries_num))
+    print(ax)
     for i in range(countries_num):
  
         states_timeseries_df[states_timeseries_df['country']==countries[i]].plot(
