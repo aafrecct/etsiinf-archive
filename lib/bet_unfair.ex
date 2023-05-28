@@ -84,8 +84,7 @@ defmodule BetUnfair do
   end
 
   def user_bets(id) do
-    # Missing Bet Model.Repo implementation
-    {:ok}
+    id |> Repo.get_user_bets()
   end
 
   # MARKETS
