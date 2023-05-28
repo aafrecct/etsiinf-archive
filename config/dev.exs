@@ -2,9 +2,9 @@ use Mix.Config
 
 # Configure your database
 config :bet_unfair, BetUnfair.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "bet_unfair_dev",
+  username: "betunfair",
+  password: "betunfair",
+  database: "betunfair",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
