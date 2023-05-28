@@ -138,11 +138,33 @@ defmodule BetUnfair do
   # BETS
   # ====
   def bet_back(user_id, market_id, stake, odds) do
-    {:ok}
+    case Repo.add_bet(%Models.Bet{
+           bet_type: :back,
+           user: user_id,
+           market: market_id,
+           original_stake: stake,
+           odds: odds,
+           status: :active
+           # I don't have any idea about the remaining_stake and matched default values
+         }) do
+      {:ok, %Models.Bet{id: id}} -> {:ok, id}
+      {:error, error} -> error
+    end
   end
 
   def bet_lay(user_id, market_id, stake, odds) do
-    {:ok}
+    case Repo.add_bet(%Models.Bet{
+           bet_type: :lay,
+           user: user_id,
+           market: market_id,
+           original_stake: stake,
+           odds: odds,
+           status: :active
+           # I don't have any idea about the remaining_stake and matched default values
+         }) do
+      {:ok, %Models.Bet{id: id}} -> {:ok, id}
+      {:error, error} -> error
+    end
   end
 
   def bet_cancel(bet_id) do
@@ -150,6 +172,9 @@ defmodule BetUnfair do
   end
 
   def bet_get(bet_id) do
-    {:ok}
+    case Repo.get_bet(bet_id) do
+      {:ok, %{}} -> {:error, "This bet does not exists"}
+      {:ok, _} = res -> res
+    end
   end
 end
