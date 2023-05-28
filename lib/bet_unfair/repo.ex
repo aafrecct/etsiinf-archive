@@ -1,5 +1,6 @@
 defmodule BetUnfair.Repo do
   alias BetUnfair.Models
+  import Ecto.Query
 
   use Ecto.Repo,
     otp_app: :bet_unfair,
@@ -46,8 +47,16 @@ defmodule BetUnfair.Repo do
 
   # Bet operations
   # ==============
+
+  def get_user_bets(user_id) do
+    # Returns all the bets from a given user_id
+    {:ok,
+     from(b in Models.Bet, where: b.user == ^user_id)
+     |> BetUnfair.Repo.all()}
+  end
+
   def get_bet(id) do
-    case Models.Bet |> BetUnfair.Repo.get_by(user: id) do
+    case Models.Bet |> BetUnfair.Repo.get_by(id: id) do
       nil ->
         {:ok, %{}}
 
