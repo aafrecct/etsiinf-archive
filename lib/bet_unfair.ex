@@ -172,8 +172,8 @@ defmodule BetUnfair do
 
   def bet_get(bet_id) do
     case Repo.get_bet(bet_id) do
+      {:ok, %{id: _}} = res -> res
       {:ok, %{}} -> {:error, "This bet does not exists"}
-      {:ok, _} = res -> res
     end
   end
 end
