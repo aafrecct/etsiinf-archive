@@ -21,15 +21,15 @@ defmodule BetUnfair do
     # TODO: Check if the id is unique (IDK how)
     # First of all we have to check if the user already exists in the DB
     case Repo.get_user(id) do
+      {:ok, %{id: _}} ->
+        {:error, {:repeated_user, "This user already exists in the system"}}
+
       {:ok, %{}} ->
         Repo.add_user(%Models.User{
           id: id,
           name: name,
           balance: 0
         })
-
-      {:ok, _} ->
-        {:error, {:repeated_user, "This user already exists in the system"}}
     end
   end
 
@@ -78,8 +78,8 @@ defmodule BetUnfair do
 
   def user_get(id) do
     case Repo.get_user(id) do
+      {:ok, %{id: _}} = res -> res
       {:ok, %{}} -> {:error, "User does not exists"}
-      {:ok, _} = res -> res
     end
   end
 
