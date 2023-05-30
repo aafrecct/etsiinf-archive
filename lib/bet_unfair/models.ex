@@ -1,4 +1,3 @@
-
 defmodule BetUnfair.Models.Bet do
   use Ecto.Schema
   import Ecto.Changeset
@@ -10,9 +9,11 @@ defmodule BetUnfair.Models.Bet do
     field :original_stake, :integer
     field :remaining_stake, :integer
     field :odds, :integer
-    field :status, Ecto.Enum, 
-      values: [:active, :cancelled, :market_cancelled, :market_settled], 
+
+    field :status, Ecto.Enum,
+      values: [:active, :cancelled, :market_cancelled, :market_settled],
       default: :active
+
     has_many :matched, BetUnfair.Models.Bet, foreign_key: :bmatched
   end
 
@@ -33,11 +34,11 @@ defmodule BetUnfair.Models.User do
     field :balance, :integer, default: 0
     has_many :bets, BetUnfair.Models.Bet, foreign_key: :user
   end
-  
+
   def changeset(struct, params) do
     struct
-      |> cast(params, [:name, :balance])
-      |> unique_constraint(:unique_uid_in_exchange, name: :unique_uid_in_exchange)
+    |> cast(params, [:name, :balance])
+    |> unique_constraint(:unique_uid_in_exchange, name: :unique_uid_in_exchange)
   end
 end
 
@@ -48,9 +49,11 @@ defmodule BetUnfair.Models.Market do
     field :exchange, :string
     field :name, :string
     field :description, :string
-    field :status, Ecto.Enum, 
+
+    field :status, Ecto.Enum,
       values: [:active, :frozen, :cancelled, :settled],
       default: :active
+
     field :result, :boolean, default: false
     has_many :bets, BetUnfair.Models.Bet, foreign_key: :market
   end

@@ -13,6 +13,7 @@ defmodule BetUnfair.Repo do
          |> BetUnfair.Repo.get_by(uid: id, exchange: exchange) do
       nil ->
         {:error, "No such user"}
+
       user ->
         {:ok, user}
     end
@@ -75,6 +76,7 @@ defmodule BetUnfair.Repo do
     case BetUnfair.Repo.update(bet) do
       {:ok, _} = res ->
         res
+
       _ ->
         {:error, {:error_edit_bet, "Bet cannot be edited in the DB"}}
     end
