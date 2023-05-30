@@ -58,7 +58,7 @@ defmodule BetUnfair.Repo do
   def get_bet(id) do
     case Models.Bet |> BetUnfair.Repo.get_by(id: id) do
       nil ->
-        {:ok, %{}}
+        {:error, "No such bet"}
 
       bet ->
         {:ok, bet}
@@ -96,9 +96,9 @@ defmodule BetUnfair.Repo do
   # Market operations
   # =================
 
-  def get_market(id) do
-    case Models.Market |> BetUnfair.Repo.get_by(id: id) do
-      nil -> {:ok, %{}}
+  def get_market(id, exchange) do
+    case Models.Market |> BetUnfair.Repo.get_by(id: id, exchange: exchange) do
+      nil -> {:error, "No such market"}
       market -> {:ok, market}
     end
   end
@@ -117,30 +117,36 @@ defmodule BetUnfair.Repo do
     end
   end
 
-  def get_all_markets() do
-    {:ok, Models.Market |> BetUnfair.Repo.all()}
+  def get_all_markets(exchange) do
+    {:ok, Models.Market |> BetUnfair.Repo.all(exchange: exchange)}
   end
 
-  def get_status_markets(status) do
+  def get_status_markets(status, exchange) do
     # Given a status returns all markets that match that status
     {:ok,
-     from(m in Models.Market, where: m.status == ^status)
-     |> BetUnfair.Repo.all()}
+     Models.Market
+     |> BetUnfair.Repo.all(status: status, exchange: exchange)}
   end
 
-  def get_market_bets(id) do
+  def get_market_bets(id, exchange) do
     # Given a market ID return all its bets
     {:ok,
-     from(b in Models.Bet, where: b.market == ^id, order_by: b.odds)
+     from(b in Models.Bet,
+       join: m in Models.Market,
+       on: b.market == ^id,
+       where: m.exchange == ^exchange,
+       order_by: b.odds
+     )
      |> BetUnfair.Repo.all()}
   end
 
-  # WARNING: THIS METHOD IS COMPLETELY MADE UP. USE UNDER YOUR OWN RISK
-  def get_market_pending_bets(id, type) do
+  def get_market_pending_bets(id, type, exchange) do
     # Given market ID and bet type, get all pendings bets in the market that match the type
     {:ok,
      from(b in Models.Bet,
-       where: b.market == ^id,
+       join: m in Models.Market,
+       on: b.market == ^id,
+       where: m.exchange == ^exchange,
        where: b.bet_type == ^type,
        where: b.remaining_stake != 0,
        order_by: b.odds

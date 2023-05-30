@@ -4,7 +4,7 @@ defmodule BetUnfair.Models.Bet do
 
   schema "bets" do
     field :bet_type, Ecto.Enum, values: [:lay, :back]
-    field :user, :string
+    field :user, :integer
     field :market, :integer
     field :original_stake, :integer
     field :remaining_stake, :integer
