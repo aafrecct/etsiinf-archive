@@ -8,12 +8,11 @@ defmodule BetUnfair.Repo do
 
   # User operations
   # ===============
-  def get_user(id) do
+  def get_user(id, exchange) do
     case Models.User
-         |> BetUnfair.Repo.get_by(id: id) do
+         |> BetUnfair.Repo.get_by(uid: id, exchange: exchange) do
       nil ->
-        {:ok, %{}}
-
+        {:error, "No such user"}
       user ->
         {:ok, user}
     end
@@ -33,9 +32,9 @@ defmodule BetUnfair.Repo do
     end
   end
 
-  def get_all_users() do
+  def get_all_users(exchange) do
     # Even if there are none it will return an empty map
-    {:ok, Models.User |> BetUnfair.Repo.all()}
+    {:ok, Models.User |> BetUnfair.Repo.all(exchange: exchange)}
   end
 
   def delete_user(user) do
@@ -76,7 +75,6 @@ defmodule BetUnfair.Repo do
     case BetUnfair.Repo.update(bet) do
       {:ok, _} = res ->
         res
-
       _ ->
         {:error, {:error_edit_bet, "Bet cannot be edited in the DB"}}
     end
