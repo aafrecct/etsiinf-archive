@@ -91,47 +91,56 @@ defmodule BetUnfair do
   # =======
 
   def market_create(name, description) do
-    {:ok}
+    {:ok, %Models.Market{id: id}} =
+      Repo.add_market(%Models.Market{
+        name: name,
+        description: description,
+        status: :active
+      })
+
+    {:ok, id}
   end
 
   def market_list() do
-    {:ok}
+    Repo.get_all_users()
   end
 
   def market_list_active() do
-    {:ok}
+    Repo.get_status_markets(:active)
   end
 
   def market_cancel(id) do
+    # IDK maybe depends on the algorithm
     {:ok}
   end
 
   def market_freeze(id) do
+    # IDK maybe depends on the algorithm
     {:ok}
   end
 
   def market_settle(id, result) do
-    {:ok}
-  end
-
-  def market_create() do
+    # IDK maybe depends on the algorithm
     {:ok}
   end
 
   def market_bets(id) do
-    {:ok}
+    Repo.get_market_bets(id)
   end
 
   def market_pending_backs(id) do
-    {:ok}
+    Repo.get_market_pending_bets(id, :back)
   end
 
   def market_pending_lays(id) do
-    {:ok}
+    Repo.get_market_pending_bets(id, :lay)
   end
 
   def market_get(id) do
-    {:ok}
+    case Repo.get_market(id) do
+      {:ok, %{id: _}} = res -> res
+      {:ok, %{}} -> {:error, "Market does not exist"}
+    end
   end
 
   # BETS
@@ -143,8 +152,8 @@ defmodule BetUnfair do
            market: market_id,
            original_stake: stake,
            odds: odds,
-           status: :active
-           # I don't have any idea about the remaining_stake and matched default values
+           status: :active,
+           remaining_stake: stake
          }) do
       {:ok, %Models.Bet{id: id}} -> {:ok, id}
       {:error, error} -> error
@@ -158,8 +167,8 @@ defmodule BetUnfair do
            market: market_id,
            original_stake: stake,
            odds: odds,
-           status: :active
-           # I don't have any idea about the remaining_stake and matched default values
+           status: :active,
+           remaining_stake: stake
          }) do
       {:ok, %Models.Bet{id: id}} -> {:ok, id}
       {:error, error} -> error
