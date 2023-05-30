@@ -1,4 +1,5 @@
 defmodule BetUnfair do
+  use GenServer
   alias BetUnfair.Repo
   alias BetUnfair.Models
 
@@ -13,78 +14,126 @@ defmodule BetUnfair do
   Contexts are also responsible for managing your data, regardless
   if it comes from the database, an external API or others.
   """
+  
+  def start_link(name) when is_binary(name) do
+    GenServer.start_link(__MODULE__, %{name: name}, name: __MODULE__)
+  end
+
+  @impl true
+  def init(state) do
+    {:ok, state}
+  end
+
+  defp matched_ammount(bet) do
+    bet.remaining_stake * (bet.odds - 1)
+  end
+
+  defp update_bet(bet_changeset) do
+    Repo.edit_bet(bet_changeset)
+  end
+
+  defp match_bets([hlay | lays], [hback | backs]) do
+    case hback.odds <= hlay.odds do
+      false ->
+        {:ok}
+      true ->
+        case matched_ammount(hback) >= hlay.remaining_stake do
+          false ->
+            update_bet( Models.Bet.update_remaining_stake(hlay, 0) )
+            update_bet( Models.Bet.update_remaining_stake(hback, hback.remaining_stake - hlay.remaining_stake) )
+          true ->
+            update_bet( Models.Bet.update_remaining_stake(hback, 0) )
+            update_bet( Models.Bet.update_remaining_stake(hlay, hlay.remaining_stake - hback.remaining_stake) )
+        end
+        match_bets(lays, backs)
+    end
+  end
+  
+  @impl true
+  def handle_call({:user_create, id, name}, _from, state) do
+    case Repo.get_user(id, state.name) do
+      {:error, _} -> 
+        {:reply, 
+        Repo.add_user(%Models.User{
+          uid: id,
+          name: name,
+          exchange: state.name
+        }), state}
+      {:ok, _} ->
+        {:reply, {:error, {:error_user_exists, "User already exists"}}, state}
+    end
+  end
+
+  @impl true
+  def handle_call({:user_deposit, id, amount}, _from, state) do
+    case amount <= 0 do
+      true ->
+        {:reply, {:error, {:non_pos_deposit, "The deposit amount is not positive"}}, state}
+
+      false ->
+        # Obtain the old user and its balance
+        {:ok, %Models.User{balance: old_balance} = user} = Repo.get_user(id, state.name)
+        # Calculate the new balance
+        balance = old_balance + amount
+        # Generate a changeset with the new balance and edit the user in the DB
+        case Ecto.Changeset.change(user, balance: balance) |> Repo.edit_user() do
+          {:ok, _} -> {:reply, :ok, state}
+          error -> {:reply, error, state}
+        end
+    end
+  end
+
+  @impl true
+  def handle_call({:user_withdraw, id, amount}, _from, state) do
+    {:ok, %Models.User{balance: old_balance} = user} = Repo.get_user(id, state.name)
+    case {amount > 0, amount <= old_balance} do
+      {false, _} ->
+        {:reply, {:error, {:non_pos_deposit, "The withdraw amount is not positive"}}, state}
+      {true, false} ->
+        {:reply, {:error, {:no_money, "The withdraw amount exceeds balance"}}, state}
+      {true, true} ->
+        balance = old_balance - amount
+        # Generate a changeset with the new balance and edit the user in the DB
+        case Ecto.Changeset.change(user, balance: balance) |> Repo.edit_user() do
+          {:ok, _} -> {:reply, :ok, state}
+          error -> {:reply, error, state}
+        end
+    end
+  end
+
+  def handle_call({:user_get, id}, _from, state) do
+    case Repo.get_user(id, state.name) do
+      {:ok, %{id: _}} = res -> {:reply, res, state}
+      error -> {:reply, error, state}
+    end
+  end
+  
+  def handle_call({:user_bets, id}, _from, state) do
+    user = Repo.get_user(id, state.name)
+    Repo.get_user_bets(user.id)
+  end
 
   # USERS
   # =====
 
   def user_create(id, name) do
-    # TODO: Check if the id is unique (IDK how)
-    # First of all we have to check if the user already exists in the DB
-    case Repo.get_user(id) do
-      {:ok, %{id: _}} ->
-        {:error, {:repeated_user, "This user already exists in the system"}}
-
-      {:ok, %{}} ->
-        Repo.add_user(%Models.User{
-          id: id,
-          name: name,
-          balance: 0
-        })
-    end
+    GenServer.call(__MODULE__, {:user_create, id, name})
   end
 
   def user_deposit(id, amount) do
-    case amount < 0 do
-      true ->
-        {:error, {:non_pos_deposit, "The deposit amount is not positive"}}
-
-      _ ->
-        # Obtain the old user and its balance
-        {:ok, %Models.User{balance: old_balance} = user} = Repo.get_user(id)
-        # Calculate the new balance
-        balance = old_balance + amount
-        # Generate a changeset with the new balance and edit the user in the DB
-        case Ecto.Changeset.change(user, balance: balance) |> Repo.edit_user() do
-          {:ok, _} -> :ok
-          {:error, error} -> error
-        end
-    end
+    GenServer.call(__MODULE__, {:user_deposit, id, amount})  
   end
 
-  def user_withdraw(id, amount) do
-    case amount < 0 do
-      true ->
-        {:error, {:non_pos_deposit, "The deposit amount is not positive"}}
-
-      _ ->
-        # Obtain the old user and its balance
-        {:ok, %Models.User{balance: old_balance} = user} = Repo.get_user(id)
-        # Calculate the new balance
-        balance = old_balance - amount
-
-        case balance < 0 do
-          true ->
-            {:error, {:no_money, "Not enough money in the user balance"}}
-
-          _ ->
-            # Generate a changeset with the new balance and edit the user in the DB
-            case Ecto.Changeset.change(user, balance: balance) |> Repo.edit_user() do
-              {:ok, _} -> :ok
-              {:error, error} -> error
-            end
-        end
-    end
+  def user_withdraw(id, amount) do 
+    GenServer.call(__MODULE__, {:user_withdraw, id, amount})  
   end
 
   def user_get(id) do
-    case Repo.get_user(id) do
-      {:ok, %{id: _}} = res -> res
-      {:ok, %{}} -> {:error, "User does not exists"}
-    end
+    GenServer.call(__MODULE__, {:user_get, id})
   end
 
   def user_bets(id) do
-    id |> Repo.get_user_bets()
+    GenServer.call(__MODULE__, {:user_bets, id})
   end
 
   # MARKETS
