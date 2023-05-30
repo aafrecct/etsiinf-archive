@@ -21,8 +21,8 @@ defmodule BetUnfair.Repo.Migrations.AddBaseSchemas do
 
     create table(:bets) do
       add :bet_type, :string
-      add :user, references(:users, name: "user")
-      add :market, references(:markets, name: "market")
+      add :user, references(:users, name: "user", on_delete: :delete_all)
+      add :market, references(:markets, name: "market", on_delete: :delete_all)
       add :original_stake, :integer
       add :remaining_stake, :integer
       add :odds, :integer
