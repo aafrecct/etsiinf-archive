@@ -64,6 +64,9 @@ defmodule BetUnfair do
     end
   end
 
+  # USERS
+  # =====
+
   @impl true
   def handle_call({:user_create, id, name}, _from, state) do
     case Repo.get_user(id, state.name) do
@@ -78,6 +81,10 @@ defmodule BetUnfair do
       {:ok, _} ->
         {:reply, {:error, {:error_user_exists, "User already exists"}}, state}
     end
+  end
+
+  def user_create(id, name) do
+    GenServer.call(__MODULE__, {:user_create, id, name})
   end
 
   @impl true
@@ -97,6 +104,10 @@ defmodule BetUnfair do
           error -> {:reply, error, state}
         end
     end
+  end
+
+  def user_deposit(id, amount) do
+    GenServer.call(__MODULE__, {:user_deposit, id, amount})
   end
 
   @impl true
@@ -120,12 +131,20 @@ defmodule BetUnfair do
     end
   end
 
+  def user_withdraw(id, amount) do
+    GenServer.call(__MODULE__, {:user_withdraw, id, amount})
+  end
+
   @impl true
   def handle_call({:user_get, id}, _from, state) do
     case Repo.get_user(id, state.name) do
       {:ok, %{id: _}} = res -> {:reply, res, state}
       error -> {:reply, error, state}
     end
+  end
+
+  def user_get(id) do
+    GenServer.call(__MODULE__, {:user_get, id})
   end
 
   @impl true
@@ -140,6 +159,13 @@ defmodule BetUnfair do
     end
   end
 
+  def user_bets(id) do
+    GenServer.call(__MODULE__, {:user_bets, id})
+  end
+
+  # MARKETS
+  # =======
+
   @impl true
   def handle_call({:market_create, name, description}, _from, state) do
     {:ok, %Models.Market{id: id}} =
@@ -153,9 +179,44 @@ defmodule BetUnfair do
     {:reply, id, state}
   end
 
+  def market_create(name, description) do
+    GenServer.call(__MODULE__, {:market_create, name, description})
+  end
+
   @impl true
   def handle_call({:market_list}, _from, state) do
     {:reply, Repo.get_all_markets(state.name), state}
+  end
+
+  def market_list() do
+    GenServer.call(__MODULE__, {:market_list})
+  end
+
+  @impl true
+  def handle_call({:market_cancel, id}, _from, state) do
+    # TODO
+  end
+
+  def market_cancel(id) do
+    GenServer.call(__MODULE__, {:market_cancel, id})
+  end
+
+  @impl true
+  def handle_call({:market_freeze, id}, _from, state) do
+    # TODO
+  end
+
+  def market_freeze(id) do
+    GenServer.call(__MODULE__, {:market_freeze, id})
+  end
+
+  @impl true
+  def handle_call({:market_settle, id}, _from, state) do
+    # TODO
+  end
+
+  def market_settle(id, result) do
+    GenServer.call(__MODULE__, {:market_settle, id, result})
   end
 
   @impl true
@@ -163,18 +224,38 @@ defmodule BetUnfair do
     {:reply, Repo.get_status_markets(:active, state.name), state}
   end
 
+  def market_list_active() do
+    GenServer.call(__MODULE__, {:market_list_active})
+  end
+
+  @impl true
   def handle_call({:market_bets, id}, _from, state) do
     {:reply, Repo.get_market_bets(id, state.name), state}
   end
 
+  def market_bets(id) do
+    GenServer.call(__MODULE__, {:market_bets, id})
+  end
+
+  @impl true
   def handle_call({:market_pending_backs, id}, _from, state) do
     {:reply, Repo.get_market_pending_bets(id, :back, state.name), state}
   end
 
+  def market_pending_backs(id) do
+    GenServer.call(__MODULE__, {:market_pending_backs, id})
+  end
+
+  @impl true
   def handle_call({:market_pending_lays, id}, _from, state) do
     {:reply, Repo.get_market_pending_bets(id, :lay, state.name), state}
   end
 
+  def market_pending_lays(id) do
+    GenServer.call(__MODULE__, {:market_pending_lays, id})
+  end
+
+  @impl true
   def handle_call({:market_get, id}, _from, state) do
     case Repo.get_market(id, state.name) do
       {:ok, %{id: _}} = res -> {:reply, res, state}
@@ -182,8 +263,8 @@ defmodule BetUnfair do
     end
   end
 
-  def handle_call({:bet_back, user_id, market_id, stake, odds}, _from, state) do
-    case Repo.get_user(user_id, state.name) do
+  defp place_bet(kind, user_id, market_id, stake, odds, exchange) do
+    case Repo.get_user(user_id, exchange) do
       {:ok, %{id: id}} ->
         case Repo.add_bet(%Models.Bet{
                bet_type: :back,
@@ -203,115 +284,46 @@ defmodule BetUnfair do
     end
   end
 
-  def handle_call({:bet_lay, user_id, market_id, stake, odds}, _from, state) do
-    case Repo.get_user(user_id, state.name) do
-      {:ok, %{id: id}} ->
-        case Repo.add_bet(%Models.Bet{
-               bet_type: :lay,
-               user: id,
-               market: market_id,
-               original_stake: stake,
-               odds: odds,
-               status: :active,
-               remaining_stake: stake
-             }) do
-          {:ok, %Models.Bet{id: id}} -> {:reply, {:ok, id}, state}
-          {:error, error} -> {:reply, error, state}
-        end
-
-      error ->
-        {:reply, error, state}
-    end
-  end
-
-  def handle_call({:bet_get, bet_id}, _from, state) do
-    case Repo.get_bet(bet_id) do
-      {:ok, %{id: _}} = res -> {:reply, res, state}
-      {:error, _} = error -> {:reply, error, state}
-    end
-  end
-
-  # USERS
-  # =====
-
-  def user_create(id, name) do
-    GenServer.call(__MODULE__, {:user_create, id, name})
-  end
-
-  def user_deposit(id, amount) do
-    GenServer.call(__MODULE__, {:user_deposit, id, amount})
-  end
-
-  def user_withdraw(id, amount) do
-    GenServer.call(__MODULE__, {:user_withdraw, id, amount})
-  end
-
-  def user_get(id) do
-    GenServer.call(__MODULE__, {:user_get, id})
-  end
-
-  def user_bets(id) do
-    GenServer.call(__MODULE__, {:user_bets, id})
-  end
-
-  # MARKETS
-  # =======
-
-  def market_create(name, description) do
-    GenServer.call(__MODULE__, {:market_create, name, description})
-  end
-
-  def market_list() do
-    GenServer.call(__MODULE__, {:market_list})
-  end
-
-  def market_list_active() do
-    GenServer.call(__MODULE__, {:market_list_active})
-  end
-
-  def market_cancel(id) do
-    # IDK maybe depends on the algorithm
-    {:ok}
-  end
-
-  def market_freeze(id) do
-    # IDK maybe depends on the algorithm
-    {:ok}
-  end
-
-  def market_settle(id, result) do
-    # IDK maybe depends on the algorithm
-    {:ok}
-  end
-
-  def market_bets(id) do
-    GenServer.call(__MODULE__, {:market_bets, id})
-  end
-
-  def market_pending_backs(id) do
-    GenServer.call(__MODULE__, {:market_pending_backs, id})
-  end
-
-  def market_pending_lays(id) do
-    GenServer.call(__MODULE__, {:market_pending_lays, id})
-  end
-
   def market_get(id) do
     GenServer.call(__MODULE__, {:market_get, id})
   end
 
   # BETS
   # ====
+
+  @impl true
+  def handle_call({:bet_back, user_id, market_id, stake, odds}, _from, state) do
+    place_bet(:back, user_id, market_id, stake, odds, state.name)
+  end
+
   def bet_back(user_id, market_id, stake, odds) do
     GenServer.call(__MODULE__, {:bet_back, user_id, market_id, stake, odds})
+  end
+
+  @impl true
+  def handle_call({:bet_lay, user_id, market_id, stake, odds}, _from, state) do
+    place_bet(:lay, user_id, market_id, stake, odds, state.name)
   end
 
   def bet_lay(user_id, market_id, stake, odds) do
     GenServer.call(__MODULE__, {:bet_lay, user_id, market_id, stake, odds})
   end
 
+  @impl true
+  def handle_call({:bet_cancel, bet_id}, _from, state) do
+    # TODO
+  end
+
   def bet_cancel(bet_id) do
-    {:ok}
+    GenServer.call(__MODULE__, {:bet_cancel, bet_id})
+  end
+
+  @impl true
+  def handle_call({:bet_get, bet_id}, _from, state) do
+    case Repo.get_bet(bet_id) do
+      {:ok, %{id: _}} = res -> {:reply, res, state}
+      {:error, _} = error -> {:reply, error, state}
+    end
   end
 
   def bet_get(bet_id) do
