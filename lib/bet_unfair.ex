@@ -19,6 +19,14 @@ defmodule Betunfair do
     GenServer.start_link(__MODULE__, %{name: name}, name: __MODULE__)
   end
 
+  def stop() do
+    GenServer.stop(__MODULE__)
+  end
+
+  def clean(name) do
+    Betunfair.stop()
+  end
+
   @impl true
   def init(state) do
     {:ok, state}
