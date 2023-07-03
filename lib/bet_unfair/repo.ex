@@ -128,6 +128,19 @@ defmodule BetUnfair.Repo do
      |> BetUnfair.Repo.all(status: status, exchange: exchange)}
   end
 
+  def get_market_bets_filter(id, exchange, filter) do
+    # Given a market ID return all its bets
+    {:ok,
+     from(b in Models.Bet,
+       join: m in Models.Market,
+       on: b.market == ^id,
+       where: m.exchange == ^exchange,
+       where: b.bet_type == ^filter,
+       order_by: b.odds
+     )
+     |> BetUnfair.Repo.all()}
+  end
+
   def get_market_bets(id, exchange) do
     # Given a market ID return all its bets
     {:ok,
