@@ -1,14 +1,14 @@
-defmodule BetUnfair do
+defmodule Betunfair do
   use GenServer
-  alias BetUnfair.Repo
-  alias BetUnfair.Models
+  alias Betunfair.Repo
+  alias Betunfair.Models
 
   @moduledoc """
   Final deliverable for the Programming Scalable Systems course at ESTIINF UPM.
   (I enjoy calling it Bet Fun Fair because gambling is only a problem is you
   stop before you win big)
 
-  BetUnfair keeps the contexts that define your domain
+  Betunfair keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

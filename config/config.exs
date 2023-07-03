@@ -8,15 +8,15 @@
 use Mix.Config
 
 config :bet_unfair,
-  ecto_repos: [BetUnfair.Repo],
+  ecto_repos: [Betunfair.Repo],
   generators: [binary_id: true]
 
 # Configures the endpoint
-config :bet_unfair, BetUnfairWeb.Endpoint,
+config :bet_unfair, BetunfairWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "T0lgZcg4vaALN10yfHH6H8EGlbikqV5gCvHj7GTa5hEup0S6zW56OFOuCNMvvUJz",
-  render_errors: [view: BetUnfairWeb.ErrorView, accepts: ~w(json), layout: false],
-  pubsub_server: BetUnfair.PubSub,
+  render_errors: [view: BetunfairWeb.ErrorView, accepts: ~w(json), layout: false],
+  pubsub_server: Betunfair.PubSub,
   live_view: [signing_salt: "LKHp55Yp"]
 
 # Configures Elixir's Logger

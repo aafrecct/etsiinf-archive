@@ -1,4 +1,4 @@
-defmodule BetUnfair.Application do
+defmodule Betunfair.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -8,27 +8,27 @@ defmodule BetUnfair.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      BetUnfair.Repo,
+      Betunfair.Repo,
       # Start the Telemetry supervisor
-      BetUnfairWeb.Telemetry,
+      BetunfairWeb.Telemetry,
       # Start the PubSub system
-      {Phoenix.PubSub, name: BetUnfair.PubSub},
+      {Phoenix.PubSub, name: Betunfair.PubSub},
       # Start the Endpoint (http/https)
-      BetUnfairWeb.Endpoint
-      # Start a worker by calling: BetUnfair.Worker.start_link(arg)
-      # {BetUnfair.Worker, arg}
+      BetunfairWeb.Endpoint
+      # Start a worker by calling: Betunfair.Worker.start_link(arg)
+      # {Betunfair.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: BetUnfair.Supervisor]
+    opts = [strategy: :one_for_one, name: Betunfair.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    BetUnfairWeb.Endpoint.config_change(changed, removed)
+    BetunfairWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

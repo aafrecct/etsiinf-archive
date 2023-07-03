@@ -1,5 +1,5 @@
-defmodule BetUnfairWeb.ErrorView do
-  use BetUnfairWeb, :view
+defmodule BetunfairWeb.ErrorView do
+  use BetunfairWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

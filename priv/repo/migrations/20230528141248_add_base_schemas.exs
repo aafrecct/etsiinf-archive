@@ -1,4 +1,4 @@
-defmodule BetUnfair.Repo.Migrations.AddBaseSchemas do
+defmodule Betunfair.Repo.Migrations.AddBaseSchemas do
   use Ecto.Migration
 
   def change do

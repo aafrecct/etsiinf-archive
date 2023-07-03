@@ -1,11 +1,11 @@
-defmodule BetUnfairWeb.Router do
-  use BetUnfairWeb, :router
+defmodule BetunfairWeb.Router do
+  use BetunfairWeb, :router
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/api", BetUnfairWeb do
+  scope "/api", BetunfairWeb do
     pipe_through :api
   end
 
@@ -21,7 +21,7 @@ defmodule BetUnfairWeb.Router do
 
     scope "/" do
       pipe_through [:fetch_session, :protect_from_forgery]
-      live_dashboard "/dashboard", metrics: BetUnfairWeb.Telemetry
+      live_dashboard "/dashboard", metrics: BetunfairWeb.Telemetry
     end
   end
 end

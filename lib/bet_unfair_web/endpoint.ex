@@ -1,4 +1,4 @@
-defmodule BetUnfairWeb.Endpoint do
+defmodule BetunfairWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :bet_unfair
 
   # The session will be stored in the cookie and signed,
@@ -10,7 +10,7 @@ defmodule BetUnfairWeb.Endpoint do
     signing_salt: "aMgfLgQo"
   ]
 
-  socket "/socket", BetUnfairWeb.UserSocket,
+  socket "/socket", BetunfairWeb.UserSocket,
     websocket: true,
     longpoll: false
 
@@ -48,5 +48,5 @@ defmodule BetUnfairWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug BetUnfairWeb.Router
+  plug BetunfairWeb.Router
 end

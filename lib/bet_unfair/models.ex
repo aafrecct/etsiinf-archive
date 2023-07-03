@@ -1,4 +1,4 @@
-defmodule BetUnfair.Models.Bet do
+defmodule Betunfair.Models.Bet do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -14,7 +14,7 @@ defmodule BetUnfair.Models.Bet do
       values: [:active, :cancelled, :market_cancelled, :market_settled],
       default: :active
 
-    has_many :matched, BetUnfair.Models.Bet, foreign_key: :bmatched
+    has_many :matched, Betunfair.Models.Bet, foreign_key: :bmatched
   end
 
   def update_remaining_stake(struct, remaining_stake) do
@@ -23,7 +23,7 @@ defmodule BetUnfair.Models.Bet do
   end
 end
 
-defmodule BetUnfair.Models.User do
+defmodule Betunfair.Models.User do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -32,7 +32,7 @@ defmodule BetUnfair.Models.User do
     field :exchange, :string
     field :name, :string
     field :balance, :integer, default: 0
-    has_many :bets, BetUnfair.Models.Bet, foreign_key: :user
+    has_many :bets, Betunfair.Models.Bet, foreign_key: :user
   end
 
   def changeset(struct, params) do
@@ -42,7 +42,7 @@ defmodule BetUnfair.Models.User do
   end
 end
 
-defmodule BetUnfair.Models.Market do
+defmodule Betunfair.Models.Market do
   use Ecto.Schema
 
   schema "markets" do
@@ -55,6 +55,6 @@ defmodule BetUnfair.Models.Market do
       default: :active
 
     field :result, :boolean, default: false
-    has_many :bets, BetUnfair.Models.Bet, foreign_key: :market
+    has_many :bets, Betunfair.Models.Bet, foreign_key: :market
   end
 end

@@ -1,12 +1,12 @@
-defmodule BetUnfairWeb do
+defmodule BetunfairWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use BetUnfairWeb, :controller
-      use BetUnfairWeb, :view
+      use BetunfairWeb, :controller
+      use BetunfairWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,11 +19,11 @@ defmodule BetUnfairWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: BetUnfairWeb
+      use Phoenix.Controller, namespace: BetunfairWeb
 
       import Plug.Conn
-      import BetUnfairWeb.Gettext
-      alias BetUnfairWeb.Router.Helpers, as: Routes
+      import BetunfairWeb.Gettext
+      alias BetunfairWeb.Router.Helpers, as: Routes
     end
   end
 
@@ -31,7 +31,7 @@ defmodule BetUnfairWeb do
     quote do
       use Phoenix.View,
         root: "lib/bet_unfair_web/templates",
-        namespace: BetUnfairWeb
+        namespace: BetunfairWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -54,7 +54,7 @@ defmodule BetUnfairWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import BetUnfairWeb.Gettext
+      import BetunfairWeb.Gettext
     end
   end
 
@@ -63,9 +63,9 @@ defmodule BetUnfairWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import BetUnfairWeb.ErrorHelpers
-      import BetUnfairWeb.Gettext
-      alias BetUnfairWeb.Router.Helpers, as: Routes
+      import BetunfairWeb.ErrorHelpers
+      import BetunfairWeb.Gettext
+      alias BetunfairWeb.Router.Helpers, as: Routes
     end
   end
 
