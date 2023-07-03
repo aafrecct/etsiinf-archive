@@ -192,22 +192,72 @@ defmodule BetUnfair do
     GenServer.call(__MODULE__, {:market_list})
   end
 
+  defp cancel_market_bet(bet, {success, count}) do
+    case GenServer.call(__MODULE__, {:user_deposit, bet.user, bet.original_stake}) do
+      {:ok, _} ->
+        case Repo.edit_bet(Exto.Changeset.cast(bet, %{status: :market_cancelled}, [:status])) do
+          {:ok, _} -> {success, count + 1}
+          {:error} -> {false, count}
+        end
+
+      {:error, _} ->
+        {false, count}
+    end
+  end
+
   @impl true
   def handle_call({:market_cancel, id}, _from, state) do
-    # TODO
+    case Repo.edit_market(
+           Exto.Changeset.cast(Repo.get_market(id), %{status: :cancelled}, [:status])
+         ) do
+      {:ok, _} ->
+        case Enum.reduce(Repo.get_market_bets(id), cancel_market_bet) do
+          {true, count} -> {:ok, "#{count} bets in market cancelled."}
+          {false, count} -> {:error, "#{count} bets cancelled, but some couldn't be modified."}
+        end
+
+      {:error, _} = res ->
+        res
+    end
   end
 
   def market_cancel(id) do
     GenServer.call(__MODULE__, {:market_cancel, id})
   end
 
+  defp freeze_market_bet(bet, {success, count}) do
+    case GenServer.call(__MODULE__, {:user_deposit, bet.user, bet.remaining_stake}) do
+      {:ok, _} ->
+        case Repo.edit_bet(Exto.Changeset.cast(bet, %{remaining_stake: 0}, [:remaining_stake])) do
+          {:ok, _} -> {success, count + 1}
+          {:error} -> {false, count}
+        end
+
+      {:error, _} ->
+        {false, count}
+    end
+  end
+
   @impl true
   def handle_call({:market_freeze, id}, _from, state) do
-    # TODO
+    case Repo.edit_market(Exto.Changeset.cast(Repo.get_market(id), %{status: :frozen}, [:status])) do
+      {:ok, _} ->
+        case Enum.reduce(Repo.get_market_bets(id), freeze_market_bet) do
+          {true, count} -> {:ok, "#{count} bets in market frozen."}
+          {false, count} -> {:error, "#{count} bets frozen, but some couldn't be modified."}
+        end
+
+      {:error, _} = res ->
+        res
+    end
   end
 
   def market_freeze(id) do
     GenServer.call(__MODULE__, {:market_freeze, id})
+  end
+
+  defp settle_market_bet(bet, {success, count}) do
+    # TODO
   end
 
   @impl true
