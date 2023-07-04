@@ -48,7 +48,7 @@ defmodule BetunfairTest do
     assert {:ok, m1} = Betunfair.market_create("rmw", "Real Madrid wins")
     assert {:ok, b} = Betunfair.bet_back(u1, m1, 1000, 150)
 
-    assert {:ok, %{id: ^b, bet_type: :back, stake: 1000, odds: 150, status: :active}} =
+    assert {:ok, %{id: ^b, bet_type: :back, remaining_stake: 1000, odds: 150, status: :active}} =
              Betunfair.bet_get(b)
 
     assert is_ok(Betunfair.stop())

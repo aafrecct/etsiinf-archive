@@ -10,7 +10,7 @@ defmodule Betunfair.Repo do
   # ===============
   def get_user(id, exchange) do
     case Models.User
-         |> Betunfair.Repo.get_by([uid: id, exchange: exchange]) do
+         |> Betunfair.Repo.get_by(uid: id, exchange: exchange) do
       nil ->
         {:error, "No such user"}
 
@@ -128,19 +128,6 @@ defmodule Betunfair.Repo do
      |> Betunfair.Repo.all(status: status, exchange: exchange)}
   end
 
-  def get_market_bets_filter(id, exchange, filter) do
-    # Given a market ID return all its bets
-    {:ok,
-     from(b in Models.Bet,
-       join: m in Models.Market,
-       on: b.market == ^id,
-       where: m.exchange == ^exchange,
-       where: b.bet_type == ^filter,
-       order_by: b.odds
-     )
-     |> Betunfair.Repo.all()}
-  end
-
   def get_market_bets(id, exchange) do
     # Given a market ID return all its bets
     {:ok,
@@ -153,7 +140,7 @@ defmodule Betunfair.Repo do
      |> Betunfair.Repo.all()}
   end
 
-  def get_market_pending_bets(id, type, exchange) do
+  def get_market_pending_bets(id, type, order, exchange) do
     # Given market ID and bet type, get all pendings bets in the market that match the type
     {:ok,
      from(b in Models.Bet,
@@ -163,7 +150,7 @@ defmodule Betunfair.Repo do
        where: m.exchange == ^exchange,
        where: b.bet_type == ^type,
        where: b.remaining_stake != 0,
-       order_by: b.odds
+       order_by: [{^order, b.odds}, {:asc, b.inserted_at}]
      )
      |> Betunfair.Repo.all()}
   end

@@ -37,7 +37,7 @@ defmodule Betunfair do
   end
 
   defp matched_ammount(bet) do
-    bet.remaining_stake * (bet.odds - 1)
+    bet.remaining_stake * (bet.odds / 100 - 1)
   end
 
   defp update_bet(bet_changeset) do
@@ -46,8 +46,8 @@ defmodule Betunfair do
 
   @impl true
   def handle_cast({:match_bets, market_id}, state) do
-    lays = Repo.get_market_bets_filter(market_id, state.name, :lay)
-    backs = Repo.get_market_bets_filter(market_id, state.name, :back)
+    {:ok, lays} = Repo.get_market_pending_bets(market_id, :lay, :desc, state.name)
+    {:ok, backs} = Repo.get_market_pending_bets(market_id, :back, :asc, state.name)
 
     case match_bets(lays, backs) do
       {:ok} ->
@@ -55,30 +55,41 @@ defmodule Betunfair do
     end
   end
 
+  defp match_bets([], _) do
+    {:ok}
+  end
+
+  defp match_bets(_, []) do
+    {:ok}
+  end
+
   defp match_bets([hlay | lays], [hback | backs]) do
+    IO.inspect([hlay | lays])
+    IO.inspect([hback | backs])
+
     case hback.odds <= hlay.odds do
       false ->
         {:ok}
 
       true ->
         case matched_ammount(hback) >= hlay.remaining_stake do
-          false ->
+          true ->
             update_bet(Models.Bet.update_remaining_stake(hlay, 0))
 
             update_bet(
               Models.Bet.update_remaining_stake(
                 hback,
-                hback.remaining_stake - hlay.remaining_stake
+                hback.remaining_stake - matched_ammount(hback)
               )
             )
 
-          true ->
+          false ->
             update_bet(Models.Bet.update_remaining_stake(hback, 0))
 
             update_bet(
               Models.Bet.update_remaining_stake(
                 hlay,
-                hlay.remaining_stake - hback.remaining_stake
+                hlay.remaining_stake - matched_ammount(hlay)
               )
             )
         end
@@ -94,12 +105,14 @@ defmodule Betunfair do
   def handle_call({:user_create, id, name}, _from, state) do
     case Repo.get_user(id, state.name) do
       {:error, _} ->
-        {:reply,
-         Repo.add_user(%Models.User{
-           uid: id,
-           name: name,
-           exchange: state.name
-         }), state}
+        case Repo.add_user(%Models.User{
+               uid: id,
+               name: name,
+               exchange: state.name
+             }) do
+          {:ok, %{uid: uid}} -> {:reply, {:ok, uid}, state}
+          _ -> {:reply, {:error, {:error_insert, "Something went wrong"}}, state}
+        end
 
       {:ok, _} ->
         {:reply, {:error, {:error_user_exists, "User already exists"}}, state}
@@ -110,11 +123,10 @@ defmodule Betunfair do
     GenServer.call(__MODULE__, {:user_create, id, name})
   end
 
-  @impl true
-  def handle_call({:user_deposit, id, amount}, _from, state) do
+  defp inner_user_deposit(id, amount, state) do
     case amount <= 0 do
       true ->
-        {:reply, {:error, {:non_pos_deposit, "The deposit amount is not positive"}}, state}
+        {:error, {:non_pos_deposit, "The deposit amount is not positive"}}
 
       false ->
         # Obtain the old user and its balance
@@ -123,10 +135,15 @@ defmodule Betunfair do
         balance = old_balance + amount
         # Generate a changeset with the new balance and edit the user in the DB
         case Ecto.Changeset.change(user, balance: balance) |> Repo.edit_user() do
-          {:ok, _} -> {:reply, :ok, state}
-          error -> {:reply, error, state}
+          {:ok, _} = res -> res
+          error -> error
         end
     end
+  end
+
+  @impl true
+  def handle_call({:user_deposit, id, amount}, _from, state) do
+    {:reply, inner_user_deposit(id, amount, state), state}
   end
 
   def user_deposit(id, amount) do
@@ -199,11 +216,15 @@ defmodule Betunfair do
         exchange: state.name
       })
 
-    {:reply, id, state}
+    {:reply, {:ok, id}, state}
   end
 
   def market_create(name, description) do
     GenServer.call(__MODULE__, {:market_create, name, description})
+  end
+
+  def market_match(market_id) do
+    GenServer.cast(__MODULE__, {:match_bets, market_id})
   end
 
   @impl true
@@ -216,7 +237,11 @@ defmodule Betunfair do
   end
 
   defp cancel_market_bet(bet, {success, count}) do
-    case GenServer.call(__MODULE__, {:user_deposit, bet.user, bet.original_stake}) do
+    {:ok, market} =
+      bet.market
+      |> Repo.get_market()
+
+    case inner_user_deposit(bet.user, bet.original_stake, market.exchange) do
       {:ok, _} ->
         case Repo.edit_bet(Ecto.Changeset.cast(bet, %{status: :market_cancelled}, [:status])) do
           {:ok, _} -> {success, count + 1}
@@ -249,7 +274,11 @@ defmodule Betunfair do
   end
 
   defp freeze_market_bet(bet, {success, count}) do
-    case GenServer.call(__MODULE__, {:user_deposit, bet.user, bet.remaining_stake}) do
+    {:ok, market} =
+      bet.market
+      |> Repo.get_market()
+
+    case inner_user_deposit(bet.user, bet.remaining_stake, market.state) do
       {:ok, _} ->
         case Repo.edit_bet(Ecto.Changeset.cast(bet, %{remaining_stake: 0}, [:remaining_stake])) do
           {:ok, _} -> {success, count + 1}
@@ -282,12 +311,16 @@ defmodule Betunfair do
   end
 
   defp settle_market_bet(bet, {success, count, result}) do
+    {:ok, market} =
+      bet.market
+      |> Repo.get_market()
+
     acc =
       cond do
         {bet.bet_type, result} == {:lay, false} or {bet.bet_type, result} == {:back, true} ->
           earnings = (bet.original_stake - bet.remaining_stake) * bet.odds + bet.remaining_stake
 
-          case GenServer.call(__MODULE__, {:user_deposit, bet.user, earnings}) do
+          case inner_user_deposit(bet.user, earnings, market.state) do
             {:ok, _} ->
               {success, count + 1, result}
 
@@ -296,7 +329,7 @@ defmodule Betunfair do
           end
 
         true ->
-          GenServer.call(__MODULE__, {:user_deposit, bet.user, bet.remaining_stake})
+          inner_user_deposit(bet.user, bet.remaining_stake, market.state)
       end
 
     Ecto.Changeset.cast(bet, %{status: :market_settled}, [:status])
@@ -305,9 +338,11 @@ defmodule Betunfair do
 
   @impl true
   def handle_call({:market_settle, id, result}, _from, state) do
+    {:ok, market} = Repo.get_market(id, state.name)
+
     case Repo.edit_market(
            Ecto.Changeset.cast(
-             Repo.get_market(id, state.name),
+             market,
              %{result: result, status: :settled},
              [
                :result,
@@ -316,8 +351,10 @@ defmodule Betunfair do
            )
          ) do
       {:ok, _} ->
+        {:ok, market_bets} = Repo.get_market_bets(id, state.name)
+
         case Enum.reduce(
-               Repo.get_market_bets(id, state.name),
+               market_bets,
                {true, 0, result},
                &settle_market_bet/2
              ) do
@@ -354,7 +391,7 @@ defmodule Betunfair do
 
   @impl true
   def handle_call({:market_pending_backs, id}, _from, state) do
-    {:reply, Repo.get_market_pending_bets(id, :back, state.name), state}
+    {:reply, Repo.get_market_pending_bets(id, :back, :asc, state.name), state}
   end
 
   def market_pending_backs(id) do
@@ -363,7 +400,7 @@ defmodule Betunfair do
 
   @impl true
   def handle_call({:market_pending_lays, id}, _from, state) do
-    {:reply, Repo.get_market_pending_bets(id, :lay, state.name), state}
+    {:reply, Repo.get_market_pending_bets(id, :lay, :desc, state.name), state}
   end
 
   def market_pending_lays(id) do
@@ -393,8 +430,10 @@ defmodule Betunfair do
                remaining_stake: stake
              }) do
           {:ok, %Models.Bet{id: id}} ->
-            GenServer.call(__MODULE__, {:user_withdraw, user_id, stake})
-            GenServer.cast(__MODULE__, {:match_bets, market_id})
+            # Please don't do this at home
+            handle_call({:user_withdraw, user_id, stake}, __MODULE__, state)
+            handle_cast({:match_bets, market_id}, state)
+
             {:reply, {:ok, id}, state}
 
           {:error, error} ->
@@ -435,7 +474,7 @@ defmodule Betunfair do
   def handle_call({:bet_cancel, bet_id}, _from, state) do
     bet = Repo.get_bet(bet_id)
 
-    case GenServer.call(__MODULE__, {:user_deposit, bet.user, bet.remaining_stake}) do
+    case inner_user_deposit(bet.user, bet.remaining_stake, state) do
       {:ok, _} ->
         {:reply,
          Repo.edit_bet(

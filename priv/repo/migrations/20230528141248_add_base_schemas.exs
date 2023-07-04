@@ -28,6 +28,8 @@ defmodule Betunfair.Repo.Migrations.AddBaseSchemas do
       add :odds, :integer
       add :status, :string
       add :matched, references(:bets, name: "matched")
+      add :inserted_at, :timestamp
+      add :updated_at, :timestamp
     end
   end
 end

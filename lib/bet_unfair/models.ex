@@ -14,6 +14,7 @@ defmodule Betunfair.Models.Bet do
       values: [:active, :cancelled, :market_cancelled, :market_settled],
       default: :active
 
+    timestamps()
     has_many :matched, Betunfair.Models.Bet, foreign_key: :bmatched
   end
 
