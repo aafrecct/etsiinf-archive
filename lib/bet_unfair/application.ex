@@ -12,9 +12,9 @@ defmodule Betunfair.Application do
       # Start the Telemetry supervisor
       BetunfairWeb.Telemetry,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Betunfair.PubSub},
+      {Phoenix.PubSub, name: Betunfair.PubSub}
       # Start the Endpoint (http/https)
-      BetunfairWeb.Endpoint
+      # BetunfairWeb.Endpoint
       # Start a worker by calling: Betunfair.Worker.start_link(arg)
       # {Betunfair.Worker, arg}
     ]

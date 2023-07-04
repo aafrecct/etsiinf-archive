@@ -10,7 +10,7 @@ defmodule Betunfair.Repo do
   # ===============
   def get_user(id, exchange) do
     case Models.User
-         |> Betunfair.Repo.get_by(uid: id, exchange: exchange) do
+         |> Betunfair.Repo.get_by([uid: id, exchange: exchange]) do
       nil ->
         {:error, "No such user"}
 
@@ -158,12 +158,37 @@ defmodule Betunfair.Repo do
     {:ok,
      from(b in Models.Bet,
        join: m in Models.Market,
-       on: b.market == ^id,
+       on: b.market == m.id,
+       where: m.id == ^id,
        where: m.exchange == ^exchange,
        where: b.bet_type == ^type,
        where: b.remaining_stake != 0,
        order_by: b.odds
      )
      |> Betunfair.Repo.all()}
+  end
+
+  def delete_exchange(exchange) do
+    from(
+      b in Models.Bet,
+      join: m in Models.Market,
+      on: b.market == m.id,
+      where: m.exchange == ^exchange
+    )
+    |> Betunfair.Repo.delete_all()
+
+    from(
+      m in Models.Market,
+      where: m.exchange == ^exchange
+    )
+    |> Betunfair.Repo.delete_all()
+
+    from(
+      u in Models.User,
+      where: u.exchange == ^exchange
+    )
+    |> Betunfair.Repo.delete_all()
+
+    {:ok}
   end
 end

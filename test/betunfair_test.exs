@@ -1,5 +1,13 @@
 defmodule BetunfairTest do
   use ExUnit.Case
+  alias Betunfair.Repo
+
+  setup do
+    # Explicitly get a connection before each test
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
+    # Setting the shared mode must be done only after checkout
+    Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
+  end
 
   test "user_create_deposit_get" do
     assert {:ok, _} = Betunfair.clean("testdb")

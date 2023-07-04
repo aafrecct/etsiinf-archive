@@ -20,10 +20,14 @@ defmodule Betunfair do
   end
 
   def stop() do
-    GenServer.stop(__MODULE__)
+    case GenServer.whereis(__MODULE__) do
+      nil -> {:ok, "No active server"}
+      _ -> GenServer.stop(__MODULE__)
+    end
   end
 
   def clean(name) do
+    Repo.delete_exchange(name)
     Betunfair.stop()
   end
 
