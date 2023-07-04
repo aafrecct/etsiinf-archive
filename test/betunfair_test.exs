@@ -30,7 +30,7 @@ defmodule BetunfairTest do
     assert {:ok, m1} = Betunfair.market_create("rmw", "Real Madrid wins")
     assert {:ok, b} = Betunfair.bet_back(u1, m1, 1000, 150)
 
-    assert {:ok, %{id: ^b, bet_type: :back, stake: 1000, odds: 150, status: :active}} =
+    assert {:ok, %{id: ^b, bet_type: :back, remaining_stake: 1000, odds: 150, status: :active}} =
              Betunfair.bet_get(b)
 
     assert {:ok, markets} = Betunfair.market_list()
@@ -81,8 +81,8 @@ defmodule BetunfairTest do
     assert {:ok, lays} = Betunfair.market_pending_lays(m1)
     assert [^bl2, ^bl1] = Enum.to_list(lays) |> Enum.map(fn e -> elem(e, 1) end)
     assert is_ok(Betunfair.market_match(m1))
-    assert {:ok, %{stake: 0}} = Betunfair.bet_get(bb1)
-    assert {:ok, %{stake: 0}} = Betunfair.bet_get(bl2)
+    assert {:ok, %{remaining_stake: 0}} = Betunfair.bet_get(bb1)
+    assert {:ok, %{remaining_stake: 0}} = Betunfair.bet_get(bl2)
   end
 
   test "match_bets2" do
@@ -102,8 +102,8 @@ defmodule BetunfairTest do
     assert {:ok, bl2} = Betunfair.bet_lay(u2, m1, 1000, 150)
     assert {:ok, %{balance: 0}} = Betunfair.user_get(u2)
     assert is_ok(Betunfair.market_match(m1))
-    assert {:ok, %{stake: 0}} = Betunfair.bet_get(bb1)
-    assert {:ok, %{stake: 500}} = Betunfair.bet_get(bl2)
+    assert {:ok, %{remaining_stake: 0}} = Betunfair.bet_get(bb1)
+    assert {:ok, %{remaining_stake: 500}} = Betunfair.bet_get(bl2)
   end
 
   test "match_bets3" do
@@ -123,8 +123,8 @@ defmodule BetunfairTest do
     assert {:ok, bl2} = Betunfair.bet_lay(u2, m1, 100, 150)
     assert {:ok, %{balance: 1800}} = Betunfair.user_get(u2)
     assert is_ok(Betunfair.market_match(m1))
-    assert {:ok, %{stake: 800}} = Betunfair.bet_get(bb1)
-    assert {:ok, %{stake: 0}} = Betunfair.bet_get(bl2)
+    assert {:ok, %{remaining_stake: 800}} = Betunfair.bet_get(bb1)
+    assert {:ok, %{remaining_stake: 0}} = Betunfair.bet_get(bl2)
     assert {:ok, user_bets} = Betunfair.user_bets(u1)
     assert 2 = length(user_bets)
   end

@@ -96,8 +96,8 @@ defmodule Betunfair.Repo do
   # Market operations
   # =================
 
-  def get_market(id, exchange) do
-    case Models.Market |> Betunfair.Repo.get_by(id: id, exchange: exchange) do
+  def get_market(id) do
+    case Models.Market |> Betunfair.Repo.get(id) do
       nil -> {:error, "No such market"}
       market -> {:ok, market}
     end
