@@ -254,8 +254,6 @@ defmodule Betunfair.Server do
   def handle_call({:bet_cancel, bet_id}, _from, exchange_name) do
     {:ok, bet} = Repo.get_bet(bet_id)
     %Models.User{uid: uid} = Repo.get(Models.User, bet.user)
-    IO.puts("CANCELLING BET #{bet_id}")
-    IO.inspect(bet)
 
     case bet.remaining_stake> 0 do
       true ->
@@ -454,10 +452,6 @@ defmodule Betunfair.Server do
   end
 
   defp match_bets(top_back, top_lay) do
-    IO.inspect(top_back)
-    IO.puts("max_matched_ammount: #{max_matched_ammount(top_back)}")
-    IO.inspect(top_lay)
-
     case top_back.odds <= top_lay.odds do
       false ->
         :end
@@ -465,7 +459,6 @@ defmodule Betunfair.Server do
       true ->
         case max_matched_ammount(top_back) >= top_lay.remaining_stake do
           true ->
-            IO.puts("Consuming lay stake")
             Repo.edit_bet(Models.Bet.update_remaining_stake(top_lay, 0))
 
             odds = (top_back.odds - 100) / 100
@@ -489,13 +482,10 @@ defmodule Betunfair.Server do
             })
 
           false ->
-            IO.puts("Consuming back stake")
             Repo.edit_bet(Models.Bet.update_remaining_stake(top_back, 0))
 
             odds = (top_lay.odds - 100) / 100
-            IO.puts("Odds are #{odds}")
             matched_stake = trunc(top_back.remaining_stake * odds)
-            IO.puts("Matched stake is #{matched_stake}")
 
             new_top_lay =
               Models.Bet.update_remaining_stake(
@@ -537,7 +527,6 @@ defmodule Betunfair.Server do
             market_match(market_id, exchange_name)
 
           :end ->
-            IO.puts("Ending match algorithm\n")
             {:ok}
         end
     end
