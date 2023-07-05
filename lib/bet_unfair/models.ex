@@ -54,6 +54,12 @@ defmodule Betunfair.Models.User do
     |> cast(params, [:name, :balance])
     |> unique_constraint(:unique_uid_in_exchange, name: :unique_uid_in_exchange)
   end
+
+  def change_balance(struct, amount) do
+    struct
+    |> cast(%{balance: struct.balance + amount}, [:balance])
+    |> validate_number(:balance, greater_than_or_equal_to: 0)
+  end
 end
 
 defmodule Betunfair.Models.Market do

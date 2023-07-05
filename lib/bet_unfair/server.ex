@@ -37,28 +37,19 @@ defmodule Betunfair.Server do
 
   @impl true
   def handle_call({:user_deposit, id, amount}, _from, exchange_name) do
-    {:reply, inner_user_deposit(id, amount, exchange_name), exchange_name}
+    if amount > 0 do
+      {:reply, change_user_balance(id, amount, exchange_name), exchange_name}
+    else
+      {:reply, {:error, "Can only deposit positive ammounts"}, exchange_name}
+    end
   end
 
   @impl true
   def handle_call({:user_withdraw, id, amount}, _from, exchange_name) do
-    {:ok, %Models.User{balance: old_balance} = user} = Repo.get_user(id, exchange_name)
-
-    case {amount > 0, amount <= old_balance} do
-      {false, _} ->
-        {:reply, {:error, {:non_pos_deposit, "The withdraw amount is not positive"}},
-         exchange_name}
-
-      {true, false} ->
-        {:reply, {:error, {:no_money, "The withdraw amount exceeds balance"}}, exchange_name}
-
-      {true, true} ->
-        balance = old_balance - amount
-        # Generate a changeset with the new balance and edit the user in the DB
-        case Ecto.Changeset.change(user, balance: balance) |> Repo.edit_user() do
-          {:ok, _} -> {:reply, :ok, exchange_name}
-          error -> {:reply, error, exchange_name}
-        end
+    if amount > 0 do
+      {:reply, change_user_balance(id, -amount, exchange_name), exchange_name}
+    else
+      {:reply, {:error, "Can only withdraw positive ammounts"}, exchange_name}
     end
   end
 
@@ -253,13 +244,10 @@ defmodule Betunfair.Server do
   @impl true
   def handle_call({:bet_cancel, bet_id}, _from, exchange_name) do
     {:ok, bet} = Repo.get_bet(bet_id)
-    %Models.User{uid: uid} = Repo.get(Models.User, bet.user)
-    IO.puts("CANCELLING BET #{bet_id}")
-    IO.inspect(bet)
 
     case bet.remaining_stake> 0 do
       true ->
-        case inner_user_deposit(uid, bet.remaining_stake, exchange_name) do
+        case change_user_balance(bet.user, bet.remaining_stake) do
           {:ok, _} ->
             {:reply,
              Repo.edit_bet(
@@ -289,21 +277,23 @@ defmodule Betunfair.Server do
   # PRIVATE FUNCTIONS
   # =================
 
-  defp inner_user_deposit(id, amount, exchange) do
-    case amount <= 0 do
-      true ->
-        {:error, {:non_pos_deposit, "The deposit amount is not positive"}}
+  defp change_user_balance(id, amount) do
+    # Obtain the old user and its balance
+    user = Repo.get(Models.User, id)
+    # Generate a changeset with the new balance and edit the user in the DB
+    case Models.User.change_balance(user, amount) |> Repo.edit_user() do
+      {:ok, _} = res -> res
+      error -> error
+    end
+  end
 
-      false ->
-        # Obtain the old user and its balance
-        {:ok, %Models.User{balance: old_balance} = user} = Repo.get_user(id, exchange)
-        # Calculate the new balance
-        balance = old_balance + amount
-        # Generate a changeset with the new balance and edit the user in the DB
-        case Ecto.Changeset.change(user, balance: balance) |> Repo.edit_user() do
-          {:ok, _} = res -> res
-          error -> error
-        end
+  defp change_user_balance(uid, amount, exchange) do
+    # Obtain the old user and its balance
+    {:ok, user} = Repo.get_user(uid, exchange)
+    # Generate a changeset with the new balance and edit the user in the DB
+    case Models.User.change_balance(user, amount) |> Repo.edit_user() do
+      {:ok, _} = res -> res
+      error -> error
     end
   end
 
@@ -312,9 +302,7 @@ defmodule Betunfair.Server do
       bet.market
       |> Repo.get_market()
 
-    %Models.User{uid: uid} = Repo.get(Models.User, bet.user)
-
-    case inner_user_deposit(uid, bet.original_stake, market.exchange) do
+    case change_user_balance(bet.user, bet.original_stake) do
       {:ok, _} ->
         case Repo.edit_bet(Ecto.Changeset.cast(bet, %{status: :market_cancelled}, [:status])) do
           {:ok, _} -> {success, count + 1}
@@ -331,11 +319,9 @@ defmodule Betunfair.Server do
       bet.market
       |> Repo.get_market()
 
-    %Models.User{uid: uid} = Repo.get(Models.User, bet.user)
-
     case bet.remaining_stake > 0 do
       true ->
-        case inner_user_deposit(uid, bet.remaining_stake, market.exchange) do
+        case change_user_balance(bet.user, bet.remaining_stake) do
           {:ok, _} ->
             case Repo.edit_bet(
                    Ecto.Changeset.cast(bet, %{remaining_stake: 0}, [:remaining_stake])
@@ -354,15 +340,11 @@ defmodule Betunfair.Server do
   end
 
   defp settle_market_bet(bet, {success, count}) do
-    {:ok, market} =
-      bet.market
-      |> Repo.get_market()
-
-    %Models.User{uid: uid} = Repo.get(Models.User, bet.user)
+    {:ok, market} = Repo.get_market(bet.market)
 
     case bet.remaining_stake > 0 do
       true ->
-        case inner_user_deposit(uid, bet.remaining_stake, market.exchange) do
+        case change_user_balance(bet.user, bet.remaining_stake) do
           {:ok, _} ->
             case Repo.edit_bet(
                    Ecto.Changeset.cast(bet, %{remaining_stake: 0, status: :market_settled}, [
@@ -391,8 +373,7 @@ defmodule Betunfair.Server do
         # GANAN BACKS
         earnings = bet.lay_stake + bet.back_stake
 
-        %{uid: uid} = Repo.get(Models.User, bet.back_user)
-        case inner_user_deposit(uid, earnings, market.exchange) do
+        case change_user_balance(bet.back_user, earnings) do
           {:ok, _} ->
             {success, count + 1, result}
 
@@ -404,8 +385,7 @@ defmodule Betunfair.Server do
         # GANAN LAYS
         earnings = bet.lay_stake + bet.back_stake
 
-        %{uid: uid} = Repo.get(Models.User, bet.lay_user)
-        case inner_user_deposit(uid, earnings, market.exchange) do
+        case change_user_balance(bet.lay_user, earnings) do
           {:ok, _} ->
             {success, count + 1, result}
 
@@ -419,8 +399,6 @@ defmodule Betunfair.Server do
     %{status: market_status} = Repo.get(Models.Market, market_id)
     case market_status do
       :active ->
-
-
         case Repo.get_user(user_id, exchange_name) do
           {:ok, %{id: id}} ->
             case Repo.add_bet(%Models.Bet{
@@ -434,8 +412,7 @@ defmodule Betunfair.Server do
                  }) do
               {:ok, %Models.Bet{id: id}} ->
                 # Please don't do this at home
-                handle_call({:user_withdraw, user_id, stake}, __MODULE__, exchange_name)
-
+                change_user_balance(user_id, -stake, exchange_name)
                 {:reply, {:ok, id}, exchange_name}
 
               {:error, error} ->
@@ -445,6 +422,7 @@ defmodule Betunfair.Server do
           error ->
             {:reply, error, exchange_name}
         end
+
       _ -> {:reply, {:error, "Market not active"}, exchange_name}
     end
   end
@@ -454,10 +432,6 @@ defmodule Betunfair.Server do
   end
 
   defp match_bets(top_back, top_lay) do
-    IO.inspect(top_back)
-    IO.puts("max_matched_ammount: #{max_matched_ammount(top_back)}")
-    IO.inspect(top_lay)
-
     case top_back.odds <= top_lay.odds do
       false ->
         :end
@@ -465,7 +439,6 @@ defmodule Betunfair.Server do
       true ->
         case max_matched_ammount(top_back) >= top_lay.remaining_stake do
           true ->
-            IO.puts("Consuming lay stake")
             Repo.edit_bet(Models.Bet.update_remaining_stake(top_lay, 0))
 
             odds = (top_back.odds - 100) / 100
@@ -489,13 +462,10 @@ defmodule Betunfair.Server do
             })
 
           false ->
-            IO.puts("Consuming back stake")
             Repo.edit_bet(Models.Bet.update_remaining_stake(top_back, 0))
 
             odds = (top_lay.odds - 100) / 100
-            IO.puts("Odds are #{odds}")
             matched_stake = trunc(top_back.remaining_stake * odds)
-            IO.puts("Matched stake is #{matched_stake}")
 
             new_top_lay =
               Models.Bet.update_remaining_stake(
@@ -537,7 +507,6 @@ defmodule Betunfair.Server do
             market_match(market_id, exchange_name)
 
           :end ->
-            IO.puts("Ending match algorithm\n")
             {:ok}
         end
     end

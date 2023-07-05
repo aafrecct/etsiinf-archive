@@ -36,14 +36,14 @@ defmodule Betunfair.Repo do
   def add_user(user) do
     case Betunfair.Repo.insert(user) do
       {:ok, _} = res -> res
-      _ -> {:error, {:error_add_user, "User cannot be inserted in the DB"}}
+      error -> {:error, {:error_add_user, "User cannot be inserted in the DB"}}
     end
   end
 
   def edit_user(user) do
     case user |> Betunfair.Repo.update() do
       {:ok, _} = res -> res
-      _ -> {:error, {:error_edit_user, "User cannot be edited in the DB"}}
+      error -> {:error, {:error_edit_user, "User cannot be edited in the DB"}}
     end
   end
 
