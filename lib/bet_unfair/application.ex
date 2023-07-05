@@ -8,13 +8,7 @@ defmodule Betunfair.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      Betunfair.Repo,
-      # Start the Telemetry supervisor
-      BetunfairWeb.Telemetry,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: Betunfair.PubSub}
-      # Start the Endpoint (http/https)
-      # BetunfairWeb.Endpoint
+      Betunfair.Repo
       # Start a worker by calling: Betunfair.Worker.start_link(arg)
       # {Betunfair.Worker, arg}
     ]

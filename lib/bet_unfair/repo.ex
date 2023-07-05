@@ -6,11 +6,25 @@ defmodule Betunfair.Repo do
     otp_app: :bet_unfair,
     adapter: Ecto.Adapters.Postgres
 
+  @tenant_key {__MODULE__, :exchange_name}
+
+  def put_exchange_name(exchange_name) do
+    Process.put(@tenant_key, exchange_name)
+  end
+
+  def get_exchange_name() do
+    Process.get(@tenant_key)
+  end
+
+  @impl true
+  def default_options(_operation) do
+    [exchange: get_exchange_name()]
+  end
+
   # User operations
   # ===============
   def get_user(id, exchange) do
-    case Models.User
-         |> Betunfair.Repo.get_by(uid: id, exchange: exchange) do
+    case get_by(Models.User, uid: id, exchange: exchange) do
       nil ->
         {:error, "No such user"}
 
@@ -20,7 +34,7 @@ defmodule Betunfair.Repo do
   end
 
   def add_user(user) do
-    case user |> Betunfair.Repo.insert() do
+    case Betunfair.Repo.insert(user) do
       {:ok, _} = res -> res
       _ -> {:error, {:error_add_user, "User cannot be inserted in the DB"}}
     end
