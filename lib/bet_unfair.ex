@@ -1,6 +1,5 @@
 defmodule Betunfair do
   alias Betunfair.Repo
-  alias Betunfair.Models
   alias Betunfair.Server
 
   @moduledoc """

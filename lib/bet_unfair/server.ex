@@ -46,7 +46,8 @@ defmodule Betunfair.Server do
 
     case {amount > 0, amount <= old_balance} do
       {false, _} ->
-        {:reply, {:error, {:non_pos_deposit, "The withdraw amount is not positive"}}, exchange_name}
+        {:reply, {:error, {:non_pos_deposit, "The withdraw amount is not positive"}},
+         exchange_name}
 
       {true, false} ->
         {:reply, {:error, {:no_money, "The withdraw amount exceeds balance"}}, exchange_name}
@@ -115,7 +116,8 @@ defmodule Betunfair.Server do
             {:reply, {:ok, "#{count} bets in market frozen."}, exchange_name}
 
           {false, count} ->
-            {:reply, {:error, "#{count} bets frozen, but some couldn't be modified."}, exchange_name}
+            {:reply, {:error, "#{count} bets frozen, but some couldn't be modified."},
+             exchange_name}
         end
 
       {:error, _} = res ->
@@ -136,7 +138,8 @@ defmodule Betunfair.Server do
             {:reply, {:ok, "#{count} bets in market cancelled."}, exchange_name}
 
           {false, count} ->
-            {:reply, {:error, "#{count} bets cancelled, but some couldn't be modified."}, exchange_name}
+            {:reply, {:error, "#{count} bets cancelled, but some couldn't be modified."},
+             exchange_name}
         end
 
       {:error, _} = res ->
@@ -160,17 +163,25 @@ defmodule Betunfair.Server do
          ) do
       {:ok, _} ->
         {:ok, market_bets} = Repo.get_market_bets(id, exchange_name)
+        market_matched_bets = Repo.get_all_matched_bets(id)
+
+        Enum.reduce(
+          market_bets,
+          {true, 0},
+          &settle_market_bet/2
+        )
 
         case Enum.reduce(
-               market_bets,
+               market_matched_bets,
                {true, 0, result},
-               &settle_market_bet/2
+               &settle_market_matched_bet/2
              ) do
           {true, count, _} ->
             {:reply, {:ok, "#{count} bets in market settled."}, exchange_name}
 
           {false, count, _} ->
-            {:reply, {:error, "#{count} bets settled, but some couldn't be modified."}, exchange_name}
+            {:reply, {:error, "#{count} bets settled, but some couldn't be modified."},
+             exchange_name}
         end
 
       {:error, _} = res ->
@@ -220,10 +231,7 @@ defmodule Betunfair.Server do
 
   @impl true
   def handle_call({:market_match, market_id}, _from, exchange_name) do
-    {:ok, lays} = Repo.get_market_pending_bets(market_id, :lay, :desc, exchange_name)
-    {:ok, backs} = Repo.get_market_pending_bets(market_id, :back, :asc, exchange_name)
-
-    case match_bets(lays, backs) do
+    case market_match(market_id, exchange_name) do
       {:ok} ->
         {:reply, :ok, exchange_name}
     end
@@ -246,8 +254,10 @@ defmodule Betunfair.Server do
   def handle_call({:bet_cancel, bet_id}, _from, exchange_name) do
     {:ok, bet} = Repo.get_bet(bet_id)
     %Models.User{uid: uid} = Repo.get(Models.User, bet.user)
+    IO.puts("CANCELLING BET #{bet_id}")
+    IO.inspect(bet)
 
-    case bet.remaining_stake <= 0 do
+    case bet.remaining_stake> 0 do
       true ->
         case inner_user_deposit(uid, bet.remaining_stake, exchange_name) do
           {:ok, _} ->
@@ -343,120 +353,193 @@ defmodule Betunfair.Server do
     end
   end
 
-  defp settle_market_bet(bet, {success, count, result}) do
-    {:ok, market} = Repo.get_market(bet.market)
+  defp settle_market_bet(bet, {success, count}) do
+    {:ok, market} =
+      bet.market
+      |> Repo.get_market()
 
     %Models.User{uid: uid} = Repo.get(Models.User, bet.user)
 
-    acc =
-      cond do
-        {bet.bet_type, result} == {:lay, false} or {bet.bet_type, result} == {:back, true} ->
-          earnings = (bet.original_stake - bet.remaining_stake) * bet.odds + bet.remaining_stake
+    case bet.remaining_stake > 0 do
+      true ->
+        case inner_user_deposit(uid, bet.remaining_stake, market.exchange) do
+          {:ok, _} ->
+            case Repo.edit_bet(
+                   Ecto.Changeset.cast(bet, %{remaining_stake: 0, status: :market_settled}, [
+                     :remaining_stake,
+                     :status
+                   ])
+                 ) do
+              {:ok, _} -> {success, count + 1}
+              {:error, _} -> {false, count}
+            end
 
-          case inner_user_deposit(uid, earnings, market.exchange) do
-            {:ok, _} ->
-              {success, count + 1, result}
+          {:error, _} ->
+            {false, count}
+        end
 
-            {:error, _} ->
-              {false, count, result}
-          end
+      false ->
+        {success, count + 1}
+    end
+  end
 
-        true ->
-          case bet.remaining_stake > 0 do
-            true ->
-              case inner_user_deposit(uid, bet.remaining_stake, market.exchange) do
-                {:ok, _} ->
-                  {success, count + 1, result}
+  defp settle_market_matched_bet(bet, {success, count, result}) do
+    {:ok, market} = Repo.get_market(bet.market)
 
-                {:error, _} ->
-                  {false, count, result}
-              end
+    case result do
+      true ->
+        # GANAN BACKS
+        earnings = bet.lay_stake + bet.back_stake
 
-            false ->
-              {success, count + 1, result}
-          end
+        %{uid: uid} = Repo.get(Models.User, bet.back_user)
+        case inner_user_deposit(uid, earnings, market.exchange) do
+          {:ok, _} ->
+            {success, count + 1, result}
+
+          {:error, _} ->
+            {false, count, result}
+        end
+
+      false ->
+        # GANAN LAYS
+        earnings = bet.lay_stake + bet.back_stake
+
+        %{uid: uid} = Repo.get(Models.User, bet.lay_user)
+        case inner_user_deposit(uid, earnings, market.exchange) do
+          {:ok, _} ->
+            {success, count + 1, result}
+
+          {:error, _} ->
+            {false, count, result}
+        end
       end
-
-    Ecto.Changeset.cast(bet, %{status: :market_settled}, [:status])
-    acc
   end
 
   defp place_bet(kind, user_id, market_id, stake, odds, exchange_name) do
+    %{status: market_status} = Repo.get(Models.Market, market_id)
+    case market_status do
+      :active ->
 
-    case Repo.get_user(user_id, exchange_name) do
-      {:ok, %{id: id}} ->
-        case Repo.add_bet(%Models.Bet{
-               bet_type: kind,
-               user: id,
-               market: market_id,
-               original_stake: stake,
-               odds: odds,
-               status: :active,
-               remaining_stake: stake
-             }) do
-          {:ok, %Models.Bet{id: id}} ->
-            # Please don't do this at home
-            handle_call({:user_withdraw, user_id, stake}, __MODULE__, exchange_name)
 
-            {:reply, {:ok, id}, exchange_name}
+        case Repo.get_user(user_id, exchange_name) do
+          {:ok, %{id: id}} ->
+            case Repo.add_bet(%Models.Bet{
+                   bet_type: kind,
+                   user: id,
+                   market: market_id,
+                   original_stake: stake,
+                   odds: odds,
+                   status: :active,
+                   remaining_stake: stake
+                 }) do
+              {:ok, %Models.Bet{id: id}} ->
+                # Please don't do this at home
+                handle_call({:user_withdraw, user_id, stake}, __MODULE__, exchange_name)
 
-          {:error, error} ->
+                {:reply, {:ok, id}, exchange_name}
+
+              {:error, error} ->
+                {:reply, error, exchange_name}
+            end
+
+          error ->
             {:reply, error, exchange_name}
         end
-
-      error ->
-        error
+      _ -> {:reply, {:error, "Market not active"}, exchange_name}
     end
   end
 
   defp max_matched_ammount(bet) do
-    trunc(bet.remaining_stake * (bet.odds / 100 - 1))
-  end
-  
-  defp match_bets([], _) do
-    {:ok}
+    trunc(bet.remaining_stake * (bet.odds - 100) / 100)
   end
 
-  defp match_bets(_, []) do
-    {:ok}
-  end
+  defp match_bets(top_back, top_lay) do
+    IO.inspect(top_back)
+    IO.puts("max_matched_ammount: #{max_matched_ammount(top_back)}")
+    IO.inspect(top_lay)
 
-  defp match_bets([hlay | lays], [hback | backs]) do
-
-    IO.puts "Match bets called\n====================="
-    IO.inspect hlay
-    IO.inspect hback
-    
-    case hback.odds <= hlay.odds do
+    case top_back.odds <= top_lay.odds do
       false ->
-        {:ok}
+        :end
 
       true ->
-        case max_matched_ammount(hback) >= hlay.remaining_stake do
+        case max_matched_ammount(top_back) >= top_lay.remaining_stake do
           true ->
-            IO.puts "Consuming lay stake"
-            Repo.edit_bet(Models.Bet.update_remaining_stake(hlay, 0))
+            IO.puts("Consuming lay stake")
+            Repo.edit_bet(Models.Bet.update_remaining_stake(top_lay, 0))
 
-            Repo.edit_bet(
+            odds = (top_back.odds - 100) / 100
+            matched_stake = trunc(top_lay.remaining_stake / odds)
+
+            new_top_back =
               Models.Bet.update_remaining_stake(
-                hback,
-                hback.remaining_stake - trunc(hlay.remaining_stake / (hlay.odds / 100) - hlay.remaining_stake)
-                )
-            )
+                top_back,
+                top_back.remaining_stake - matched_stake
+              )
+
+            Repo.edit_bet(new_top_back)
+
+            Repo.match_bets_create(%Models.MatchedBet{
+              lay_user: top_lay.user,
+              back_user: top_back.user,
+              market: top_back.market,
+              lay_stake: top_lay.remaining_stake,
+              back_stake: matched_stake,
+              odds: top_back.odds
+            })
 
           false ->
-            IO.puts "Consuming back stake"
-            Repo.edit_bet(Models.Bet.update_remaining_stake(hback, 0))
+            IO.puts("Consuming back stake")
+            Repo.edit_bet(Models.Bet.update_remaining_stake(top_back, 0))
 
-            Repo.edit_bet(
+            odds = (top_lay.odds - 100) / 100
+            IO.puts("Odds are #{odds}")
+            matched_stake = trunc(top_back.remaining_stake * odds)
+            IO.puts("Matched stake is #{matched_stake}")
+
+            new_top_lay =
               Models.Bet.update_remaining_stake(
-                hlay,
-                hlay.remaining_stake - trunc(hback.remaining_stake * (hlay.odds / 100) - hback.remaining_stake)
+                top_lay,
+                top_lay.remaining_stake - matched_stake
               )
-            )
+
+            Repo.edit_bet(new_top_lay)
+
+            Repo.match_bets_create(%Models.MatchedBet{
+              lay_user: top_lay.user,
+              back_user: top_back.user,
+              market: top_back.market,
+              lay_stake: matched_stake,
+              back_stake: top_back.remaining_stake,
+              #! Puede que esto este mal
+              odds: top_back.odds
+            })
         end
 
-        match_bets(lays, backs)
+        :continue
+    end
+  end
+
+  defp market_match(market_id, exchange_name) do
+    {:ok, backs} = Repo.get_market_pending_bets(market_id, :back, :asc, exchange_name)
+    {:ok, lays} = Repo.get_market_pending_bets(market_id, :lay, :desc, exchange_name)
+
+    case {backs, lays} do
+      {[], _} ->
+        {:ok}
+
+      {_, []} ->
+        {:ok}
+
+      {[top_back | _], [top_lay | _]} ->
+        case match_bets(top_back, top_lay) do
+          :continue ->
+            market_match(market_id, exchange_name)
+
+          :end ->
+            IO.puts("Ending match algorithm\n")
+            {:ok}
+        end
     end
   end
 end

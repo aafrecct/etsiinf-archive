@@ -27,9 +27,17 @@ defmodule Betunfair.Repo.Migrations.AddBaseSchemas do
       add :remaining_stake, :integer
       add :odds, :integer
       add :status, :string
-      add :matched, references(:bets, name: "matched")
       add :inserted_at, :timestamp
       add :updated_at, :timestamp
+    end
+
+    create table(:matched_bets) do
+      add :lay_user, references(:users, name: "lay_user", on_delete: :delete_all)
+      add :back_user, references(:users, name: "back_user", on_delete: :delete_all)
+      add :market, :integer
+      add :lay_stake, :integer
+      add :back_stake, :integer
+      add :odds, :integer
     end
   end
 end

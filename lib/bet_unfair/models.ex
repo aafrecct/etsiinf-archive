@@ -15,12 +15,25 @@ defmodule Betunfair.Models.Bet do
       default: :active
 
     timestamps()
-    has_many :matched, Betunfair.Models.Bet, foreign_key: :bmatched
   end
 
   def update_remaining_stake(struct, remaining_stake) do
     struct
-    |> cast(%{"remaining_stake" => remaining_stake}, [:remaining_stake])
+    |> cast(%{remaining_stake: remaining_stake}, [:remaining_stake])
+  end
+end
+
+defmodule Betunfair.Models.MatchedBet do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  schema "matched_bets" do
+    field :lay_user, :integer
+    field :back_user, :integer
+    field :market, :integer
+    field :lay_stake, :integer
+    field :back_stake, :integer
+    field :odds, :integer
   end
 end
 

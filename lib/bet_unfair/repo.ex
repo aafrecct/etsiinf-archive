@@ -192,4 +192,15 @@ defmodule Betunfair.Repo do
 
     {:ok}
   end
+
+  def match_bets_create(matched_bet) do
+    case Betunfair.Repo.insert(matched_bet) do
+      {:ok, _} = res -> res
+      _ -> {:error, {:error_match_bet, "Bets cannot be matched in DB"}}
+    end
+  end
+
+  def get_all_matched_bets(market_id) do
+    all(Models.MatchedBet, market: market_id)
+  end
 end
