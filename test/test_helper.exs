@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(BetUnfair.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(Betunfair.Repo, :manual)

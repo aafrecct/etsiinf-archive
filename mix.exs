@@ -1,4 +1,4 @@
-defmodule BetUnfair.MixProject do
+defmodule Betunfair.MixProject do
   use Mix.Project
 
   def project do
@@ -7,7 +7,7 @@ defmodule BetUnfair.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -19,7 +19,7 @@ defmodule BetUnfair.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {BetUnfair.Application, []},
+      mod: {Betunfair.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

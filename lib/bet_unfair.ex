@@ -1,234 +1,33 @@
-defmodule BetUnfair do
-  use GenServer
-  alias BetUnfair.Repo
-  alias BetUnfair.Models
+defmodule Betunfair do
+  alias Betunfair.Repo
+  alias Betunfair.Server
 
   @moduledoc """
   Final deliverable for the Programming Scalable Systems course at ESTIINF UPM.
   (I enjoy calling it Bet Fun Fair because gambling is only a problem is you
   stop before you win big)
 
-  BetUnfair keeps the contexts that define your domain
+  Betunfair keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless
   if it comes from the database, an external API or others.
   """
 
-  def start_link(name) when is_binary(name) do
-    GenServer.start_link(__MODULE__, %{name: name}, name: __MODULE__)
+  def start_link(exchange_name) when is_binary(exchange_name) do
+    GenServer.start_link(Server, exchange_name, name: __MODULE__)
   end
 
-  @impl true
-  def init(state) do
-    {:ok, state}
-  end
-
-  defp matched_ammount(bet) do
-    bet.remaining_stake * (bet.odds - 1)
-  end
-
-  defp update_bet(bet_changeset) do
-    Repo.edit_bet(bet_changeset)
-  end
-
-  defp match_bets([hlay | lays], [hback | backs]) do
-    case hback.odds <= hlay.odds do
-      false ->
-        {:ok}
-
-      true ->
-        case matched_ammount(hback) >= hlay.remaining_stake do
-          false ->
-            update_bet(Models.Bet.update_remaining_stake(hlay, 0))
-
-            update_bet(
-              Models.Bet.update_remaining_stake(
-                hback,
-                hback.remaining_stake - hlay.remaining_stake
-              )
-            )
-
-          true ->
-            update_bet(Models.Bet.update_remaining_stake(hback, 0))
-
-            update_bet(
-              Models.Bet.update_remaining_stake(
-                hlay,
-                hlay.remaining_stake - hback.remaining_stake
-              )
-            )
-        end
-
-        match_bets(lays, backs)
+  def stop() do
+    case GenServer.whereis(__MODULE__) do
+      nil -> {:ok, "No active server"}
+      _ -> GenServer.stop(__MODULE__)
     end
   end
 
-  @impl true
-  def handle_call({:user_create, id, name}, _from, state) do
-    case Repo.get_user(id, state.name) do
-      {:error, _} ->
-        {:reply,
-         Repo.add_user(%Models.User{
-           uid: id,
-           name: name,
-           exchange: state.name
-         }), state}
-
-      {:ok, _} ->
-        {:reply, {:error, {:error_user_exists, "User already exists"}}, state}
-    end
-  end
-
-  @impl true
-  def handle_call({:user_deposit, id, amount}, _from, state) do
-    case amount <= 0 do
-      true ->
-        {:reply, {:error, {:non_pos_deposit, "The deposit amount is not positive"}}, state}
-
-      false ->
-        # Obtain the old user and its balance
-        {:ok, %Models.User{balance: old_balance} = user} = Repo.get_user(id, state.name)
-        # Calculate the new balance
-        balance = old_balance + amount
-        # Generate a changeset with the new balance and edit the user in the DB
-        case Ecto.Changeset.change(user, balance: balance) |> Repo.edit_user() do
-          {:ok, _} -> {:reply, :ok, state}
-          error -> {:reply, error, state}
-        end
-    end
-  end
-
-  @impl true
-  def handle_call({:user_withdraw, id, amount}, _from, state) do
-    {:ok, %Models.User{balance: old_balance} = user} = Repo.get_user(id, state.name)
-
-    case {amount > 0, amount <= old_balance} do
-      {false, _} ->
-        {:reply, {:error, {:non_pos_deposit, "The withdraw amount is not positive"}}, state}
-
-      {true, false} ->
-        {:reply, {:error, {:no_money, "The withdraw amount exceeds balance"}}, state}
-
-      {true, true} ->
-        balance = old_balance - amount
-        # Generate a changeset with the new balance and edit the user in the DB
-        case Ecto.Changeset.change(user, balance: balance) |> Repo.edit_user() do
-          {:ok, _} -> {:reply, :ok, state}
-          error -> {:reply, error, state}
-        end
-    end
-  end
-
-  @impl true
-  def handle_call({:user_get, id}, _from, state) do
-    case Repo.get_user(id, state.name) do
-      {:ok, %{id: _}} = res -> {:reply, res, state}
-      error -> {:reply, error, state}
-    end
-  end
-
-  @impl true
-  def handle_call({:user_bets, id}, _from, state) do
-    case Repo.get_user(id, state.name) do
-      {:error, _} = res ->
-        res
-
-      {:ok, user} ->
-        user.id
-        {:reply, Repo.get_user_bets(user.id), state}
-    end
-  end
-
-  @impl true
-  def handle_call({:market_create, name, description}, _from, state) do
-    {:ok, %Models.Market{id: id}} =
-      Repo.add_market(%Models.Market{
-        name: name,
-        description: description,
-        status: :active,
-        exchange: state.name
-      })
-
-    {:reply, id, state}
-  end
-
-  @impl true
-  def handle_call({:market_list}, _from, state) do
-    {:reply, Repo.get_all_markets(state.name), state}
-  end
-
-  @impl true
-  def handle_call({:market_list_active}, _from, state) do
-    {:reply, Repo.get_status_markets(:active, state.name), state}
-  end
-
-  def handle_call({:market_bets, id}, _from, state) do
-    {:reply, Repo.get_market_bets(id, state.name), state}
-  end
-
-  def handle_call({:market_pending_backs, id}, _from, state) do
-    {:reply, Repo.get_market_pending_bets(id, :back, state.name), state}
-  end
-
-  def handle_call({:market_pending_lays, id}, _from, state) do
-    {:reply, Repo.get_market_pending_bets(id, :lay, state.name), state}
-  end
-
-  def handle_call({:market_get, id}, _from, state) do
-    case Repo.get_market(id, state.name) do
-      {:ok, %{id: _}} = res -> {:reply, res, state}
-      {:error, _} = error -> {:reply, error, state}
-    end
-  end
-
-  def handle_call({:bet_back, user_id, market_id, stake, odds}, _from, state) do
-    case Repo.get_user(user_id, state.name) do
-      {:ok, %{id: id}} ->
-        case Repo.add_bet(%Models.Bet{
-               bet_type: :back,
-               user: id,
-               market: market_id,
-               original_stake: stake,
-               odds: odds,
-               status: :active,
-               remaining_stake: stake
-             }) do
-          {:ok, %Models.Bet{id: id}} -> {:reply, {:ok, id}, state}
-          {:error, error} -> {:reply, error, state}
-        end
-
-      error ->
-        error
-    end
-  end
-
-  def handle_call({:bet_lay, user_id, market_id, stake, odds}, _from, state) do
-    case Repo.get_user(user_id, state.name) do
-      {:ok, %{id: id}} ->
-        case Repo.add_bet(%Models.Bet{
-               bet_type: :lay,
-               user: id,
-               market: market_id,
-               original_stake: stake,
-               odds: odds,
-               status: :active,
-               remaining_stake: stake
-             }) do
-          {:ok, %Models.Bet{id: id}} -> {:reply, {:ok, id}, state}
-          {:error, error} -> {:reply, error, state}
-        end
-
-      error ->
-        {:reply, error, state}
-    end
-  end
-
-  def handle_call({:bet_get, bet_id}, _from, state) do
-    case Repo.get_bet(bet_id) do
-      {:ok, %{id: _}} = res -> {:reply, res, state}
-      {:error, _} = error -> {:reply, error, state}
-    end
+  def clean(name) do
+    Repo.delete_exchange(name)
+    Betunfair.stop()
   end
 
   # USERS
@@ -261,27 +60,28 @@ defmodule BetUnfair do
     GenServer.call(__MODULE__, {:market_create, name, description})
   end
 
+  def market_match(market_id) do
+    GenServer.call(__MODULE__, {:market_match, market_id})
+  end
+
   def market_list() do
     GenServer.call(__MODULE__, {:market_list})
   end
 
-  def market_list_active() do
-    GenServer.call(__MODULE__, {:market_list_active})
-  end
-
   def market_cancel(id) do
-    # IDK maybe depends on the algorithm
-    {:ok}
+    GenServer.call(__MODULE__, {:market_cancel, id})
   end
 
   def market_freeze(id) do
-    # IDK maybe depends on the algorithm
-    {:ok}
+    GenServer.call(__MODULE__, {:market_freeze, id})
   end
 
   def market_settle(id, result) do
-    # IDK maybe depends on the algorithm
-    {:ok}
+    GenServer.call(__MODULE__, {:market_settle, id, result})
+  end
+
+  def market_list_active() do
+    GenServer.call(__MODULE__, {:market_list_active})
   end
 
   def market_bets(id) do
@@ -302,6 +102,7 @@ defmodule BetUnfair do
 
   # BETS
   # ====
+
   def bet_back(user_id, market_id, stake, odds) do
     GenServer.call(__MODULE__, {:bet_back, user_id, market_id, stake, odds})
   end
@@ -311,7 +112,7 @@ defmodule BetUnfair do
   end
 
   def bet_cancel(bet_id) do
-    {:ok}
+    GenServer.call(__MODULE__, {:bet_cancel, bet_id})
   end
 
   def bet_get(bet_id) do

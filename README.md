@@ -1,4 +1,4 @@
-# BetUnfair
+# Betunfair
 
 To start your Phoenix server:
 

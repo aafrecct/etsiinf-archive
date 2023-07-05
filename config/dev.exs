@@ -1,7 +1,7 @@
-use Mix.Config
+import Config
 
 # Configure your database
-config :bet_unfair, BetUnfair.Repo,
+config :bet_unfair, Betunfair.Repo,
   username: "betunfair",
   password: "betunfair",
   database: "betunfair",
@@ -15,7 +15,7 @@ config :bet_unfair, BetUnfair.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :bet_unfair, BetUnfairWeb.Endpoint,
+config :bet_unfair, BetunfairWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
