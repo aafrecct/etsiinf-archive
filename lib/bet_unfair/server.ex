@@ -245,7 +245,7 @@ defmodule Betunfair.Server do
   def handle_call({:bet_cancel, bet_id}, _from, exchange_name) do
     {:ok, bet} = Repo.get_bet(bet_id)
 
-    case bet.remaining_stake> 0 do
+    case bet.remaining_stake > 0 do
       true ->
         case change_user_balance(bet.user, bet.remaining_stake) do
           {:ok, _} ->
@@ -392,11 +392,12 @@ defmodule Betunfair.Server do
           {:error, _} ->
             {false, count, result}
         end
-      end
+    end
   end
 
   defp place_bet(kind, user_id, market_id, stake, odds, exchange_name) do
     %{status: market_status} = Repo.get(Models.Market, market_id)
+
     case market_status do
       :active ->
         case Repo.get_user(user_id, exchange_name) do
@@ -423,7 +424,8 @@ defmodule Betunfair.Server do
             {:reply, error, exchange_name}
         end
 
-      _ -> {:reply, {:error, "Market not active"}, exchange_name}
+      _ ->
+        {:reply, {:error, "Market not active"}, exchange_name}
     end
   end
 

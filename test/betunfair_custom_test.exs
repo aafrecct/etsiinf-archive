@@ -39,10 +39,12 @@ defmodule BetunfairCustomTest do
     assert {:ok, %{balance: 2000}} = Betunfair.user_get(u1)
     assert {:ok, m1} = Betunfair.market_create("apss", "Aprobamos PSS")
     assert {:ok, bb} = Betunfair.bet_back(u1, m1, 1000, 150)
+
     assert {:ok, %{id: ^bb, bet_type: :back, remaining_stake: 1000, odds: 150, status: :active}} =
              Betunfair.bet_get(bb)
 
     assert {:ok, bl} = Betunfair.bet_lay(u1, m1, 1000, 150)
+
     assert {:ok, %{id: ^bl, bet_type: :lay, remaining_stake: 1000, odds: 150, status: :active}} =
              Betunfair.bet_get(bl)
 
