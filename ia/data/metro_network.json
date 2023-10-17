@@ -1,0 +1,87 @@
+{
+  "Line 1": {
+    "number": 1,
+    "color": "red",
+    "length": 22640,
+    "transfers": {
+      "Line 2": [120, 217],
+      "Line 3": [119, 313]
+    },
+    "stations" : [
+      {"name": "Akademmistechko", "ukranian_name": "Академмістечко", "coords": [1, 5]},
+      {"name": "Zhytomyrska", "ukranian_name": "Житомирська", "coords": [3, 7]},
+      {"name": "Sviatoshyn", "ukranian_name": "Святошин", "coords": [5, 9]},
+      {"name": "Nyvky", "ukranian_name": "Нивки", "coords": [7, 11]},
+      {"name": "Beresteiska", "ukranian_name": "Берестейська", "coords": [9, 13]},
+      {"name": "Shuliavska", "ukranian_name": "Шулявська", "coords": [11, 15]},
+      {"name": "Politekhnichnyi Instytut", "ukranian_name": "Політехнічний інститут", "coords": [13, 17]},
+      {"name": "Vokzalna", "ukranian_name": "Вокзальна", "coords": [16, 17]},
+      {"name": "Universytet", "ukranian_name": "Університет", "coords": [20, 17]},
+      {"name": "Teatralna", "ukranian_name": "Театральна", "connects_with": "Zoloti vorota", "coords": [23, 17]},
+      {"name": "Kreshchatyk", "ukranian_name": "Хрещатик", "connects_with": "Maidan Nezalezhnosti", "coords": [26, 17]},
+      {"name": "Arsenalna", "ukranian_name": "Арсенальна", "coords": [28, 19]},
+      {"name": "Dnipro", "ukranian_name": "Дніпро", "coords": [30, 21]},
+      {"name": "Hidropark", "ukranian_name": "Гідропарк", "coords": [33, 21]},
+      {"name": "Livoberezhna", "ukranian_name": "Лівобережна", "coords": [36, 21]},
+      {"name": "Darnytsia", "ukranian_name": "Дарниця", "coords": [38, 19]},
+      {"name": "Chernihivska", "ukranian_name": "Чернігівська", "coords": [40, 17]},
+      {"name": "Lisova", "ukranian_name": "Лісова", "coords": [42, 15]}
+    ]
+  },
+  "Line 2": {
+    "number": 2,
+    "color": "blue",
+    "length": 20950,
+    "transfers": {
+      "Line 1": [217, 120],
+      "Line 3": [218, 314]
+    },
+    "stations": [
+      {"name": "Heroyiv Dnipra", "ukranian_name": "Героїв Дніпра", "coords": [24, 1]},
+      {"name": "Minska", "ukranian_name": "Мінська", "coords": [24, 3]},
+      {"name": "Obolon", "ukranian_name": "Оболонь", "coords": [24, 5]},
+      {"name": "Pochaina", "ukranian_name": "Почайна", "coords": [24, 7]},
+      {"name": "Tarasa Shevchenka", "ukranian_name": "Тараса Шевченка", "coords": [24, 9]},
+      {"name": "Kontraktova ploshcha", "ukranian_name": "Контрактова площа", "coords": [24, 11]},
+      {"name": "Poshtova ploshcha", "ukranian_name": "Поштова площа", "coords": [24, 13]},
+      {"name": "Maidan Nezalezhnosti", "ukranian_name": "Майдан Незалежності", "connects_with":  "Kreshchatyk", "coords": [24, 15]},
+      {"name": "Ploshcha Lva Tolstogo", "ukranian_name": "Площа Льва Толстого", "connects_with": "Palats Sportu", "coords": [22, 20]},
+      {"name": "Olimpiiska", "ukranian_name": "Олімпійська", "coords": [20, 22]},
+      {"name": "Palats Ukraina", "ukranian_name": "Палац «Україна»", "coords": [20, 24]},
+      {"name": "Lybidska", "ukranian_name": "Либідська", "coords": [20, 26]},
+      {"name": "Demiivska", "ukranian_name": "Деміївська", "coords": [18, 28]},
+      {"name": "Holosiivska", "ukranian_name": "Голосіївська", "coords": [16, 30]},
+      {"name": "Vasylkivska", "ukranian_name": "Васильківська", "coords": [14, 32]},
+      {"name": "Vystavkovyi tsentr", "ukranian_name": "Виставковий центр", "coords": [12, 34]},
+      {"name": "Ipodrom", "ukranian_name": "Іподром", "coords": [10, 36]},
+      {"name": "Teremky", "ukranian_name": "Теремки", "coords":[7, 36]}
+    ]
+  },
+  "Line 3": {
+    "number": 3,
+    "color": "green",
+    "length": 23860,
+    "transfers": {
+      "Line 1": [313, 119],
+      "Line 2": [314, 218]
+    },
+    "stations": [
+      {"name": "Syrets", "ukranian_name": "Сирець", "coords": [15, 9]},
+      {"name": "Dorohozhychi", "ukranian_name": "Дорогожичі", "coords": [17, 11]},
+      {"name": "Lukianivska", "ukranian_name": "Лук'янівська", "coords": [19, 13]},
+      {"name": "Zoloti vorota", "ukranian_name": "Золоті ворота", "connects_with": "Teatralna", "coords": [21, 15]},
+      {"name": "Palats Sportu", "ukranian_name": "Палац спорту", "connects_with": "Ploshcha Lva Tolstogo", "coords": [24, 20]},
+      {"name": "Klovska", "ukranian_name": "Кловська", "coords": [26, 22]},
+      {"name": "Percherska", "ukranian_name": "Печерська", "coords": [26, 24]},
+      {"name": "Druzhby Narodiv", "ukranian_name": "Дружби народів", "coords": [26, 26]},
+      {"name": "Vydubychi", "ukranian_name": "Видубичі", "coords": [26, 28]},
+      {"name": "Slavutych", "ukranian_name": "Славутич", "coords": [28, 30]},
+      {"name": "Osokorky", "ukranian_name": "Осокорки", "coords": [30, 32]},
+      {"name": "Pozniaky", "ukranian_name": "Позняки", "coords": [32, 34]},
+      {"name": "Kharkivska", "ukranian_name": "Харківська", "coords": [35, 34]},
+      {"name": "Vyrlytsia", "ukranian_name": "Вирлиця", "coords": [37, 32]},
+      {"name": "Boryspilska", "ukranian_name": "Бориспільська", "coords": [39, 30]},
+      {"name": "Chervonyi Khutir", "ukranian_name": "Червоний хутір", "coords": [41, 28]}
+    ]
+  }
+}
