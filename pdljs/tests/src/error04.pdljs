@@ -1,0 +1,13 @@
+function Func4 int ()
+{
+    let int i;
+    let boolean name;
+    i = 5;
+    while (i > 0) {
+    /* Input can only be saved to string type variables */
+        input(name);
+        print("Bucle");
+        print(name);
+        i += -1;
+    }
+}

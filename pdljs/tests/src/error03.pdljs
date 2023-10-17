@@ -1,0 +1,18 @@
+function Func3 int (int pi1, boolean pb1)
+{  
+    let boolean fb1;
+    pi1 = 11;
+    fb1 = true;
+    fb1 = !fb1;
+    if (fb1) s1 = "adios";
+    if (!fb1) s1 = "hola";
+    
+    return pi1;
+    /*
+    s2 = "adios" 
+    return s2; 
+    */
+}
+
+/* Calling the function with wrong arguments */
+Func3(-27, 3);

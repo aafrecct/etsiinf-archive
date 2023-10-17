@@ -1,0 +1,1753 @@
+Grammar:
+
+Rule 0     S' -> P
+Rule 1     P -> empty
+Rule 2     P -> F P
+Rule 3     P -> B P
+Rule 4     B -> WHL PAO E PAC BRO C BRC
+Rule 5     B -> S
+Rule 6     B -> IFT PAO E PAC S
+Rule 7     B -> LET TYP VID SCL
+Rule 8     S -> INP PAO VID PAC SCL
+Rule 9     S -> PRT PAO E PAC SCL
+Rule 10    S -> VID PAO L PAC SCL
+Rule 11    S -> RET X SCL
+Rule 12    S -> VID PAS E SCL
+Rule 13    S -> VID ASG E SCL
+Rule 14    X -> empty
+Rule 15    X -> E
+Rule 16    C -> empty
+Rule 17    C -> B C
+Rule 18    L -> empty
+Rule 19    L -> E Q
+Rule 20    Q -> empty
+Rule 21    Q -> COM E Q
+Rule 22    F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC
+Rule 23    before_func_args -> <empty>
+Rule 24    after_func_args -> <empty>
+Rule 25    H -> empty
+Rule 26    H -> TYP
+Rule 27    A -> empty
+Rule 28    A -> TYP VID K
+Rule 29    K -> empty
+Rule 30    K -> COM TYP VID K
+Rule 31    E -> R
+Rule 32    E -> E AND R
+Rule 33    R -> Y
+Rule 34    R -> R EQS Y
+Rule 35    Y -> U
+Rule 36    Y -> Y GRT U
+Rule 37    U -> W
+Rule 38    U -> U MIN W
+Rule 39    U -> U PLS W
+Rule 40    W -> V
+Rule 41    W -> MIN W
+Rule 42    W -> PLS W
+Rule 43    W -> NOT W
+Rule 44    V -> STR
+Rule 45    V -> BOL
+Rule 46    V -> INT
+Rule 47    V -> VID PAO L PAC
+Rule 48    V -> PAO E PAC
+Rule 49    V -> VID
+Rule 50    empty -> <empty>
+
+Terminals, with rules where they appear:
+
+AND                  : 32
+ASG                  : 13
+BOL                  : 45
+BRC                  : 4 22
+BRO                  : 4 22
+COM                  : 21 30
+EQS                  : 34
+FUN                  : 22
+GRT                  : 36
+IFT                  : 6
+INP                  : 8
+INT                  : 46
+LET                  : 7
+MIN                  : 38 41
+NOT                  : 43
+PAC                  : 4 6 8 9 10 22 47 48
+PAO                  : 4 6 8 9 10 22 47 48
+PAS                  : 12
+PLS                  : 39 42
+PRT                  : 9
+RET                  : 11
+SCL                  : 7 8 9 10 11 12 13
+STR                  : 44
+TYP                  : 7 26 28 30
+VID                  : 7 8 10 12 13 22 28 30 47 49
+WHL                  : 4
+error                : 
+
+Nonterminals, with rules where they appear:
+
+A                    : 22
+B                    : 3 17
+C                    : 4 17 22
+E                    : 4 6 9 12 13 15 19 21 32 48
+F                    : 2
+H                    : 22
+K                    : 28 30
+L                    : 10 47
+P                    : 2 3 0
+Q                    : 19 21
+R                    : 31 32 34
+S                    : 5 6
+U                    : 35 36 38 39
+V                    : 40
+W                    : 37 38 39 41 42 43
+X                    : 11
+Y                    : 33 34 36
+after_func_args      : 22
+before_func_args     : 22
+empty                : 1 14 16 18 20 25 27 29
+
+
+state 0
+
+    (0) S' -> . P
+    (1) P -> . empty
+    (2) P -> . F P
+    (3) P -> . B P
+    (50) empty -> .
+    (22) F -> . FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC
+    (4) B -> . WHL PAO E PAC BRO C BRC
+    (5) B -> . S
+    (6) B -> . IFT PAO E PAC S
+    (7) B -> . LET TYP VID SCL
+    (8) S -> . INP PAO VID PAC SCL
+    (9) S -> . PRT PAO E PAC SCL
+    (10) S -> . VID PAO L PAC SCL
+    (11) S -> . RET X SCL
+    (12) S -> . VID PAS E SCL
+    (13) S -> . VID ASG E SCL
+    $end            reduce using rule 50 (empty -> .)
+    FUN             shift and go to state 5
+    WHL             shift and go to state 7
+    IFT             shift and go to state 9
+    LET             shift and go to state 10
+    INP             shift and go to state 11
+    PRT             shift and go to state 12
+    VID             shift and go to state 6
+    RET             shift and go to state 13
+
+    P                              shift and go to state 1
+    empty                          shift and go to state 2
+    F                              shift and go to state 3
+    B                              shift and go to state 4
+    S                              shift and go to state 8
+
+state 1
+
+    (0) S' -> P .
+
+
+state 2
+
+    (1) P -> empty .
+    $end            reduce using rule 1 (P -> empty .)
+
+
+state 3
+
+    (2) P -> F . P
+    (1) P -> . empty
+    (2) P -> . F P
+    (3) P -> . B P
+    (50) empty -> .
+    (22) F -> . FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC
+    (4) B -> . WHL PAO E PAC BRO C BRC
+    (5) B -> . S
+    (6) B -> . IFT PAO E PAC S
+    (7) B -> . LET TYP VID SCL
+    (8) S -> . INP PAO VID PAC SCL
+    (9) S -> . PRT PAO E PAC SCL
+    (10) S -> . VID PAO L PAC SCL
+    (11) S -> . RET X SCL
+    (12) S -> . VID PAS E SCL
+    (13) S -> . VID ASG E SCL
+    $end            reduce using rule 50 (empty -> .)
+    FUN             shift and go to state 5
+    WHL             shift and go to state 7
+    IFT             shift and go to state 9
+    LET             shift and go to state 10
+    INP             shift and go to state 11
+    PRT             shift and go to state 12
+    VID             shift and go to state 6
+    RET             shift and go to state 13
+
+    F                              shift and go to state 3
+    P                              shift and go to state 14
+    empty                          shift and go to state 2
+    B                              shift and go to state 4
+    S                              shift and go to state 8
+
+state 4
+
+    (3) P -> B . P
+    (1) P -> . empty
+    (2) P -> . F P
+    (3) P -> . B P
+    (50) empty -> .
+    (22) F -> . FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC
+    (4) B -> . WHL PAO E PAC BRO C BRC
+    (5) B -> . S
+    (6) B -> . IFT PAO E PAC S
+    (7) B -> . LET TYP VID SCL
+    (8) S -> . INP PAO VID PAC SCL
+    (9) S -> . PRT PAO E PAC SCL
+    (10) S -> . VID PAO L PAC SCL
+    (11) S -> . RET X SCL
+    (12) S -> . VID PAS E SCL
+    (13) S -> . VID ASG E SCL
+    $end            reduce using rule 50 (empty -> .)
+    FUN             shift and go to state 5
+    WHL             shift and go to state 7
+    IFT             shift and go to state 9
+    LET             shift and go to state 10
+    INP             shift and go to state 11
+    PRT             shift and go to state 12
+    VID             shift and go to state 6
+    RET             shift and go to state 13
+
+    B                              shift and go to state 4
+    P                              shift and go to state 15
+    empty                          shift and go to state 2
+    F                              shift and go to state 3
+    S                              shift and go to state 8
+
+state 5
+
+    (22) F -> FUN . VID H before_func_args PAO A PAC after_func_args BRO C BRC
+    VID             shift and go to state 16
+
+
+state 6
+
+    (10) S -> VID . PAO L PAC SCL
+    (12) S -> VID . PAS E SCL
+    (13) S -> VID . ASG E SCL
+    PAO             shift and go to state 17
+    PAS             shift and go to state 18
+    ASG             shift and go to state 19
+
+
+state 7
+
+    (4) B -> WHL . PAO E PAC BRO C BRC
+    PAO             shift and go to state 20
+
+
+state 8
+
+    (5) B -> S .
+    FUN             reduce using rule 5 (B -> S .)
+    WHL             reduce using rule 5 (B -> S .)
+    IFT             reduce using rule 5 (B -> S .)
+    LET             reduce using rule 5 (B -> S .)
+    INP             reduce using rule 5 (B -> S .)
+    PRT             reduce using rule 5 (B -> S .)
+    VID             reduce using rule 5 (B -> S .)
+    RET             reduce using rule 5 (B -> S .)
+    $end            reduce using rule 5 (B -> S .)
+    BRC             reduce using rule 5 (B -> S .)
+
+
+state 9
+
+    (6) B -> IFT . PAO E PAC S
+    PAO             shift and go to state 21
+
+
+state 10
+
+    (7) B -> LET . TYP VID SCL
+    TYP             shift and go to state 22
+
+
+state 11
+
+    (8) S -> INP . PAO VID PAC SCL
+    PAO             shift and go to state 23
+
+
+state 12
+
+    (9) S -> PRT . PAO E PAC SCL
+    PAO             shift and go to state 24
+
+
+state 13
+
+    (11) S -> RET . X SCL
+    (14) X -> . empty
+    (15) X -> . E
+    (50) empty -> .
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    SCL             reduce using rule 50 (empty -> .)
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    X                              shift and go to state 25
+    empty                          shift and go to state 26
+    E                              shift and go to state 27
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 14
+
+    (2) P -> F P .
+    $end            reduce using rule 2 (P -> F P .)
+
+
+state 15
+
+    (3) P -> B P .
+    $end            reduce using rule 3 (P -> B P .)
+
+
+state 16
+
+    (22) F -> FUN VID . H before_func_args PAO A PAC after_func_args BRO C BRC
+    (25) H -> . empty
+    (26) H -> . TYP
+    (50) empty -> .
+    TYP             shift and go to state 43
+    PAO             reduce using rule 50 (empty -> .)
+
+    H                              shift and go to state 41
+    empty                          shift and go to state 42
+
+state 17
+
+    (10) S -> VID PAO . L PAC SCL
+    (18) L -> . empty
+    (19) L -> . E Q
+    (50) empty -> .
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    PAC             reduce using rule 50 (empty -> .)
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    L                              shift and go to state 44
+    empty                          shift and go to state 45
+    E                              shift and go to state 46
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 18
+
+    (12) S -> VID PAS . E SCL
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    E                              shift and go to state 47
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 19
+
+    (13) S -> VID ASG . E SCL
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    E                              shift and go to state 48
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 20
+
+    (4) B -> WHL PAO . E PAC BRO C BRC
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    E                              shift and go to state 49
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 21
+
+    (6) B -> IFT PAO . E PAC S
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    E                              shift and go to state 50
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 22
+
+    (7) B -> LET TYP . VID SCL
+    VID             shift and go to state 51
+
+
+state 23
+
+    (8) S -> INP PAO . VID PAC SCL
+    VID             shift and go to state 52
+
+
+state 24
+
+    (9) S -> PRT PAO . E PAC SCL
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    E                              shift and go to state 53
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 25
+
+    (11) S -> RET X . SCL
+    SCL             shift and go to state 54
+
+
+state 26
+
+    (14) X -> empty .
+    SCL             reduce using rule 14 (X -> empty .)
+
+
+state 27
+
+    (15) X -> E .
+    (32) E -> E . AND R
+    SCL             reduce using rule 15 (X -> E .)
+    AND             shift and go to state 55
+
+
+state 28
+
+    (31) E -> R .
+    (34) R -> R . EQS Y
+    AND             reduce using rule 31 (E -> R .)
+    SCL             reduce using rule 31 (E -> R .)
+    COM             reduce using rule 31 (E -> R .)
+    PAC             reduce using rule 31 (E -> R .)
+    EQS             shift and go to state 56
+
+
+state 29
+
+    (33) R -> Y .
+    (36) Y -> Y . GRT U
+    EQS             reduce using rule 33 (R -> Y .)
+    AND             reduce using rule 33 (R -> Y .)
+    SCL             reduce using rule 33 (R -> Y .)
+    COM             reduce using rule 33 (R -> Y .)
+    PAC             reduce using rule 33 (R -> Y .)
+    GRT             shift and go to state 57
+
+
+state 30
+
+    (35) Y -> U .
+    (38) U -> U . MIN W
+    (39) U -> U . PLS W
+    GRT             reduce using rule 35 (Y -> U .)
+    EQS             reduce using rule 35 (Y -> U .)
+    AND             reduce using rule 35 (Y -> U .)
+    SCL             reduce using rule 35 (Y -> U .)
+    COM             reduce using rule 35 (Y -> U .)
+    PAC             reduce using rule 35 (Y -> U .)
+    MIN             shift and go to state 58
+    PLS             shift and go to state 59
+
+
+state 31
+
+    (37) U -> W .
+    MIN             reduce using rule 37 (U -> W .)
+    PLS             reduce using rule 37 (U -> W .)
+    GRT             reduce using rule 37 (U -> W .)
+    EQS             reduce using rule 37 (U -> W .)
+    AND             reduce using rule 37 (U -> W .)
+    SCL             reduce using rule 37 (U -> W .)
+    COM             reduce using rule 37 (U -> W .)
+    PAC             reduce using rule 37 (U -> W .)
+
+
+state 32
+
+    (41) W -> MIN . W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    W                              shift and go to state 60
+    V                              shift and go to state 34
+
+state 33
+
+    (42) W -> PLS . W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    W                              shift and go to state 61
+    V                              shift and go to state 34
+
+state 34
+
+    (40) W -> V .
+    MIN             reduce using rule 40 (W -> V .)
+    PLS             reduce using rule 40 (W -> V .)
+    GRT             reduce using rule 40 (W -> V .)
+    EQS             reduce using rule 40 (W -> V .)
+    AND             reduce using rule 40 (W -> V .)
+    SCL             reduce using rule 40 (W -> V .)
+    COM             reduce using rule 40 (W -> V .)
+    PAC             reduce using rule 40 (W -> V .)
+
+
+state 35
+
+    (43) W -> NOT . W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    W                              shift and go to state 62
+    V                              shift and go to state 34
+
+state 36
+
+    (44) V -> STR .
+    MIN             reduce using rule 44 (V -> STR .)
+    PLS             reduce using rule 44 (V -> STR .)
+    GRT             reduce using rule 44 (V -> STR .)
+    EQS             reduce using rule 44 (V -> STR .)
+    AND             reduce using rule 44 (V -> STR .)
+    SCL             reduce using rule 44 (V -> STR .)
+    COM             reduce using rule 44 (V -> STR .)
+    PAC             reduce using rule 44 (V -> STR .)
+
+
+state 37
+
+    (45) V -> BOL .
+    MIN             reduce using rule 45 (V -> BOL .)
+    PLS             reduce using rule 45 (V -> BOL .)
+    GRT             reduce using rule 45 (V -> BOL .)
+    EQS             reduce using rule 45 (V -> BOL .)
+    AND             reduce using rule 45 (V -> BOL .)
+    SCL             reduce using rule 45 (V -> BOL .)
+    COM             reduce using rule 45 (V -> BOL .)
+    PAC             reduce using rule 45 (V -> BOL .)
+
+
+state 38
+
+    (46) V -> INT .
+    MIN             reduce using rule 46 (V -> INT .)
+    PLS             reduce using rule 46 (V -> INT .)
+    GRT             reduce using rule 46 (V -> INT .)
+    EQS             reduce using rule 46 (V -> INT .)
+    AND             reduce using rule 46 (V -> INT .)
+    SCL             reduce using rule 46 (V -> INT .)
+    COM             reduce using rule 46 (V -> INT .)
+    PAC             reduce using rule 46 (V -> INT .)
+
+
+state 39
+
+    (47) V -> VID . PAO L PAC
+    (49) V -> VID .
+    PAO             shift and go to state 63
+    MIN             reduce using rule 49 (V -> VID .)
+    PLS             reduce using rule 49 (V -> VID .)
+    GRT             reduce using rule 49 (V -> VID .)
+    EQS             reduce using rule 49 (V -> VID .)
+    AND             reduce using rule 49 (V -> VID .)
+    SCL             reduce using rule 49 (V -> VID .)
+    COM             reduce using rule 49 (V -> VID .)
+    PAC             reduce using rule 49 (V -> VID .)
+
+
+state 40
+
+    (48) V -> PAO . E PAC
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    E                              shift and go to state 64
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 41
+
+    (22) F -> FUN VID H . before_func_args PAO A PAC after_func_args BRO C BRC
+    (23) before_func_args -> .
+    PAO             reduce using rule 23 (before_func_args -> .)
+
+    before_func_args               shift and go to state 65
+
+state 42
+
+    (25) H -> empty .
+    PAO             reduce using rule 25 (H -> empty .)
+
+
+state 43
+
+    (26) H -> TYP .
+    PAO             reduce using rule 26 (H -> TYP .)
+
+
+state 44
+
+    (10) S -> VID PAO L . PAC SCL
+    PAC             shift and go to state 66
+
+
+state 45
+
+    (18) L -> empty .
+    PAC             reduce using rule 18 (L -> empty .)
+
+
+state 46
+
+    (19) L -> E . Q
+    (32) E -> E . AND R
+    (20) Q -> . empty
+    (21) Q -> . COM E Q
+    (50) empty -> .
+    AND             shift and go to state 55
+    COM             shift and go to state 69
+    PAC             reduce using rule 50 (empty -> .)
+
+    Q                              shift and go to state 67
+    empty                          shift and go to state 68
+
+state 47
+
+    (12) S -> VID PAS E . SCL
+    (32) E -> E . AND R
+    SCL             shift and go to state 70
+    AND             shift and go to state 55
+
+
+state 48
+
+    (13) S -> VID ASG E . SCL
+    (32) E -> E . AND R
+    SCL             shift and go to state 71
+    AND             shift and go to state 55
+
+
+state 49
+
+    (4) B -> WHL PAO E . PAC BRO C BRC
+    (32) E -> E . AND R
+    PAC             shift and go to state 72
+    AND             shift and go to state 55
+
+
+state 50
+
+    (6) B -> IFT PAO E . PAC S
+    (32) E -> E . AND R
+    PAC             shift and go to state 73
+    AND             shift and go to state 55
+
+
+state 51
+
+    (7) B -> LET TYP VID . SCL
+    SCL             shift and go to state 74
+
+
+state 52
+
+    (8) S -> INP PAO VID . PAC SCL
+    PAC             shift and go to state 75
+
+
+state 53
+
+    (9) S -> PRT PAO E . PAC SCL
+    (32) E -> E . AND R
+    PAC             shift and go to state 76
+    AND             shift and go to state 55
+
+
+state 54
+
+    (11) S -> RET X SCL .
+    FUN             reduce using rule 11 (S -> RET X SCL .)
+    WHL             reduce using rule 11 (S -> RET X SCL .)
+    IFT             reduce using rule 11 (S -> RET X SCL .)
+    LET             reduce using rule 11 (S -> RET X SCL .)
+    INP             reduce using rule 11 (S -> RET X SCL .)
+    PRT             reduce using rule 11 (S -> RET X SCL .)
+    VID             reduce using rule 11 (S -> RET X SCL .)
+    RET             reduce using rule 11 (S -> RET X SCL .)
+    $end            reduce using rule 11 (S -> RET X SCL .)
+    BRC             reduce using rule 11 (S -> RET X SCL .)
+
+
+state 55
+
+    (32) E -> E AND . R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    R                              shift and go to state 77
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 56
+
+    (34) R -> R EQS . Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    Y                              shift and go to state 78
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 57
+
+    (36) Y -> Y GRT . U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    U                              shift and go to state 79
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 58
+
+    (38) U -> U MIN . W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    W                              shift and go to state 80
+    V                              shift and go to state 34
+
+state 59
+
+    (39) U -> U PLS . W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    W                              shift and go to state 81
+    V                              shift and go to state 34
+
+state 60
+
+    (41) W -> MIN W .
+    MIN             reduce using rule 41 (W -> MIN W .)
+    PLS             reduce using rule 41 (W -> MIN W .)
+    GRT             reduce using rule 41 (W -> MIN W .)
+    EQS             reduce using rule 41 (W -> MIN W .)
+    AND             reduce using rule 41 (W -> MIN W .)
+    SCL             reduce using rule 41 (W -> MIN W .)
+    COM             reduce using rule 41 (W -> MIN W .)
+    PAC             reduce using rule 41 (W -> MIN W .)
+
+
+state 61
+
+    (42) W -> PLS W .
+    MIN             reduce using rule 42 (W -> PLS W .)
+    PLS             reduce using rule 42 (W -> PLS W .)
+    GRT             reduce using rule 42 (W -> PLS W .)
+    EQS             reduce using rule 42 (W -> PLS W .)
+    AND             reduce using rule 42 (W -> PLS W .)
+    SCL             reduce using rule 42 (W -> PLS W .)
+    COM             reduce using rule 42 (W -> PLS W .)
+    PAC             reduce using rule 42 (W -> PLS W .)
+
+
+state 62
+
+    (43) W -> NOT W .
+    MIN             reduce using rule 43 (W -> NOT W .)
+    PLS             reduce using rule 43 (W -> NOT W .)
+    GRT             reduce using rule 43 (W -> NOT W .)
+    EQS             reduce using rule 43 (W -> NOT W .)
+    AND             reduce using rule 43 (W -> NOT W .)
+    SCL             reduce using rule 43 (W -> NOT W .)
+    COM             reduce using rule 43 (W -> NOT W .)
+    PAC             reduce using rule 43 (W -> NOT W .)
+
+
+state 63
+
+    (47) V -> VID PAO . L PAC
+    (18) L -> . empty
+    (19) L -> . E Q
+    (50) empty -> .
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    PAC             reduce using rule 50 (empty -> .)
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    L                              shift and go to state 82
+    empty                          shift and go to state 45
+    E                              shift and go to state 46
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 64
+
+    (48) V -> PAO E . PAC
+    (32) E -> E . AND R
+    PAC             shift and go to state 83
+    AND             shift and go to state 55
+
+
+state 65
+
+    (22) F -> FUN VID H before_func_args . PAO A PAC after_func_args BRO C BRC
+    PAO             shift and go to state 84
+
+
+state 66
+
+    (10) S -> VID PAO L PAC . SCL
+    SCL             shift and go to state 85
+
+
+state 67
+
+    (19) L -> E Q .
+    PAC             reduce using rule 19 (L -> E Q .)
+
+
+state 68
+
+    (20) Q -> empty .
+    PAC             reduce using rule 20 (Q -> empty .)
+
+
+state 69
+
+    (21) Q -> COM . E Q
+    (31) E -> . R
+    (32) E -> . E AND R
+    (33) R -> . Y
+    (34) R -> . R EQS Y
+    (35) Y -> . U
+    (36) Y -> . Y GRT U
+    (37) U -> . W
+    (38) U -> . U MIN W
+    (39) U -> . U PLS W
+    (40) W -> . V
+    (41) W -> . MIN W
+    (42) W -> . PLS W
+    (43) W -> . NOT W
+    (44) V -> . STR
+    (45) V -> . BOL
+    (46) V -> . INT
+    (47) V -> . VID PAO L PAC
+    (48) V -> . PAO E PAC
+    (49) V -> . VID
+    MIN             shift and go to state 32
+    PLS             shift and go to state 33
+    NOT             shift and go to state 35
+    STR             shift and go to state 36
+    BOL             shift and go to state 37
+    INT             shift and go to state 38
+    VID             shift and go to state 39
+    PAO             shift and go to state 40
+
+    E                              shift and go to state 86
+    R                              shift and go to state 28
+    Y                              shift and go to state 29
+    U                              shift and go to state 30
+    W                              shift and go to state 31
+    V                              shift and go to state 34
+
+state 70
+
+    (12) S -> VID PAS E SCL .
+    FUN             reduce using rule 12 (S -> VID PAS E SCL .)
+    WHL             reduce using rule 12 (S -> VID PAS E SCL .)
+    IFT             reduce using rule 12 (S -> VID PAS E SCL .)
+    LET             reduce using rule 12 (S -> VID PAS E SCL .)
+    INP             reduce using rule 12 (S -> VID PAS E SCL .)
+    PRT             reduce using rule 12 (S -> VID PAS E SCL .)
+    VID             reduce using rule 12 (S -> VID PAS E SCL .)
+    RET             reduce using rule 12 (S -> VID PAS E SCL .)
+    $end            reduce using rule 12 (S -> VID PAS E SCL .)
+    BRC             reduce using rule 12 (S -> VID PAS E SCL .)
+
+
+state 71
+
+    (13) S -> VID ASG E SCL .
+    FUN             reduce using rule 13 (S -> VID ASG E SCL .)
+    WHL             reduce using rule 13 (S -> VID ASG E SCL .)
+    IFT             reduce using rule 13 (S -> VID ASG E SCL .)
+    LET             reduce using rule 13 (S -> VID ASG E SCL .)
+    INP             reduce using rule 13 (S -> VID ASG E SCL .)
+    PRT             reduce using rule 13 (S -> VID ASG E SCL .)
+    VID             reduce using rule 13 (S -> VID ASG E SCL .)
+    RET             reduce using rule 13 (S -> VID ASG E SCL .)
+    $end            reduce using rule 13 (S -> VID ASG E SCL .)
+    BRC             reduce using rule 13 (S -> VID ASG E SCL .)
+
+
+state 72
+
+    (4) B -> WHL PAO E PAC . BRO C BRC
+    BRO             shift and go to state 87
+
+
+state 73
+
+    (6) B -> IFT PAO E PAC . S
+    (8) S -> . INP PAO VID PAC SCL
+    (9) S -> . PRT PAO E PAC SCL
+    (10) S -> . VID PAO L PAC SCL
+    (11) S -> . RET X SCL
+    (12) S -> . VID PAS E SCL
+    (13) S -> . VID ASG E SCL
+    INP             shift and go to state 11
+    PRT             shift and go to state 12
+    VID             shift and go to state 6
+    RET             shift and go to state 13
+
+    S                              shift and go to state 88
+
+state 74
+
+    (7) B -> LET TYP VID SCL .
+    FUN             reduce using rule 7 (B -> LET TYP VID SCL .)
+    WHL             reduce using rule 7 (B -> LET TYP VID SCL .)
+    IFT             reduce using rule 7 (B -> LET TYP VID SCL .)
+    LET             reduce using rule 7 (B -> LET TYP VID SCL .)
+    INP             reduce using rule 7 (B -> LET TYP VID SCL .)
+    PRT             reduce using rule 7 (B -> LET TYP VID SCL .)
+    VID             reduce using rule 7 (B -> LET TYP VID SCL .)
+    RET             reduce using rule 7 (B -> LET TYP VID SCL .)
+    $end            reduce using rule 7 (B -> LET TYP VID SCL .)
+    BRC             reduce using rule 7 (B -> LET TYP VID SCL .)
+
+
+state 75
+
+    (8) S -> INP PAO VID PAC . SCL
+    SCL             shift and go to state 89
+
+
+state 76
+
+    (9) S -> PRT PAO E PAC . SCL
+    SCL             shift and go to state 90
+
+
+state 77
+
+    (32) E -> E AND R .
+    (34) R -> R . EQS Y
+    AND             reduce using rule 32 (E -> E AND R .)
+    SCL             reduce using rule 32 (E -> E AND R .)
+    COM             reduce using rule 32 (E -> E AND R .)
+    PAC             reduce using rule 32 (E -> E AND R .)
+    EQS             shift and go to state 56
+
+
+state 78
+
+    (34) R -> R EQS Y .
+    (36) Y -> Y . GRT U
+    EQS             reduce using rule 34 (R -> R EQS Y .)
+    AND             reduce using rule 34 (R -> R EQS Y .)
+    SCL             reduce using rule 34 (R -> R EQS Y .)
+    COM             reduce using rule 34 (R -> R EQS Y .)
+    PAC             reduce using rule 34 (R -> R EQS Y .)
+    GRT             shift and go to state 57
+
+
+state 79
+
+    (36) Y -> Y GRT U .
+    (38) U -> U . MIN W
+    (39) U -> U . PLS W
+    GRT             reduce using rule 36 (Y -> Y GRT U .)
+    EQS             reduce using rule 36 (Y -> Y GRT U .)
+    AND             reduce using rule 36 (Y -> Y GRT U .)
+    SCL             reduce using rule 36 (Y -> Y GRT U .)
+    COM             reduce using rule 36 (Y -> Y GRT U .)
+    PAC             reduce using rule 36 (Y -> Y GRT U .)
+    MIN             shift and go to state 58
+    PLS             shift and go to state 59
+
+
+state 80
+
+    (38) U -> U MIN W .
+    MIN             reduce using rule 38 (U -> U MIN W .)
+    PLS             reduce using rule 38 (U -> U MIN W .)
+    GRT             reduce using rule 38 (U -> U MIN W .)
+    EQS             reduce using rule 38 (U -> U MIN W .)
+    AND             reduce using rule 38 (U -> U MIN W .)
+    SCL             reduce using rule 38 (U -> U MIN W .)
+    COM             reduce using rule 38 (U -> U MIN W .)
+    PAC             reduce using rule 38 (U -> U MIN W .)
+
+
+state 81
+
+    (39) U -> U PLS W .
+    MIN             reduce using rule 39 (U -> U PLS W .)
+    PLS             reduce using rule 39 (U -> U PLS W .)
+    GRT             reduce using rule 39 (U -> U PLS W .)
+    EQS             reduce using rule 39 (U -> U PLS W .)
+    AND             reduce using rule 39 (U -> U PLS W .)
+    SCL             reduce using rule 39 (U -> U PLS W .)
+    COM             reduce using rule 39 (U -> U PLS W .)
+    PAC             reduce using rule 39 (U -> U PLS W .)
+
+
+state 82
+
+    (47) V -> VID PAO L . PAC
+    PAC             shift and go to state 91
+
+
+state 83
+
+    (48) V -> PAO E PAC .
+    MIN             reduce using rule 48 (V -> PAO E PAC .)
+    PLS             reduce using rule 48 (V -> PAO E PAC .)
+    GRT             reduce using rule 48 (V -> PAO E PAC .)
+    EQS             reduce using rule 48 (V -> PAO E PAC .)
+    AND             reduce using rule 48 (V -> PAO E PAC .)
+    SCL             reduce using rule 48 (V -> PAO E PAC .)
+    COM             reduce using rule 48 (V -> PAO E PAC .)
+    PAC             reduce using rule 48 (V -> PAO E PAC .)
+
+
+state 84
+
+    (22) F -> FUN VID H before_func_args PAO . A PAC after_func_args BRO C BRC
+    (27) A -> . empty
+    (28) A -> . TYP VID K
+    (50) empty -> .
+    TYP             shift and go to state 94
+    PAC             reduce using rule 50 (empty -> .)
+
+    A                              shift and go to state 92
+    empty                          shift and go to state 93
+
+state 85
+
+    (10) S -> VID PAO L PAC SCL .
+    FUN             reduce using rule 10 (S -> VID PAO L PAC SCL .)
+    WHL             reduce using rule 10 (S -> VID PAO L PAC SCL .)
+    IFT             reduce using rule 10 (S -> VID PAO L PAC SCL .)
+    LET             reduce using rule 10 (S -> VID PAO L PAC SCL .)
+    INP             reduce using rule 10 (S -> VID PAO L PAC SCL .)
+    PRT             reduce using rule 10 (S -> VID PAO L PAC SCL .)
+    VID             reduce using rule 10 (S -> VID PAO L PAC SCL .)
+    RET             reduce using rule 10 (S -> VID PAO L PAC SCL .)
+    $end            reduce using rule 10 (S -> VID PAO L PAC SCL .)
+    BRC             reduce using rule 10 (S -> VID PAO L PAC SCL .)
+
+
+state 86
+
+    (21) Q -> COM E . Q
+    (32) E -> E . AND R
+    (20) Q -> . empty
+    (21) Q -> . COM E Q
+    (50) empty -> .
+    AND             shift and go to state 55
+    COM             shift and go to state 69
+    PAC             reduce using rule 50 (empty -> .)
+
+    Q                              shift and go to state 95
+    empty                          shift and go to state 68
+
+state 87
+
+    (4) B -> WHL PAO E PAC BRO . C BRC
+    (16) C -> . empty
+    (17) C -> . B C
+    (50) empty -> .
+    (4) B -> . WHL PAO E PAC BRO C BRC
+    (5) B -> . S
+    (6) B -> . IFT PAO E PAC S
+    (7) B -> . LET TYP VID SCL
+    (8) S -> . INP PAO VID PAC SCL
+    (9) S -> . PRT PAO E PAC SCL
+    (10) S -> . VID PAO L PAC SCL
+    (11) S -> . RET X SCL
+    (12) S -> . VID PAS E SCL
+    (13) S -> . VID ASG E SCL
+    BRC             reduce using rule 50 (empty -> .)
+    WHL             shift and go to state 7
+    IFT             shift and go to state 9
+    LET             shift and go to state 10
+    INP             shift and go to state 11
+    PRT             shift and go to state 12
+    VID             shift and go to state 6
+    RET             shift and go to state 13
+
+    C                              shift and go to state 96
+    empty                          shift and go to state 97
+    B                              shift and go to state 98
+    S                              shift and go to state 8
+
+state 88
+
+    (6) B -> IFT PAO E PAC S .
+    FUN             reduce using rule 6 (B -> IFT PAO E PAC S .)
+    WHL             reduce using rule 6 (B -> IFT PAO E PAC S .)
+    IFT             reduce using rule 6 (B -> IFT PAO E PAC S .)
+    LET             reduce using rule 6 (B -> IFT PAO E PAC S .)
+    INP             reduce using rule 6 (B -> IFT PAO E PAC S .)
+    PRT             reduce using rule 6 (B -> IFT PAO E PAC S .)
+    VID             reduce using rule 6 (B -> IFT PAO E PAC S .)
+    RET             reduce using rule 6 (B -> IFT PAO E PAC S .)
+    $end            reduce using rule 6 (B -> IFT PAO E PAC S .)
+    BRC             reduce using rule 6 (B -> IFT PAO E PAC S .)
+
+
+state 89
+
+    (8) S -> INP PAO VID PAC SCL .
+    FUN             reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+    WHL             reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+    IFT             reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+    LET             reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+    INP             reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+    PRT             reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+    VID             reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+    RET             reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+    $end            reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+    BRC             reduce using rule 8 (S -> INP PAO VID PAC SCL .)
+
+
+state 90
+
+    (9) S -> PRT PAO E PAC SCL .
+    FUN             reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+    WHL             reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+    IFT             reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+    LET             reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+    INP             reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+    PRT             reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+    VID             reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+    RET             reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+    $end            reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+    BRC             reduce using rule 9 (S -> PRT PAO E PAC SCL .)
+
+
+state 91
+
+    (47) V -> VID PAO L PAC .
+    MIN             reduce using rule 47 (V -> VID PAO L PAC .)
+    PLS             reduce using rule 47 (V -> VID PAO L PAC .)
+    GRT             reduce using rule 47 (V -> VID PAO L PAC .)
+    EQS             reduce using rule 47 (V -> VID PAO L PAC .)
+    AND             reduce using rule 47 (V -> VID PAO L PAC .)
+    SCL             reduce using rule 47 (V -> VID PAO L PAC .)
+    COM             reduce using rule 47 (V -> VID PAO L PAC .)
+    PAC             reduce using rule 47 (V -> VID PAO L PAC .)
+
+
+state 92
+
+    (22) F -> FUN VID H before_func_args PAO A . PAC after_func_args BRO C BRC
+    PAC             shift and go to state 99
+
+
+state 93
+
+    (27) A -> empty .
+    PAC             reduce using rule 27 (A -> empty .)
+
+
+state 94
+
+    (28) A -> TYP . VID K
+    VID             shift and go to state 100
+
+
+state 95
+
+    (21) Q -> COM E Q .
+    PAC             reduce using rule 21 (Q -> COM E Q .)
+
+
+state 96
+
+    (4) B -> WHL PAO E PAC BRO C . BRC
+    BRC             shift and go to state 101
+
+
+state 97
+
+    (16) C -> empty .
+    BRC             reduce using rule 16 (C -> empty .)
+
+
+state 98
+
+    (17) C -> B . C
+    (16) C -> . empty
+    (17) C -> . B C
+    (50) empty -> .
+    (4) B -> . WHL PAO E PAC BRO C BRC
+    (5) B -> . S
+    (6) B -> . IFT PAO E PAC S
+    (7) B -> . LET TYP VID SCL
+    (8) S -> . INP PAO VID PAC SCL
+    (9) S -> . PRT PAO E PAC SCL
+    (10) S -> . VID PAO L PAC SCL
+    (11) S -> . RET X SCL
+    (12) S -> . VID PAS E SCL
+    (13) S -> . VID ASG E SCL
+    BRC             reduce using rule 50 (empty -> .)
+    WHL             shift and go to state 7
+    IFT             shift and go to state 9
+    LET             shift and go to state 10
+    INP             shift and go to state 11
+    PRT             shift and go to state 12
+    VID             shift and go to state 6
+    RET             shift and go to state 13
+
+    B                              shift and go to state 98
+    C                              shift and go to state 102
+    empty                          shift and go to state 97
+    S                              shift and go to state 8
+
+state 99
+
+    (22) F -> FUN VID H before_func_args PAO A PAC . after_func_args BRO C BRC
+    (24) after_func_args -> .
+    BRO             reduce using rule 24 (after_func_args -> .)
+
+    after_func_args                shift and go to state 103
+
+state 100
+
+    (28) A -> TYP VID . K
+    (29) K -> . empty
+    (30) K -> . COM TYP VID K
+    (50) empty -> .
+    COM             shift and go to state 106
+    PAC             reduce using rule 50 (empty -> .)
+
+    K                              shift and go to state 104
+    empty                          shift and go to state 105
+
+state 101
+
+    (4) B -> WHL PAO E PAC BRO C BRC .
+    FUN             reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+    WHL             reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+    IFT             reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+    LET             reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+    INP             reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+    PRT             reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+    VID             reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+    RET             reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+    $end            reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+    BRC             reduce using rule 4 (B -> WHL PAO E PAC BRO C BRC .)
+
+
+state 102
+
+    (17) C -> B C .
+    BRC             reduce using rule 17 (C -> B C .)
+
+
+state 103
+
+    (22) F -> FUN VID H before_func_args PAO A PAC after_func_args . BRO C BRC
+    BRO             shift and go to state 107
+
+
+state 104
+
+    (28) A -> TYP VID K .
+    PAC             reduce using rule 28 (A -> TYP VID K .)
+
+
+state 105
+
+    (29) K -> empty .
+    PAC             reduce using rule 29 (K -> empty .)
+
+
+state 106
+
+    (30) K -> COM . TYP VID K
+    TYP             shift and go to state 108
+
+
+state 107
+
+    (22) F -> FUN VID H before_func_args PAO A PAC after_func_args BRO . C BRC
+    (16) C -> . empty
+    (17) C -> . B C
+    (50) empty -> .
+    (4) B -> . WHL PAO E PAC BRO C BRC
+    (5) B -> . S
+    (6) B -> . IFT PAO E PAC S
+    (7) B -> . LET TYP VID SCL
+    (8) S -> . INP PAO VID PAC SCL
+    (9) S -> . PRT PAO E PAC SCL
+    (10) S -> . VID PAO L PAC SCL
+    (11) S -> . RET X SCL
+    (12) S -> . VID PAS E SCL
+    (13) S -> . VID ASG E SCL
+    BRC             reduce using rule 50 (empty -> .)
+    WHL             shift and go to state 7
+    IFT             shift and go to state 9
+    LET             shift and go to state 10
+    INP             shift and go to state 11
+    PRT             shift and go to state 12
+    VID             shift and go to state 6
+    RET             shift and go to state 13
+
+    C                              shift and go to state 109
+    empty                          shift and go to state 97
+    B                              shift and go to state 98
+    S                              shift and go to state 8
+
+state 108
+
+    (30) K -> COM TYP . VID K
+    VID             shift and go to state 110
+
+
+state 109
+
+    (22) F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C . BRC
+    BRC             shift and go to state 111
+
+
+state 110
+
+    (30) K -> COM TYP VID . K
+    (29) K -> . empty
+    (30) K -> . COM TYP VID K
+    (50) empty -> .
+    COM             shift and go to state 106
+    PAC             reduce using rule 50 (empty -> .)
+
+    K                              shift and go to state 112
+    empty                          shift and go to state 105
+
+state 111
+
+    (22) F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .
+    FUN             reduce using rule 22 (F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .)
+    WHL             reduce using rule 22 (F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .)
+    IFT             reduce using rule 22 (F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .)
+    LET             reduce using rule 22 (F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .)
+    INP             reduce using rule 22 (F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .)
+    PRT             reduce using rule 22 (F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .)
+    VID             reduce using rule 22 (F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .)
+    RET             reduce using rule 22 (F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .)
+    $end            reduce using rule 22 (F -> FUN VID H before_func_args PAO A PAC after_func_args BRO C BRC .)
+
+
+state 112
+
+    (30) K -> COM TYP VID K .
+    PAC             reduce using rule 30 (K -> COM TYP VID K .)

@@ -1,0 +1,18 @@
+let int a;
+let boolean b;
+let string c;
+
+function hola string (string name){
+    print("hola ");
+    print(name);
+    /*Comentario*/
+    return "OK";
+}
+
+a = 3;
+while (!(a == 0)) {
+    hola("paco");
+    a += -1;
+}
+
+

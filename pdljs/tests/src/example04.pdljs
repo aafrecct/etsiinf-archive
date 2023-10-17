@@ -1,0 +1,12 @@
+function Func4 int ()
+{
+    let int i;
+    let string name;
+    i = 5;
+    while (i > 0) {
+        input(name);
+        print("Bucle");
+        print(name);
+        i += -1;
+    }
+}

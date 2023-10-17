@@ -1,0 +1,11 @@
+let int a;
+/* Falta ; en la siguiente linea */
+let boolean b
+let string c;
+
+function hola string (string name){
+    print("hola ");
+    print(name);
+    /* Función devuelve el tipo incorrecto */
+    return 0;
+}

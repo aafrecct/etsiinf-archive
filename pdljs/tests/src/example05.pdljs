@@ -1,0 +1,13 @@
+function Func5 int (string s, int i, boolean t)
+{   
+
+    /*
+    Imprime la string s tantas veces como indique el entero i,
+    solo si t es verdadero, si es falso, imprime 1 vez.
+    */
+
+    print(s);
+    if (t && i > 0) Func5(s, i - 1, t); 
+}
+
+Func5("Hola", 3, true);

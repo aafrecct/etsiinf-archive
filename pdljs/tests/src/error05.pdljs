@@ -1,0 +1,12 @@
+function Func5 int (string s, int i, boolean t)
+{   
+
+    /*
+    El operador || (or lógico) no está implementado.
+    */
+
+    print(s);
+    if (t || i > 0) Func5(s, i - 1, t); 
+}
+
+Func5("Hola", 3, true);

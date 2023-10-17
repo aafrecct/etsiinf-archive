@@ -1,0 +1,59 @@
+globals # 0 : 
+	*  's'
+		+  Tipo:            Type.STR
+		+  Despl:           0
+	*  'a'
+		+  Tipo:            Type.INT
+		+  Despl:           64
+	*  'bb'
+		+  Tipo:            Type.BOOL
+		+  Despl:           68
+	*  'RR'
+		+  Tipo:            Type.FUNC
+		+  numParam:        2
+		+  TipoParam00:     Type.INT
+		+  TipoParam01:     Type.BOOL
+		+  TipoRetorno:     Type.INT
+		+  EtiqFuncion:     (Type.FUNC, Type.INT, Type.BOOL, Type.INT)
+	*  's_s'
+		+  Tipo:            Type.STR
+		+  Despl:           69
+	*  'prin'
+		+  Tipo:            Type.FUNC
+		+  numParam:        1
+		+  TipoParam00:     Type.STR
+		+  TipoRetorno:     Type.INT
+		+  EtiqFuncion:     (Type.FUNC, Type.STR, Type.INT)
+	*  'cadena'
+		+  Tipo:            Type.FUNC
+		+  numParam:        1
+		+  TipoParam00:     Type.STR
+		+  TipoRetorno:     Type.STR
+		+  EtiqFuncion:     (Type.FUNC, Type.STR, Type.STR)
+RR # 1 : 
+	*  'b'
+		+  Tipo:            Type.BOOL
+		+  Despl:           0
+	*  'n'
+		+  Tipo:            Type.INT
+		+  Despl:           1
+	*  'log'
+		+  Tipo:            Type.BOOL
+		+  Despl:           5
+	*  'kk'
+		+  Tipo:            Type.STR
+		+  Despl:           6
+prin # 2 : 
+	*  'RR'
+		+  Tipo:            Type.INT
+		+  Despl:           0
+	*  's'
+		+  Tipo:            Type.STR
+		+  Despl:           4
+cadena # 3 : 
+	*  'kk'
+		+  Tipo:            Type.STR
+		+  Despl:           0
+	*  'xx'
+		+  Tipo:            Type.INT
+		+  Despl:           64

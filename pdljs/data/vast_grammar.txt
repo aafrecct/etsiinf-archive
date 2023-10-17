@@ -1,0 +1,56 @@
+Axioma = P
+
+Terminales = { INT BOL STR PAS EQS PLS MIN ASG GRT AND NOT TYP LET
+               FUN RET IFT WHL PRT INP VID SCL COM PAO PAC BRO BRC }
+
+NoTerminales = { P B S X C L Q F H A K E R Y U W V }
+
+Producciones = {
+P -> B P
+P -> F P
+P -> lambda
+B -> LET TYP VID SCL
+B -> IFT PAO E PAC S
+B -> S
+B -> WHL PAO E PAC BRO C BRC
+S -> VID ASG E SCL
+S -> VID PAS E SCL
+S -> RET X SCL
+S -> VID PAO L PAC SCL
+S -> PRT PAO E PAC SCL
+S -> INP PAO VID PAC SCL
+X -> E
+X -> lambda
+C -> B C
+C -> lambda
+L -> E Q
+L -> lambda
+Q -> COM E Q
+Q -> lambda
+F -> FUN VID H PAO A PAC BRO C BRC
+H -> TYP
+H -> lambda
+A -> TYP VID K
+A -> lambda
+K -> COM TYP VID K
+K -> lambda
+E -> E AND R
+E -> R
+R -> R EQS Y
+R -> Y
+Y -> Y GRT U
+Y -> U
+U -> U PLS W
+U -> U MIN W
+U -> W
+W -> NOT W
+W -> PLS W
+W -> MIN W
+W -> V
+V -> VID
+V -> PAO E PAC
+V -> VID PAO L PAC
+V -> INT
+V -> BOL
+V -> STR
+}

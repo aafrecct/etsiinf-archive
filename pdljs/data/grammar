@@ -1,0 +1,47 @@
+P -> B P
+P -> F P
+P -> λ
+B -> LET TYP VID SCL
+B -> IFT PAO E PAC S
+B -> S
+B -> WHL PAO E PAC BRO C BRC
+S -> VID ASG E SCL
+S -> VID PAS E SCL
+S -> RET X SCL
+S -> VID PAO L PAC SCL
+S -> PRT PAO E PAC SCL
+S -> INP PAO VID PAC SCL
+X -> E
+X -> λ
+C -> B C
+C -> λ
+L -> E Q
+L -> λ
+Q -> COM E Q
+Q -> λ
+F -> FUN VID H PAO A PAC BRO C BRC
+H -> TYP
+H -> λ
+A -> TYP VID K
+A -> λ
+K -> COM TYP VID K
+K -> λ
+E -> E AND R
+E -> R
+R -> R EQS Y
+R -> Y
+Y -> Y GRT U
+Y -> U
+U -> U PLS W
+U -> U MIN W
+U -> W
+W -> NOT W
+W -> PLS W
+W -> MIN W
+W -> V
+V -> VID
+V -> PAO E PAC
+V -> VID PAO L PAC
+V -> INT
+V -> BOL
+V -> STR

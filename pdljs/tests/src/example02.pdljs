@@ -1,0 +1,8 @@
+let int un_numero;
+let boolean cierto;
+
+cierto = true;
+un_numero = 420;
+un_numero += -69;
+
+if (cierto) un_numero += 9 - 2;

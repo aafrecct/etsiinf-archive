@@ -1,0 +1,48 @@
+/* Variable Declaration Test */
+let int i1;
+let int i2;
+let int i3;
+let int i4;
+
+let string s1;
+let string s2;
+
+let boolean b0;
+let boolean b1;
+let boolean b2;
+let boolean b3;
+let boolean b4;
+let boolean b5;
+let boolean b6;
+let boolean b7;
+
+
+function Func1 boolean (int pi1, boolean pb1, boolean pb2)
+{  
+    /*
+    s2 = "adios" 
+    return s2; 
+    */
+    if (pb1 && pb2) return false;
+    return pi1 > 0;
+}
+
+function Func2 int (boolean pb0, boolean pb1, boolean pb2, boolean pb3)
+{
+   n = -13;
+   if(!(pb0 && pb1) && !(pb2 && pb3) && pb0) return n;
+   return -42;
+}
+
+i1 = 3;
+print(i1);
+input (s1);
+print(s1);
+Func2(true, false, false, false);
+Func2(true, true, false, false);
+
+a = -10;
+while (!(a == 0)) {
+    print("paco");
+    a += 1;
+}
