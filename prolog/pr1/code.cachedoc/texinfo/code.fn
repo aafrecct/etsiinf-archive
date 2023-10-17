@@ -1,0 +1,15 @@
+\entry{bind/1:}{1}{\code {bind/1:}}
+\entry{binary{\_}byte/1:}{1}{\code {binary_byte/1:}}
+\entry{hexd/1:}{2}{\code {hexd/1:}}
+\entry{hex{\_}byte/1:}{2}{\code {hex_byte/1:}}
+\entry{byte/1:}{2}{\code {byte/1:}}
+\entry{byte{\_}list/1:}{3}{\code {byte_list/1:}}
+\entry{hex{\_}to{\_}bin/2:}{3}{\code {hex_to_bin/2:}}
+\entry{byte{\_}conversion/2:}{3}{\code {byte_conversion/2:}}
+\entry{byte{\_}list{\_}conversion/2:}{4}{\code {byte_list_conversion/2:}}
+\entry{tail/3:}{5}{\code {tail/3:}}
+\entry{get{\_}nth{\_}bit{\_}from{\_}byte/3:}{5}{\code {get_nth_bit_from_byte/3:}}
+\entry{byte{\_}list{\_}clsh/2:}{6}{\code {byte_list_clsh/2:}}
+\entry{byte{\_}list{\_}crsh/2:}{6}{\code {byte_list_crsh/2:}}
+\entry{xor/3:}{6}{\code {xor/3:}}
+\entry{byte{\_}xor/3:}{6}{\code {byte_xor/3:}}

@@ -1,0 +1,163 @@
+This is TeXk, Version 3.141592653 (TeX Live 2021/Arch Linux) (preloaded format=tex 2022.4.19)  19 APR 2022 23:38
+ file:line:error style messages enabled.
+**\nonstopmode\input code.texic
+(./code.texic (./texinfo.tex Loading texinfo package [Version 2.257]: Basics,
+\bindingoffset=\dimen16
+\normaloffset=\dimen17
+\pagewidth=\dimen18
+\pageheight=\dimen19
+\outerhsize=\dimen20
+\outervsize=\dimen21
+\cornerlong=\dimen22
+\cornerthick=\dimen23
+\topandbottommargin=\dimen24
+\headlinebox=\box16
+\footlinebox=\box17
+\margin=\insert252
+\EMsimple=\toks12
+\singlespaceskip=\skip18
+\groupinvalidhelp=\toks13
+\mil=\dimen25
+\exdentamount=\skip19
+\inmarginspacing=\skip20
+
+fonts,
+\sffam=\fam8
+\mainmagstep=\count26
+\fontdepth=\count27
+ page headings,
+\titlepagetopglue=\skip21
+\titlepagebottomglue=\skip22
+\evenheadline=\toks14
+\oddheadline=\toks15
+\evenfootline=\toks16
+\oddfootline=\toks17
+ tables,
+\tableindent=\dimen26
+\itemindent=\dimen27
+\itemmargin=\dimen28
+\itemmax=\dimen29
+\itemno=\count28
+\multitableparskip=\skip23
+\multitableparindent=\skip24
+\multitablecolspace=\dimen30
+\multitablelinespace=\skip25
+\colcount=\count29
+ indexing,
+\secondaryindent=\skip26
+\partialpage=\box18
+\doublecolumnhsize=\dimen31
+ sectioning,
+\chapno=\count30
+\secno=\count31
+\subsecno=\count32
+\subsubsecno=\count33
+\appendixno=\count34
+\absseclevel=\count35
+\secbase=\count36
+\chapheadingskip=\skip27
+\secheadingskip=\skip28
+\subsecheadingskip=\skip29
+ toc,
+\tocfile=\write0
+\contentsrightmargin=\skip30
+\savepageno=\count37
+\lastnegativepageno=\count38
+\shortappendixwidth=\dimen32
+\tocindent=\dimen33
+ environments,
+\dblarrowbox=\box19
+\longdblarrowbox=\box20
+\pushcharbox=\box21
+\bullbox=\box22
+\equivbox=\box23
+\errorbox=\box24
+\lispnarrowing=\skip31
+\envskipamount=\skip32
+\circthick=\dimen34
+\cartouter=\dimen35
+\cartinner=\dimen36
+\normbskip=\skip33
+\normpskip=\skip34
+\normlskip=\skip35
+\lskip=\skip36
+\rskip=\skip37
+ defuns,
+\defbodyindent=\skip38
+\defargsindent=\skip39
+\deftypemargin=\skip40
+\deflastargmargin=\skip41
+\parencount=\count39
+
+macros,
+\macscribble=\write1
+\paramno=\count40
+\macname=\toks18
+ cross references,
+\auxfile=\write2
+\footnoteno=\count41
+ (/usr/share/texmf-dist/tex/generic/epsf/epsf.tex
+This is `epsf.tex' v2.7.4 <14 February 2011>
+\epsffilein=\read0
+\epsfframemargin=\dimen37
+\epsfframethickness=\dimen38
+\epsfrsize=\dimen39
+\epsftmp=\dimen40
+\epsftsize=\dimen41
+\epsfxsize=\dimen42
+\epsfysize=\dimen43
+\pspoints=\dimen44
+)
+\noepsfhelp=\toks19
+ paper sizes,
+\defaultparindent=\dimen45
+ and turning on texinfo input format.) (./code.aux)
+@fnindfile=@write3
+
+./code.texic:7: Undefined control sequence.
+l.7 @documentencoding
+                      UTF-8
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no ^^c3 in font cmbx12!
+Missing character: There is no ^^a1 in font cmbx12!
+[1] [2] (./code.toc) [-1] (./codeintro.texic (code)
+Missing character: There is no ^^c3 in font cmti10!
+Missing character: There is no ^^b3 in font cmti10!
+ [1]
+Missing character: There is no ^^c3 in font cmr10!
+Missing character: There is no ^^a1 in font cmr10!
+ [2] (./code.tmp)
+(./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)
+(./code.tmp) (./code.tmp) [3]
+Missing character: There is no ^^c3 in font cmr10!
+Missing character: There is no ^^a1 in font cmr10!
+ (./code.tmp) (./code.tmp) (./code.tmp)
+(./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)
+Missing character: There is no ^^c3 in font cmr10!
+Missing character: There is no ^^a1 in font cmr10!
+
+[4] (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)
+(./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)
+[5] (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)) (./coderefs.texic
+(References)
+Missing character: There is no ^^c3 in font cmr10!
+Missing character: There is no ^^a1 in font cmr10!
+ [6]) [7]
+Missing character: There is no ^^c3 in font cmr10!
+Missing character: There is no ^^a1 in font cmr10!
+ [8] ) 
+Here is how much of TeX's memory you used:
+ 1215 strings out of 497972
+ 12730 string characters out of 6220737
+ 31752 words of memory out of 5000000
+ 2031 multiletter control sequences out of 15000+600000
+ 30088 words of font info for 104 fonts, out of 8000000 for 9000
+ 19 hyphenation exceptions out of 8191
+ 15i,5n,13p,350b,295s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on code.dvi (11 pages, 21444 bytes).

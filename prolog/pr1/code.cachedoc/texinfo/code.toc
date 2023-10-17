@@ -1,0 +1,20 @@
+\unnumbchapentry{code}{1}
+\unnumbsecentry{Usage and interface}{1}
+\unnumbsecentry{Documentation on exports}{1}
+\unnumbsubsubsecentry{bind/1 (prop)}{1}
+\unnumbsubsubsecentry{binary\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}byte/1 (pred)}{1}
+\unnumbsubsubsecentry{hexd/1 (prop)}{2}
+\unnumbsubsubsecentry{hex\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}byte/1 (pred)}{2}
+\unnumbsubsubsecentry{byte/1 (pred)}{2}
+\unnumbsubsubsecentry{byte\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}list/1 (pred)}{2}
+\unnumbsubsubsecentry{hex\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}to\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}bin/2 (pred)}{3}
+\unnumbsubsubsecentry{byte\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}conversion/2 (pred)}{3}
+\unnumbsubsubsecentry{byte\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}list\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}conversion/2 (pred)}{4}
+\unnumbsubsubsecentry{tail/3 (pred)}{5}
+\unnumbsubsubsecentry{get\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}nth\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}bit\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}from\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}byte/3 (pred)}{5}
+\unnumbsubsubsecentry{byte\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}list\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}clsh/2 (pred)}{6}
+\unnumbsubsubsecentry{byte\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}list\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}crsh/2 (pred)}{6}
+\unnumbsubsubsecentry{xor/3 (pred)}{6}
+\unnumbsubsubsecentry{byte\unhbox \voidb@x \kern .06em \vbox {\hrule width.3em height.1ex}xor/3 (pred)}{6}
+\unnumbsecentry{Documentation on imports}{6}
+\unnumbchapentry{References}{7}

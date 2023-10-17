@@ -1,0 +1,21 @@
+This is TeXk, Version 3.141592653 (TeX Live 2021/Arch Linux) (preloaded format=tex)
+
+(./code.texic (./texinfo.tex Loading texinfo package [Version 2.257]: Basics,
+fonts, page headings, tables, indexing, sectioning, toc, environments, defuns,
+macros, cross references, (/usr/share/texmf-dist/tex/generic/epsf/epsf.tex
+This is `epsf.tex' v2.7.4 <14 February 2011>
+) paper sizes, and turning on texinfo input format.) (./code.aux)
+./code.texic:7: Undefined control sequence.
+l.7 @documentencoding
+                      UTF-8
+[1] [2] (./code.toc) [-1] (./codeintro.texic (code) [1] [2] (./code.tmp)
+(./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)
+(./code.tmp) (./code.tmp) [3] (./code.tmp) (./code.tmp) (./code.tmp)
+(./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)
+[4] (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)
+(./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)
+[5] (./code.tmp) (./code.tmp) (./code.tmp) (./code.tmp)) (./coderefs.texic
+(References) [6]) [7] [8] )
+(see the transcript file for additional information)
+Output written on code.dvi (11 pages, 21444 bytes).
+Transcript written on code.log.

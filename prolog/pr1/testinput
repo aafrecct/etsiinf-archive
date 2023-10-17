@@ -1,0 +1,55 @@
+use_module(code).
+
+bind(0).
+bind(1).
+
+hexd(0).
+hexd(1).
+hexd(f).
+
+binary_byte([bind(0), bind(1), bind(0), bind(1), bind(1), bind(1), bind(1), bind(0)]).
+binary_byte([0, 1, 0, 1, 1 ,1 ,0, 1]).
+
+hex_byte([hexd(0), hexd(f)]).
+
+byte([bind(0), bind(1), bind(0), bind(1), bind(1), bind(1), bind(1), bind(0)]).
+byte([hexd(0), hexd(f)]).
+
+
+byte_list(L).
+;
+;
+;
+
+byte_conversion([hexd(3), hexd(5)], BB).
+;
+
+byte_conversion([hexd(0), hexd(f)], BB).
+;
+
+tail([1, 2, 3, 4, 5, 6], R, T).
+;
+
+get_nth_bit_from_byte(A, [hexd(f), hexd(f)], bind(1)).
+;
+;
+;
+;
+;
+;
+;
+;
+
+get_nth_bit_from_byte(A, [hexd(0), hexd(1)], bind(1)).
+;
+
+get_nth_bit_from_byte(A, [hexd(0), hexd(4)], bind(1)).
+;
+
+byte_xor([hexd(0), hexd(4)], [hexd(0), hexd(0)], R).
+;
+
+byte_xor([hexd(a), hexd(b)], [hexd(4), hexd(f)], R).
+;
+
+byte_xor([hexd(b)], [hexd(4), hexd(f)], R).

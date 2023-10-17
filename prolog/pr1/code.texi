@@ -1,0 +1,49 @@
+\raggedbottom
+\input texinfo @c -*- texinfo -*-
+@comment %**start of header
+@setfilename code
+@settitle Práctica 1
+@comment @paragraphindent 0
+@documentencoding UTF-8
+@setchapternewpage odd
+@comment @footnotestyle separate
+@iftex
+@comment @smallbook
+@afourpaper
+@tolerance 10000
+@hbadness 10000
+@end iftex
+@macro hfill
+@tex
+@hfill
+@end tex
+@end macro
+@comment %**end of header
+
+@iftex
+
+@titlepage
+@title Práctica 1
+@comment @font@authorrm=cmbx10 scaled @magstep2
+@author Borja Martinena, b190242
+@comment Copyright page
+@page
+@vskip 0pt plus 1filll
+
+@end titlepage
+
+@pageno 1
+@contents
+@end iftex
+@ifinfo
+
+
+@node Top, code, (dir), (dir)
+@top Práctica 1
+@end ifinfo
+@menu
+* code::
+@end menu
+@include codeintro.texic
+@include coderefs.texic
+@bye

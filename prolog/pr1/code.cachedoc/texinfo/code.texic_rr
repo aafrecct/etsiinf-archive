@@ -1,0 +1,5 @@
+filetype(module).
+main_title([[string_esc("Práctica 1")]]).
+sect([level(0)],global_label("Práctica 1"),[string_esc("Práctica 1")]).
+refs_link(codeintro).
+refs_link(coderefs).

@@ -1,0 +1,102 @@
+sect([level(1)],global_label("code"),string_esc("code")).
+sect([level(2)],local_label("Usage and interface"),string_esc("Usage and interface")).
+idx(use,code,localnum_label("0"),"binary_byte/1").
+idx(use,code,localnum_label("1"),"hex_byte/1").
+idx(use,code,localnum_label("2"),"byte/1").
+idx(use,code,localnum_label("3"),"byte_list/1").
+idx(use,code,localnum_label("4"),"hex_to_bin/2").
+idx(use,code,localnum_label("5"),"byte_conversion/2").
+idx(use,code,localnum_label("6"),"byte_list_conversion/2").
+idx(use,code,localnum_label("7"),"tail/3").
+idx(use,code,localnum_label("8"),"get_nth_bit_from_byte/3").
+idx(use,code,localnum_label("9"),"byte_list_clsh/2").
+idx(use,code,localnum_label("10"),"byte_list_crsh/2").
+idx(use,code,localnum_label("11"),"xor/3").
+idx(use,code,localnum_label("12"),"byte_xor/3").
+idx(use,code,localnum_label("13"),"bind/1").
+idx(use,code,localnum_label("14"),"hexd/1").
+sect([level(2)],local_label("Documentation on exports"),string_esc("Documentation on exports")).
+idx(def,prop,local_label("bind/1"),"bind/1").
+idx(def,pred,local_label("binary_byte/1"),"binary_byte/1").
+idx(def,prop,local_label("hexd/1"),"hexd/1").
+idx(def,pred,local_label("hex_byte/1"),"hex_byte/1").
+idx(def,pred,local_label("byte/1"),"byte/1").
+idx(def,pred,local_label("byte_list/1"),"byte_list/1").
+idx(use,prop,localnum_label("15"),"BL=[[hexd(a),hexd(b)]]").
+idx(use,prop,localnum_label("16"),"= /2").
+idx(use,prop,localnum_label("17"),"()(BL)").
+idx(use,prop,localnum_label("18"),"not_fails/1").
+idx(use,prop,localnum_label("19"),"BL=[[hexd(9),hexd(6)],[hexd(5),hexd(c)],[hexd(d),hexd(f)]]").
+idx(use,prop,localnum_label("20"),"= /2").
+idx(use,prop,localnum_label("21"),"()(BL)").
+idx(use,prop,localnum_label("22"),"not_fails/1").
+idx(use,prop,localnum_label("23"),"BL=[[bind(1),bind(0),bind(0),bind(0),bind(0),bind(1),bind(1),bind(0)]]").
+idx(use,prop,localnum_label("24"),"= /2").
+idx(use,prop,localnum_label("25"),"()(BL)").
+idx(use,prop,localnum_label("26"),"not_fails/1").
+idx(def,pred,local_label("hex_to_bin/2"),"hex_to_bin/2").
+idx(def,pred,local_label("byte_conversion/2"),"byte_conversion/2").
+idx(use,prop,localnum_label("27"),"HB=[hexd(f),hexd(f)]").
+idx(use,prop,localnum_label("28"),"= /2").
+idx(use,prop,localnum_label("29"),"BB=[bind(1),bind(1),bind(1),bind(1),bind(1),bind(1),bind(1),bind(1)]").
+idx(use,prop,localnum_label("30"),"= /2").
+idx(use,prop,localnum_label("31"),"not_fails/1").
+idx(use,prop,localnum_label("32"),"HB=[hexd(0),hexd(1)]").
+idx(use,prop,localnum_label("33"),"= /2").
+idx(use,prop,localnum_label("34"),"BB=[bind(0),bind(0),bind(0),bind(0),bind(0),bind(0),bind(0),bind(1)]").
+idx(use,prop,localnum_label("35"),"= /2").
+idx(use,prop,localnum_label("36"),"not_fails/1").
+idx(use,prop,localnum_label("37"),"BB=[bind(1),bind(1),bind(1),bind(1),bind(0),bind(0),bind(0),bind(1)]").
+idx(use,prop,localnum_label("38"),"= /2").
+idx(use,prop,localnum_label("39"),"HB=[hexd(f),hexd(1)]").
+idx(use,prop,localnum_label("40"),"= /2").
+idx(use,prop,localnum_label("41"),"not_fails/1").
+idx(def,pred,local_label("byte_list_conversion/2"),"byte_list_conversion/2").
+idx(use,prop,localnum_label("42"),"HB=[[hexd(4),hexd(4)]]").
+idx(use,prop,localnum_label("43"),"= /2").
+idx(use,prop,localnum_label("44"),"BB=[bind(1),bind(1),bind(1),bind(1),bind(1),bind(1),bind(1),bind(1)]").
+idx(use,prop,localnum_label("45"),"= /2").
+idx(use,prop,localnum_label("46"),"not_fails/1").
+idx(def,pred,local_label("tail/3"),"tail/3").
+idx(def,pred,local_label("get_nth_bit_from_byte/3"),"get_nth_bit_from_byte/3").
+idx(use,prop,localnum_label("47"),"N=s(s(0))").
+idx(use,prop,localnum_label("48"),"= /2").
+idx(use,prop,localnum_label("49"),"B=[hexd(0),hexd(4)]").
+idx(use,prop,localnum_label("50"),"= /2").
+idx(use,prop,localnum_label("51"),"BN=bind(1)").
+idx(use,prop,localnum_label("52"),"= /2").
+idx(use,prop,localnum_label("53"),"not_fails/1").
+idx(use,prop,localnum_label("54"),"BN=bind(1)").
+idx(use,prop,localnum_label("55"),"= /2").
+idx(use,prop,localnum_label("56"),"B=[hexd(0),hexd(8)]").
+idx(use,prop,localnum_label("57"),"= /2").
+idx(use,prop,localnum_label("58"),"N=s(s(s(0)))").
+idx(use,prop,localnum_label("59"),"= /2").
+idx(use,prop,localnum_label("60"),"not_fails/1").
+idx(def,pred,local_label("byte_list_clsh/2"),"byte_list_clsh/2").
+idx(def,pred,local_label("byte_list_crsh/2"),"byte_list_crsh/2").
+idx(def,pred,local_label("xor/3"),"xor/3").
+idx(def,pred,local_label("byte_xor/3"),"byte_xor/3").
+idx(use,prop,localnum_label("61"),"B1=[hexd(a),hexd(b)]").
+idx(use,prop,localnum_label("62"),"= /2").
+idx(use,prop,localnum_label("63"),"B2=[hexd(4),hexd(f)]").
+idx(use,prop,localnum_label("64"),"= /2").
+idx(use,prop,localnum_label("65"),"B3=[hexd(e),hexd(4)]").
+idx(use,prop,localnum_label("66"),"= /2").
+idx(use,prop,localnum_label("67"),"not_fails/1").
+sect([level(2)],local_label("Documentation on imports"),string_esc("Documentation on imports")).
+idx(use,code,localnum_label("68"),"term_basic").
+idx(use,code,localnum_label("69"),"arithmetic").
+idx(use,code,localnum_label("70"),"atomic_basic").
+idx(use,code,localnum_label("71"),"basiccontrol").
+idx(use,code,localnum_label("72"),"exceptions").
+idx(use,code,localnum_label("73"),"term_compare").
+idx(use,code,localnum_label("74"),"term_typing").
+idx(use,code,localnum_label("75"),"debugger_support").
+idx(use,code,localnum_label("76"),"basic_props").
+idx(use,code,localnum_label("77"),"prelude").
+idx(use,code,localnum_label("78"),"initial").
+idx(use,code,localnum_label("79"),"condcomp").
+idx(use,code,localnum_label("80"),"assertions").
+idx(use,code,localnum_label("81"),"assertions/assertions_basic").
+idx(use,code,localnum_label("82"),"regtypes").

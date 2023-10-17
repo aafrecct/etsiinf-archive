@@ -1,0 +1,683 @@
+
+@node code, References, Top, Top
+@comment node-name, next, previous, up
+@unnumbered code
+
+The module contains the predicates specified for the first practical exercise of the @i{Programación Declarativa} course at ETSIINF in the academic year 2021-2022.
+
+@noindent
+This is mostly composed of predicates dealing with simple byte operations. First binary and hexadecimal digits are defined:
+
+@smallexample 
+
+bind/1
+hexd/1
+@end smallexample 
+
+@noindent
+And bytes, which are lists of either 8 bits/binds or 2 hexadecimal digits.
+
+@smallexample 
+
+binary_byte/1
+hex_byte/1
+byte/1
+@end smallexample 
+
+The rest of the predicates are implemented with these considerations.
+
+@section Usage and interface
+@cartouche
+@itemize @bullet
+@item @b{Library usage:}
+
+@code{:- use_module(/home/bmcaos/Documents/IngInf/sem6/PROLOG/pr1/code.pl).}
+@item @b{Exports:}
+
+@itemize @minus
+@item @i{Predicates:}
+
+@code{binary_byte/1}, @code{hex_byte/1}, @code{byte/1}, @code{byte_list/1}, @code{hex_to_bin/2}, @code{byte_conversion/2}, @code{byte_list_conversion/2}, @code{tail/3}, @code{get_nth_bit_from_byte/3}, @code{byte_list_clsh/2}, @code{byte_list_crsh/2}, @code{xor/3}, @code{byte_xor/3}.
+@item @i{Properties:}
+
+@code{bind/1}, @code{hexd/1}.
+@end itemize
+@end itemize
+@end cartouche
+@section Documentation on exports
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{bind/1 (prop)}}}
+@temp
+@end iftex
+@deffn PROPERTY bind/1:
+
+@b{Usage:} @code{bind(D)}
+
+@code{D} is a binary digit. 
+@noindent
+@smallexample 
+bind(0).
+bind(1).
+@end smallexample
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{binary_byte/1 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE binary_byte/1:
+
+@b{Usage:} @code{binary_byte(B)}
+
+@code{B} is a binary byte. A binary byte is a list of binary digits of length 8.
+
+@smallexample 
+
+binary_byte([bind(B7), bind(B6), bind(B5), bind(B4),
+             bind(B3), bind(B2), bind(B1), bind(B0)]) :-
+        bind(B7),
+        bind(B6),
+        bind(B5),
+        bind(B4),
+        bind(B3),
+        bind(B2),
+        bind(B1),
+        bind(B0).
+@end smallexample
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{hexd/1 (prop)}}}
+@temp
+@end iftex
+@deffn PROPERTY hexd/1:
+
+@b{Usage:} @code{hexd(D)}
+
+@code{D} is a hexadecimal digit. 
+@noindent
+@smallexample 
+hexd(0).
+hexd(1).
+hexd(2).
+hexd(3).
+hexd(4).
+hexd(5).
+hexd(6).
+hexd(7).
+hexd(8).
+hexd(9).
+hexd(a).
+hexd(b).
+hexd(c).
+hexd(d).
+hexd(e).
+hexd(f).
+@end smallexample
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{hex_byte/1 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE hex_byte/1:
+
+@b{Usage:} @code{hex_byte(B)}
+
+@code{B} is a hexadecimal byte. A binary byte is a list of binary digits of length 8. 
+@noindent
+@smallexample 
+hex_byte([hexd(H1),hexd(H0)]) :-
+    hexd(H1),
+    hexd(H0).
+@end smallexample
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{byte/1 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE byte/1:
+
+@b{Usage:} @code{byte(B)}
+
+@code{B} is a byte that is: a binary byte or a hexadecimal byte. 
+@noindent
+@smallexample 
+byte(BB) :-
+    binary_byte(BB).
+byte(HB) :-
+    hex_byte(HB).
+@end smallexample
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{byte_list/1 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE byte_list/1:
+
+@b{Usage:} @code{byte_list(BL)}
+
+True if @code{BL} is a list of valid bytes.
+@itemize @minus
+@end itemize
+
+@b{Other properties:} 
+
+
+@b{Test:} @code{byte_list(BL)}
+
+Un byte hexadecimal.
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{BL=[[hexd(a),hexd(b)]]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{()(BL)}
+@iftex
+@hfill
+@end iftex
+ (undefined property)
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{byte_list(BL)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+
+@b{Test:} @code{byte_list(BL)}
+
+Tres bytes hexadecimal.
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{BL=[[hexd(9),hexd(6)],[hexd(5),hexd(c)],[hexd(d),hexd(f)]]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{()(BL)}
+@iftex
+@hfill
+@end iftex
+ (undefined property)
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{byte_list(BL)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+
+@b{Test:} @code{byte_list(BL)}
+
+Un byte binario.
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{BL=[[bind(1),bind(0),bind(0),bind(0),bind(0),bind(1),bind(1),bind(0)]]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{()(BL)}
+@iftex
+@hfill
+@end iftex
+ (undefined property)
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{byte_list(BL)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{hex_to_bin/2 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE hex_to_bin/2:
+
+@b{Usage:} @code{hex_to_bin(HD,BN)}
+
+True if @code{HD}, a hexadecimal digit is equal in value to @code{BN}, a binary nibble. Used to convert hex digits to binary.
+
+@smallexample 
+
+?- hex_to_bin(hexd(b), BN).
+BN = [bind(1), bind(0), bind(1), bind(1)] ? ;
+no.
+@end smallexample 
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{byte_conversion/2 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE byte_conversion/2:
+
+@b{Usage:} @code{byte_conversion(HB,BB)}
+
+True if @code{HB}, a hex byte, is equal in value to @code{BB}, a binary byte. Used to convert hex bytes to binary.
+
+@smallexample 
+
+?- byte_conversion([hexd(b), hexd(f)], BB).
+BB = [bind(1), bind(0), bind(1), bind(1),
+      bind(1), bind(1), bind(1), bind(1)] ? ;
+no.
+@end smallexample 
+@itemize @minus
+@end itemize
+
+@b{Other properties:} 
+
+
+@b{Test:} @code{byte_conversion(HB,BB)}
+
+Byte máximo.
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{HB=[hexd(f),hexd(f)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{BB=[bind(1),bind(1),bind(1),bind(1),bind(1),bind(1),bind(1),bind(1)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{byte_conversion(HB,BB)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+
+@b{Test:} @code{byte_conversion(HB,BB)}
+
+Byte con valor 1.
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{HB=[hexd(0),hexd(1)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{BB=[bind(0),bind(0),bind(0),bind(0),bind(0),bind(0),bind(0),bind(1)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{byte_conversion(HB,BB)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+
+@b{Test:} @code{byte_conversion(HB,BB)}
+
+Conversion binario a hexadecimal.
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{BB=[bind(1),bind(1),bind(1),bind(1),bind(0),bind(0),bind(0),bind(1)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{HB=[hexd(f),hexd(1)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{byte_conversion(HB,BB)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{byte_list_conversion/2 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE byte_list_conversion/2:
+
+@b{Usage:} @code{byte_list_conversion(HBL,BBL)}
+
+True if @code{HBL}, a hex byte list, is equal in value to @code{BBL}, a binary byte list. Used to convert hex bytes lists to binary.
+
+Two empty lists are considered to be equal in value. Tests with lists longer than length 1 will cause a TeX hbox overflow in trying to display the binary bite list.
+
+@smallexample 
+
+?- byte_list_conversion([[hexd(b), hexd(f)]], BN).
+BN = [[bind(1), bind(0), bind(1), bind(1),
+       bind(1), bind(1), bind(1), bind(1)]] ? ;
+no.
+@end smallexample 
+@itemize @minus
+@end itemize
+
+@b{Other properties:} 
+
+
+@b{Test:} @code{byte_list_conversion(HBL,BBL)}
+
+Regular call with list of length 1.
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{HB=[[hexd(4),hexd(4)]]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{BB=[bind(1),bind(1),bind(1),bind(1),bind(1),bind(1),bind(1),bind(1)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{byte_list_conversion(HBL,BBL)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{tail/3 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE tail/3:
+
+@b{Usage:} @code{tail(L,R,T)}
+
+Provides a way to access lists in reverse order, instead of accessing them via head/tail, @code{R} is the leading part of the list (rest), and @code{T} is the last item (tail).
+
+However, this operation has linear complexity, to access lists in reverse order, it would be more efficient to reverse them.
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{get_nth_bit_from_byte/3 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE get_nth_bit_from_byte/3:
+
+@b{Usage:} @code{get_nth_bit_from_byte(N,B,BN)}
+
+True if @code{BN} is equivalent to the bit at position @code{N} of the byte @code{B}.
+
+Used to get the bit at position @code{N} of the byte where @code{N} is a natural number expresed in terms of Peano's axioms, that is, as the succesor of another number recursively until reaching 0.
+
+Bytes are big endian so the 0th bit is actually the last. This predicate is quite inefficient because it uses the tail/1 predicate, which has linear time complexity, in each recursive step.
+@itemize @minus
+@end itemize
+
+@b{Other properties:} 
+
+
+@b{Test:} @code{get_nth_bit_from_byte(N,B,BN)}
+
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{N=s(s(0))}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@code{B=[hexd(0),hexd(4)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{BN=bind(1)}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{get_nth_bit_from_byte(N,B,BN)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+
+@b{Test:} @code{get_nth_bit_from_byte(N,B,BN)}
+
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{BN=bind(1)}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@code{B=[hexd(0),hexd(8)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{N=s(s(s(0)))}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{get_nth_bit_from_byte(N,B,BN)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{byte_list_clsh/2 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE byte_list_clsh/2:
+
+@b{Usage:} @code{byte_list_clsh(L,CLShL)}
+
+Performs a circular left shift on byte list @code{L}.
+
+@code{NOT IMPLEMENTED}
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{byte_list_crsh/2 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE byte_list_crsh/2:
+
+@b{Usage:} @code{byte_list_crsh(L,CLShL)}
+
+Performs a circular right shift on byte list @code{L}.
+
+@code{NOT IMPLEMENTED}
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{xor/3 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE xor/3:
+
+@b{Usage:} @code{xor(B1,B2,BR)}
+
+Implements the logical gate xor for two bit @code{B1} and @code{B2} with a result @code{BR}. 
+@smallexample 
+xor(bind(0),bind(0),bind(0)).
+xor(bind(0),bind(1),bind(1)).
+xor(bind(1),bind(0),bind(1)).
+xor(bind(1),bind(1),bind(0)).
+@end smallexample 
+@itemize @minus
+@end itemize
+@end deffn
+@sp 1
+
+@iftex
+@edef@temp{@noexpand@writetocentry{@realbackslash unnumbsubsubsecentry{byte_xor/3 (pred)}}}
+@temp
+@end iftex
+@deffn PREDICATE byte_xor/3:
+
+@b{Usage:} @code{byte_xor(B1,B2,B3)}
+
+Implements a bitwise XOR operation between two input bytes @code{B1} and @code{B2}. Hex bytes are first converted to binary bytes and then the xor predicate is used recursively on each bit.
+
+@code{B3} is the output byte.
+
+Three empty lists B1 = [], B2 = [] and B3 = [] will validate this predicate.
+@itemize @minus
+@end itemize
+
+@b{Other properties:} 
+
+
+@b{Test:} @code{byte_xor(B1,B2,B3)}
+
+@itemize @minus
+@item @i{If the following properties hold at call time:}
+
+@code{B1=[hexd(a),hexd(b)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@code{B2=[hexd(4),hexd(f)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold upon exit:}
+
+@code{B3=[hexd(e),hexd(4)]}
+@iftex
+@hfill
+@end iftex
+ (@code{= /2})
+
+@i{then the following properties should hold globally:}
+
+All the calls of the form @code{byte_xor(B1,B2,B3)} do not fail.
+@iftex
+@hfill
+@end iftex
+ (@code{not_fails/1})
+@end itemize
+@end deffn
+@sp 1
+
+@section Documentation on imports
+This module has the following direct dependencies:
+@itemize @minus
+@item @i{Internal (engine) modules:}
+
+@code{term_basic}, @code{arithmetic}, @code{atomic_basic}, @code{basiccontrol}, @code{exceptions}, @code{term_compare}, @code{term_typing}, @code{debugger_support}, @code{basic_props}.
+@item @i{Packages:}
+
+@code{prelude}, @code{initial}, @code{condcomp}, @code{assertions}, @code{assertions/assertions_basic}, @code{regtypes}.
+@end itemize
